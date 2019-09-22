@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { NavLink } from 'react-router-dom'
 
 const styleBar = {
@@ -7,7 +7,6 @@ const styleBar = {
   // position: 'fixed',
   // top: '0',
   // width: '100%'
-
 }
 
 const styleLink = {
@@ -19,7 +18,6 @@ const styleLink = {
   fontSize: '17px',
   textDecoration: 'none'
 }
-
 
 // ! Need to fix up logout
 const Navbar = () => {

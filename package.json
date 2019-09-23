@@ -7,14 +7,18 @@
     "@material-ui/icons": "^4.4.1",
     "country-state-city": "^1.0.0",
     "hunterio": "^1.0.0",
+    "lodash": "^4.17.15",
+    "node-uuid": "^1.4.8",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-redux": "^6",
     "react-scripts": "3.1.1",
     "redux": "^4.0.4",
+    "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
     "semantic-ui-react": "^0.88.1",
-    "startbootstrap-grayscale": "^5.0.9"
+    "startbootstrap-grayscale": "^5.0.9",
+    "uuid": "^3.3.3"
   },
   "scripts": {
     "start": "react-scripts start",

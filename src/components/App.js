@@ -10,21 +10,22 @@ import LoginForm from "./LoginForm";
 import NewUserForm from "./NewUserForm";
 import LandingPage from "./LandingPage";
 import { connect } from "react-redux";
-import { currentUser } from "../actions";
+import { currentUser, thunkFetchLists } from "../actions";
 
 // const LEADS_URL = 'http://localhost:3000/api/v1/leads'
 
 class App extends React.Component {
   componentDidMount() {
     this.props.currentUser(this.props.history);
+    this.props.thunkFetchLists(this.props.auth.id);
   }
 
   render() {
     return (
       <div className="app">
         <Switch>
-          <Route exact path="/" component={LandingPage}/>
-          <Route exact path="/login" component={LoginForm}/>
+          <Route exact path="/" component={LandingPage} />
+          <Route exact path="/login" component={LoginForm} />
           <Route exact path="/results" component={SearchResults} />
           <Route exact path="/leadlists" component={LeadListContainer} />
           <Route exact path="/profile" component={UserProfile} />
@@ -39,7 +40,12 @@ class App extends React.Component {
 
 const mapDispatchToProps = dispatch => {
   return {
-    currentUser: history => dispatch(currentUser(history))
+    currentUser: history => {
+      dispatch(currentUser(history));
+    },
+    thunkFetchLists: id => {
+      dispatch(thunkFetchLists(id));
+    }
   };
 };
 

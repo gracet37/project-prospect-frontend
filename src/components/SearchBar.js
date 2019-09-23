@@ -4,12 +4,6 @@ import { thunkFetchCategories, thunkFetchLeads } from "../actions";
 import { connect } from "react-redux";
 import { Link, withRouter } from 'react-router-dom';
 
-var HunterSDK = require("hunterio");
-
-var KEY = "7ca084937e5e049696b7bb64c10366c3d077c650";
-
-var hunter = new HunterSDK(KEY);
-
 /////////////////////// STYLING /////////////////////////
 const searchOptions = [
   { key: "industry", text: "Industry", value: "industry" },
@@ -23,10 +17,6 @@ const styleDropdown = {
 const styleDiv = {
   backgroundImage: "https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/s2048x2048/70590332_836756946718765_3473765009224368128_n.png?_nc_cat=111&_nc_oc=AQnqWP4HyrAi7q61EL8yVFptltQa3xI5h09a4-BztmyG9-4Dby2fVE1e_IVK7Rn_WHg&_nc_ht=scontent-ort2-2.xx&oh=1a1fd9abc2dba4016521fba11ffaa3b6&oe=5E3DD369"
 }
-
-const CATEGORY_URL = "http://localhost:3000/api/v1/categories";
-const LEADS_URL =  "http://localhost:3000/api/v1/leads"
-
 /////////////////////// STYLING /////////////////////////
 
 class SearchBar extends Component {
@@ -52,7 +42,6 @@ class SearchBar extends Component {
   handleSubmit = () => {
     this.props.thunkFetchLeads(this.state.searchParam, this.props.history)
   };
-
 
   render() {
     console.log(this.state);

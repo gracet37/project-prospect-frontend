@@ -5,6 +5,97 @@ export const FETCH_LEADS = "FETCH_LEADS";
 export const START_FETCH_LISTS = "FETCH_LISTS";
 export const FETCH_LISTS = "FETCH_LISTS";
 export const ADD_LIST = "ADD_LIST";
+export const LOGIN_USER = "LOGIN_USER";
+export const LOGOUT_USER = "LOGOUT_USER";
+
+// LOGIN
+
+export function loginUser(user) {
+  return {
+    type: "LOGIN_USER",
+    user
+  }
+}
+
+export function logoutUser() {
+  return {
+    type: "LOGOUT_USER"
+  }
+}
+
+export function currentUser(history) {
+  return (dispatch) => {
+    const token = localStorage.token;
+    const reqObj = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    }
+
+    return fetch('http://localhost:3000/api/v1/current_user', reqObj)
+      .then(resp => resp.json())
+      .then(data => {
+        if (data.error) {
+          //handle error
+          console.log(data.error)
+        } else {
+          dispatch(loginUser({ id: data.id, email: data.email, first_name: data.first_name, last_name: data.last_name}))
+          history.push('/search')
+        }
+      })
+  }
+}
+
+export function login(formData, history) {
+  return (dispatch) => {
+    const reqObj = {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(formData)
+    }
+
+    return fetch('http://localhost:3000/api/v1/login', reqObj)
+      .then(resp => resp.json())
+      .then(data => {
+        if (data.error){
+          //handle error case
+          console.log(data.error)
+        } else {
+          console.log("fetch login", data)
+          localStorage.token = data.token
+          dispatch(loginUser({ id: data.id, email: data.email, first_name: data.first_name, last_name: data.last_name}))
+          history.push('/search')
+        }
+      })
+  }
+}
+
+export function registerUser(formData, history) {
+  return (dispatch) => {
+    const reqObj = {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(formData)
+    }
+
+    return fetch('http://localhost:3000/api/v1/auth', reqObj)
+      .then(resp => resp.json())
+      .then(data => {
+        if (data.error){
+          //handle error case
+          console.log(data.error)
+        } else {
+          localStorage.token = data.token
+          dispatch(loginUser({ id: data.id, email: data.email, first_name: data.first_name, last_name: data.last_name}))
+          history.push('/search')
+        }
+      })
+  }
+}
+
+////LOGIN
 
 export function thunkFetchCategories() {
   return function(dispatch) {

@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Redirect } from "react-router-dom";
+import { Route, withRouter, Switch } from "react-router-dom";
 import Navbar from "./Navbar";
 import LeadListContainer from "../containers/LeadListContainer";
 import SearchContainer from "../containers/SearchContainer";
@@ -8,27 +8,49 @@ import SearchResults from "./SearchResults";
 import SearchResultsTest from "./SearchResultsTest";
 import LoginForm from "./LoginForm";
 import NewUserForm from "./NewUserForm";
-import {connect} from "react-redux";
+import LandingPage from "./LandingPage";
+import { connect } from "react-redux";
+import { currentUser } from "../actions";
 
 // const LEADS_URL = 'http://localhost:3000/api/v1/leads'
 
-const App = () => {
-  return (
-    <div className="app">
-      <Navbar />
-      <LoginForm />
-      <Route exact path="/" component={SearchContainer} />
-      <Route exact path="/results" component={SearchResults} />
-      <Route exact path="/leadlists" component={LeadListContainer} />
-      <Route exact path="/profile" component={UserProfile} />
-      {/* <Route exact path="/logout" component={} /> */}
-      {/* {this.props.leads.length > 0 ? <Redirect to='/' /> : null} */}
-    </div>
-  );
+class App extends React.Component {
+  componentDidMount() {
+    this.props.currentUser(this.props.history);
+  }
+
+  render() {
+    return (
+      <div className="app">
+        <Switch>
+          <Route exact path="/" component={LandingPage}/>
+          <Route exact path="/login" component={LoginForm}/>
+          <Route exact path="/results" component={SearchResults} />
+          <Route exact path="/leadlists" component={LeadListContainer} />
+          <Route exact path="/profile" component={UserProfile} />
+          <Route exact path="/search" component={SearchContainer} />
+          <Route exact path="/signup" component={NewUserForm} />
+        </Switch>
+        {/* <Route exact path="/logout" component={} /> */}
+      </div>
+    );
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    currentUser: history => dispatch(currentUser(history))
+  };
 };
 
 const mapStateToProps = state => {
-  return {leads: state.leads}
-}
+  return {
+    leads: state.leads,
+    auth: state.auth
+  };
+};
 
-export default connect(mapStateToProps, null)(App);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(App));

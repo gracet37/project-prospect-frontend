@@ -1,12 +1,12 @@
 import { combineReducers } from 'redux'
-import auth from './auth'
-import { FETCH_CATEGORIES, FETCH_LEADS, FETCH_LISTS, ADD_LIST } from '../actions'
+import { FETCH_CATEGORIES, FETCH_LEADS, FETCH_LISTS, ADD_LIST, LOGIN_USER, LOGOUT_USER } from '../actions'
 
 
 export default combineReducers({
   categories: categories,
   leads: leads,
-  lists: lists
+  lists: lists,
+  auth: auth
 })
 
 function categories(state=[], action) {
@@ -37,5 +37,16 @@ function lists(state=[], action) {
       lists: [...state.lists, action.list]}
     default: 
      return state
+  }
+}
+
+function auth(state = {}, action) {
+  switch (action.type) {
+    case 'LOGIN_USER':
+      return {...action.user}
+    case 'LOGOUT_USER':
+      return {}
+    default:
+      return state
   }
 }

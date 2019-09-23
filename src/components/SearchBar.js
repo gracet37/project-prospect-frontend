@@ -20,6 +20,10 @@ const styleDropdown = {
   width: "20%"
 };
 
+const styleDiv = {
+  backgroundImage: "https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/s2048x2048/70590332_836756946718765_3473765009224368128_n.png?_nc_cat=111&_nc_oc=AQnqWP4HyrAi7q61EL8yVFptltQa3xI5h09a4-BztmyG9-4Dby2fVE1e_IVK7Rn_WHg&_nc_ht=scontent-ort2-2.xx&oh=1a1fd9abc2dba4016521fba11ffaa3b6&oe=5E3DD369"
+}
+
 const CATEGORY_URL = "http://localhost:3000/api/v1/categories";
 const LEADS_URL =  "http://localhost:3000/api/v1/leads"
 
@@ -53,8 +57,8 @@ class SearchBar extends Component {
   render() {
     console.log(this.state);
     return (
-      <div>
-        <Form>
+      <div style={styleDiv}>
+        <Form style={styleDiv}> 
           <Dropdown
             onChange={this.handleDropdown}
             name="selectionParam"

@@ -8,6 +8,8 @@ export const ADD_LIST = "ADD_LIST";
 export const LOGIN_USER = "LOGIN_USER";
 export const LOGOUT_USER = "LOGOUT_USER";
 
+const uuidv1 = require('uuid/v1')
+
 // LOGIN
 
 export function loginUser(user) {
@@ -109,11 +111,11 @@ export function thunkFetchCategories() {
   };
 }
 
-export function thunkFetchLists() {
+export function thunkFetchLists(id) {
   return function(dispatch) {
     dispatch({ type: START_FETCH_LISTS });
 
-    fetch("http://localhost:3000/api/v1/lists")
+    fetch(`http://localhost:3000/api/v1/lists/${id}`)
       .then(res => res.json())
       .then(data => {
         dispatch({ type: FETCH_LISTS, lists: data });
@@ -190,7 +192,7 @@ export function thunkFetchLeads(domainName, history) {
     )
       .then(res => res.json())
       .then(result => {
-        dispatch({ type: FETCH_LEADS, leads: result.data })
+        dispatch({ type: FETCH_LEADS, id: uuidv1(), leads: result.data })
         history.push('/results')
       });
 

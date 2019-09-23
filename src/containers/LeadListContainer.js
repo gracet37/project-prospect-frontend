@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import Navbar from '../components/Navbar'
 
 class LeadListContainer extends Component {
   render() {
     return (
       <div>
-        Dashboard yo
+        <Navbar />
       </div>
     );
   }

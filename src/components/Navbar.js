@@ -36,8 +36,9 @@ class Navbar extends React.Component {
     <div className="navbar" style={styleBar}>
       <NavLink style={styleLink} onClick={() => this.handleLogout()}>Logout</NavLink>
       <NavLink style={styleLink} to="/leadlists">Dashboard</NavLink>
+      <NavLink style={styleLink} to="/results">Results</NavLink>
       <NavLink style={styleLink} to="/profile">My Profile</NavLink>
-      <NavLink style={styleLink} to="/">Home</NavLink>
+      <NavLink style={styleLink} to="/search">Home</NavLink>
     </div>
   );
   }

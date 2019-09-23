@@ -12,7 +12,7 @@ const LEADS_URL = "http://localhost:3000/api/v1/leads";
 
 class SearchContainer extends Component {
   componentDidMount() {
-    this.props.thunkFetchLists();
+    // this.props.thunkFetchLists();
   }
 
   render() {
@@ -23,6 +23,7 @@ class SearchContainer extends Component {
           <div>
             <NavBar />
             <SearchBar />
+            {/* <SearchResultsTest /> */}
           </div>
         ) : (
           <LoginForm />

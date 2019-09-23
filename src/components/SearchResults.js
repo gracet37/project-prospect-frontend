@@ -11,30 +11,26 @@ import {
 } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { addList, addLead } from "../actions";
+import Navbar from "./Navbar";
 
+const uuidv1 = require("uuid/v1");
 
 const styleDropdown = {
   width: "40%"
 };
 
-// const searchOptions = [
-//   { key: "industry", text: "Industry", value: "industry" },
-//   { key: "domain", text: "Company Domain", value: "domain" }
-// ];
-
 class SearchResults extends Component {
   state = {
-    listId: '',
-    leadSelection: '',
-    company: '',
-    website: ''
+    listId: "",
+    leadSelection: "",
+    company: "",
+    website: ""
   };
 
   componentDidMount() {
-    const array = this.props.leads[0]
-    this.setState({company: array.organization, website: array.domain})
+    const array = this.props.leads[0];
+    this.setState({ company: array.organization, website: array.domain });
   }
-  
 
   handleDropdown = (e, data) => {
     const targetValue = data.value;
@@ -47,29 +43,37 @@ class SearchResults extends Component {
     this.setState({ [targetName]: targetValue });
   };
 
-  handleLeadChange = (lead) => {
-    this.setState({leadSelection: lead})
-  }
+  handleLeadChange = lead => {
+    this.setState({ leadSelection: lead });
+  };
 
   handleSubmit = () => {
-    const {leadSelection, company, website, listId} = this.state
-    this.props.addLead(leadSelection, company, website, listId)
+    const { leadSelection, company, website, listId } = this.state;
+    this.props.addLead(leadSelection, company, website, listId);
     // this.props.addList(this.state.listId)
   };
 
-
+  handleTest = () => {
+    console.log("TEST");
+  };
 
   render() {
-    console.log("state", this.state)
-    console.log("list props", this.props.lists)
-    // const searchOptions = this.props.lists.map(list => {
-    //   return { key: list.id, text: list.name, value: list.id};
-    // });
+    console.log("state", this.state);
+    console.log("list props", this.props.lists);
+    let listArray = [];
+    let lists = this.props.lists[0];
+    if (Object.keys(lists))
+    Object.keys(lists).forEach(function(i) {
+      listArray.push({
+        key: lists[i].id,
+        text: lists[i].name,
+        value: lists[i].id
+      });
+    });
     // console.log("searchoptions", searchOptions)
     const dataArray = this.props.leads[0];
     console.log(dataArray);
     const tableRow = dataArray.emails.map(lead => {
-      // console.log(lead)
       return (
         <Table.Row>
           <Table.Cell>{lead.first_name}</Table.Cell>
@@ -79,14 +83,19 @@ class SearchResults extends Component {
           <Table.Cell>{dataArray.organization}</Table.Cell>
           <Table.Cell>{lead.confidence}</Table.Cell>
           <Table.Cell>
-            {" "}
-            <Modal trigger={<Button onClick={() => this.handleLeadChange(lead)}>Add</Button>} basic size="small">
-              <Header icon="archive" content="list" />
+            <Modal
+              trigger={
+                <Button onClick={() => this.handleLeadChange(lead)}>Add</Button>
+              }
+              basic
+              size="small"
+            >
+              <Header/>
               <Modal.Content>
-                <p>Select a list:</p>
+                <h3>Select a list:</h3>
               </Modal.Content>
               <Modal.Actions>
-                <Input onChange={this.handleChange} placeholder='New List...' />
+                <Input onChange={this.handleChange} placeholder="New List..." />
                 <Dropdown
                   onChange={this.handleDropdown}
                   name="listId"
@@ -94,11 +103,7 @@ class SearchResults extends Component {
                   placeholder="Select List..."
                   fluid
                   selection
-                  options={this.props.lists.map(list => ({
-                    key: list.id,
-                    value: list.id,
-                    text: list.name
-                  }))}
+                  options={listArray}
                 />
                 <Button onClick={this.handleSubmit} basic color="red" inverted>
                   <Icon name="add" /> Add Lead to List
@@ -111,6 +116,7 @@ class SearchResults extends Component {
     });
     return (
       <div>
+        <Navbar />
         <Table singleLine>
           <Table.Header>
             <Table.Row>
@@ -158,14 +164,14 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    addList: (listName) => {
-      dispatch(addList(listName))
+    addList: listName => {
+      dispatch(addList(listName));
     },
     addLead: (leadObj, company, website, listId) => {
-      dispatch(addLead(leadObj, company, website, listId))
+      dispatch(addLead(leadObj, company, website, listId));
     }
-  }
-}
+  };
+};
 
 // Connect this component to all returns for the company search
 export default connect(

@@ -53,14 +53,6 @@ class NewUserForm extends Component {
     console.log("new user form", this.state);
     return (
       <div className="new-user-form">
-        {/* <Grid> */}
-        {/* <Grid.Column style={styleColumn}>
-            <Image
-              src="https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/70899389_2519172824806568_6105558141708009472_n.png?_nc_cat=109&_nc_oc=AQl7M70Sg3NpW0mxFQ2HiBBb2vaWR7OI91ePG62W4zv7EYNgY-_2YGp5fZ2Vio2dVgE&_nc_ht=scontent-ort2-2.xx&oh=83ca814288ac01ffb3a5c2a9f90c506f&oe=5DFE3575"
-              width="100%"
-              height="100%"
-            />
-          </Grid.Column> */}
         <Grid textAlign="center" verticalAlign="middle">
           <Form.Group>
             <Form style={styleForm} size="large" onSubmit={this.handleSubmit}>
@@ -115,7 +107,6 @@ class NewUserForm extends Component {
             </Form>
           </Form.Group>
         </Grid>
-        {/* </Grid> */}
       </div>
     );
   }

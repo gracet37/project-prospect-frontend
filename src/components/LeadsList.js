@@ -31,11 +31,6 @@ const rows = [
 ];
 
 
-
-
-
-
-
 function desc(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;

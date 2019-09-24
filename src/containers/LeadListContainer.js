@@ -10,7 +10,7 @@ class LeadListContainer extends Component {
     return (
       <div>
         <Dashboard />
-        <EnhancedTable allLeads={this.props.leads}/>
+        {/* <EnhancedTable allLeads={this.props.leads}/> */}
       </div>
     );
   }

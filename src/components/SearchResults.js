@@ -151,6 +151,7 @@ class SearchResults extends Component {
     });
     return (
       <div>
+        <Navbar />
         <Table singleLine>
           <Table.Header>
             <Table.Row>

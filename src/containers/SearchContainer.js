@@ -11,22 +11,16 @@ const CATEGORY_URL = "http://localhost:3000/api/v1/categories";
 const LEADS_URL = "http://localhost:3000/api/v1/leads";
 
 class SearchContainer extends Component {
-  componentDidMount() {
-    // this.props.thunkFetchLists();
-  }
 
   render() {
     // console.log(this.state)
     return (
       <div>
-        {this.props.auth.id ? (
+        <NavBar />
           <div>
             <SearchBar />
             {/* <SearchResultsTest /> */}
           </div>
-        ) : (
-          <LoginForm />
-        )}
         {/* <SearchResultsTest />} */}
       </div>
     );

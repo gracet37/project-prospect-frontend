@@ -11,20 +11,22 @@ import storage from 'redux-persist/lib/storage' // defaults to localStorage
 import {loadState, saveState} from './localStorage'
 import throttle from 'lodash/throttle'
 
-const persistedState = loadState()
+// const persistedState = loadState()
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const store = createStore(reducer, persistedState, composeEnhancers(
+const store = createStore(reducer, composeEnhancers(
    applyMiddleware(thunk)
 ));
 
-store.subscribe(throttle(() => {
-  saveState({
-    leads: store.getState().leads,
-    auth: store.getState().auth,
-    lists: store.getState().lists
-});
-}, 1000))
+// removed persistedState from store
+
+// store.subscribe(throttle(() => {
+//   saveState({
+//     leads: store.getState().leads,
+//     // auth: store.getState().auth,
+//     lists: store.getState().lists
+// });
+// }, 1000))
 
 ReactDOM.render(
   <Provider store={store}>

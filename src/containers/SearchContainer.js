@@ -33,16 +33,16 @@ class SearchContainer extends Component {
 //   return {leads: state.leads}
 // }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    thunkFetchLeads: () => {
-      dispatch(thunkFetchLeads());
-    },
-    thunkFetchLists: () => {
-      dispatch(thunkFetchLists());
-    }
-  };
-};
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     thunkFetchLeads: () => {
+//       dispatch(thunkFetchLeads());
+//     },
+//     thunkFetchLists: () => {
+//       dispatch(thunkFetchLists());
+//     }
+//   };
+// };
 
 const mapStateToProps = state => {
   return {
@@ -52,5 +52,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  null
 )(SearchContainer);

@@ -20,6 +20,9 @@ class App extends React.Component {
   
   componentDidMount() {
     this.props.currentUser(this.props.history)
+    // this.props.thunkFetchLists(this.props.auth.user.id)
+        // this.props.thunkFetchLists(17) //HARDCODING THIS FOR NOW
+    // console.log())
   }
 
   render() {

@@ -11,7 +11,7 @@ import { withRouter} from "react-router-dom";
 class LeadListContainer extends Component {
 
   componentDidMount() {
-    this.props.thunkFetchLists(17)
+    // this.props.thunkFetchLists(17)
   }
 
   render() {

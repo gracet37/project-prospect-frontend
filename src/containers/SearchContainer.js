@@ -21,7 +21,6 @@ class SearchContainer extends Component {
       <div>
         {this.props.auth.id ? (
           <div>
-            <NavBar />
             <SearchBar />
             {/* <SearchResultsTest /> */}
           </div>

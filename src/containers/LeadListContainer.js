@@ -1,14 +1,25 @@
 import React, { Component } from 'react';
 import Navbar from '../components/Navbar'
+import Dashboard from '../components/Dashboard'
+import EnhancedTable from '../components/LeadsList'
+import {connect} from 'react-redux'
 
 class LeadListContainer extends Component {
+
   render() {
     return (
       <div>
-        <Navbar />
+        <Dashboard />
+        <EnhancedTable allLeads={this.props.leads}/>
       </div>
     );
   }
 }
 
-export default LeadListContainer;
+const mapStateToProps = state => {
+  return {
+    leads: state.leads
+  }
+}
+
+export default connect(mapStateToProps, null)(LeadListContainer);

@@ -27,13 +27,14 @@ export function logoutUser() {
 
 export function currentUser(history) {
   return (dispatch) => {
-    const token = localStorage.token;
+    // const token = localStorage.token;
     const reqObj = {
-      method: 'GET',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
+        Authorization: `Bearer ${localStorage.token}`
+      },
+      body: JSON.stringify(localStorage.token)
     }
 
     return fetch('http://localhost:3000/api/v1/current_user', reqObj)
@@ -41,9 +42,9 @@ export function currentUser(history) {
       .then(data => {
         if (data.error) {
           //handle error
-          console.log(data.error)
+          console.log("currentUser error", data.error)
         } else {
-          dispatch(loginUser({ id: data.id, email: data.email, first_name: data.first_name, last_name: data.last_name}))
+          dispatch(loginUser({user: data.user}))
           history.push('/search')
         }
       })
@@ -67,10 +68,11 @@ export function login(formData, history) {
         } else {
           console.log("fetch login", data)
           localStorage.token = data.token
-          dispatch(loginUser({ id: data.id, email: data.email, first_name: data.first_name, last_name: data.last_name}))
+          dispatch(loginUser(data.user))
           history.push('/search')
         }
       })
+      .catch(err => console.log(err))
   }
 }
 
@@ -90,7 +92,7 @@ export function registerUser(formData, history) {
           console.log(data.error)
         } else {
           localStorage.token = data.token
-          dispatch(loginUser({ id: data.id, email: data.email, first_name: data.first_name, last_name: data.last_name}))
+          dispatch(loginUser( data.user ))
           history.push('/search')
         }
       })
@@ -123,7 +125,7 @@ export function thunkFetchLists(id) {
   };
 }
 // creating a new lead instance of the one the user saved and creating the association between list and lead
-export function addLead(leadObj, company, website, listId) {
+export function addLead(leadObj, company, website, listId, newListName, userId) {
   return function(dispatch) {
     dispatch({ type: START_FETCH_LEADS });
 
@@ -146,6 +148,7 @@ export function addLead(leadObj, company, website, listId) {
     })
       .then(res => res.json())
       .then(data => {
+        if (listId) { 
         fetch("http://localhost:3000/api/v1/leadlists", {
           method: "POST",
           headers: {
@@ -156,7 +159,23 @@ export function addLead(leadObj, company, website, listId) {
             list_id: listId,
             lead_id: data.id
           })
+        }).catch(err => console.log(err));
+      } else { 
+        fetch("http://localhost:3000/api/v1/lists", {
+          method: "POST",
+          headers: {
+            "Content-Type": 'application/json',
+            "Accept": 'application/json'
+          },
+          body: JSON.stringify({
+            name: newListName, 
+            user_id: userId
+          })
         })
+        .then(res => res.json())
+        .then(data => console.log(data))
+        .catch(err => console.log(err));
+      }
       })
       .catch(err => console.log(err)); 
   };

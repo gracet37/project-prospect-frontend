@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import {
   Table,
   Menu,
+  Form,
   Icon,
   Modal,
   Header,
@@ -24,7 +25,8 @@ class SearchResults extends Component {
     listId: "",
     leadSelection: "",
     company: "",
-    website: ""
+    website: "",
+    newListName: ""
   };
 
   componentDidMount() {
@@ -48,8 +50,9 @@ class SearchResults extends Component {
   };
 
   handleSubmit = () => {
-    const { leadSelection, company, website, listId } = this.state;
-    this.props.addLead(leadSelection, company, website, listId);
+    const { leadSelection, company, website, listId, newListName } = this.state;
+    const userId = this.props.auth.id
+    this.props.addLead(leadSelection, company, website, listId, newListName, userId);
     // this.props.addList(this.state.listId)
   };
 
@@ -62,7 +65,6 @@ class SearchResults extends Component {
     console.log("list props", this.props.lists);
     let listArray = [];
     let lists = this.props.lists[0];
-    if (Object.keys(lists))
     Object.keys(lists).forEach(function(i) {
       listArray.push({
         key: lists[i].id,
@@ -84,31 +86,64 @@ class SearchResults extends Component {
           <Table.Cell>{lead.confidence}</Table.Cell>
           <Table.Cell>
             <Modal
+              centered
               trigger={
                 <Button onClick={() => this.handleLeadChange(lead)}>Add</Button>
               }
               basic
               size="small"
             >
-              <Header/>
-              <Modal.Content>
-                <h3>Select a list:</h3>
-              </Modal.Content>
-              <Modal.Actions>
-                <Input onChange={this.handleChange} placeholder="New List..." />
-                <Dropdown
-                  onChange={this.handleDropdown}
-                  name="listId"
-                  style={styleDropdown}
-                  placeholder="Select List..."
-                  fluid
-                  selection
-                  options={listArray}
-                />
-                <Button onClick={this.handleSubmit} basic color="red" inverted>
-                  <Icon name="add" /> Add Lead to List
-                </Button>
-              </Modal.Actions>
+              {Object.keys(lists).length > 1 ? (
+                <div>
+                  <Modal.Header as='h2'>Select an Existing List:</Modal.Header>
+                  <Modal.Actions>
+                    <Dropdown
+                      onChange={this.handleDropdown}
+                      name="listId"
+                      style={styleDropdown}
+                      placeholder="Select list..."
+                      fluid
+                      selection
+                      options={listArray}
+                    />
+                    <Form.Input
+                      placeholder="Create new list..."
+                      onChange={this.handleChange}
+                      name="newListName"
+                    />
+                    <Button
+                      onClick={this.handleSubmit}
+                      basic
+                      color="red"
+                      inverted
+                    >
+                      <Icon name="add" /> Add Lead to List
+                    </Button>
+                  </Modal.Actions>{" "}
+                </div>
+              ) : (
+                <div>
+                  <Modal.Header as='h2'>
+                    You have no existing lists. 
+                    Create a new list:
+                  </Modal.Header>
+                  <Modal.Actions>
+                    <Form.Input
+                      placeholder="Create new list..."
+                      onChange={this.handleChange}
+                      name="newListName"
+                    />
+                    <Button
+                      onClick={this.handleSubmit}
+                      basic
+                      color="red"
+                      inverted
+                    >
+                      <Icon name="add" /> Add Lead to List
+                    </Button>
+                  </Modal.Actions>
+                </div>
+              )}
             </Modal>
           </Table.Cell>
         </Table.Row>
@@ -116,7 +151,6 @@ class SearchResults extends Component {
     });
     return (
       <div>
-        <Navbar />
         <Table singleLine>
           <Table.Header>
             <Table.Row>
@@ -158,7 +192,8 @@ class SearchResults extends Component {
 const mapStateToProps = state => {
   return {
     leads: state.leads,
-    lists: state.lists
+    lists: state.lists,
+    auth: state.auth
   };
 };
 

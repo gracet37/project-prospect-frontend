@@ -5,8 +5,7 @@ export default class UserProfile extends Component {
   render() {
     return (
       <div>
-        <NavBar />
-        Profile page
+        
       </div>
     )
   }

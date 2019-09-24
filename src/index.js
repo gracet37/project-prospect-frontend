@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import App from "./components/App";
 import { createStore, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from "react-redux";
 import reducer from "./reducers/index";
 import { persistStore, persistReducer } from 'redux-persist'
@@ -30,9 +30,9 @@ const store = createStore(reducer, composeEnhancers(
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
+    <Router>
     <App />
-    </BrowserRouter>
+    </Router>
   </Provider>,
   document.getElementById("root")
 );

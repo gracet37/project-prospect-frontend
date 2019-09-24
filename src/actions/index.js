@@ -47,7 +47,6 @@ export function currentUser(history) {
           console.log("current user", data.error)
         } else {
           dispatch(loginUser({ user: data.user }))
-          history.push('/search')
         }
       })
   }
@@ -64,9 +63,9 @@ export function login(formData, history) {
     return fetch('http://localhost:3000/api/v1/login', reqObj)
       .then(resp => resp.json())
       .then(data => {
-        if (data.error){
+        if (data.message){
           //handle error case
-          console.log("login error", data.error)
+          console.log("login error", data.message)
         } else {
           console.log("fetch login", data)
           localStorage.token = data.token
@@ -119,16 +118,18 @@ export function thunkFetchLists(id) {
   return function(dispatch) {
     dispatch({ type: START_FETCH_LISTS });
 
-    fetch(`http://localhost:3000/api/v1/lists/${id}`)
+    fetch(`http://localhost:3000/users/${id}`)
       .then(res => res.json())
       .then(data => {
-        dispatch({ type: FETCH_LISTS, lists: data });
+        console.log(data)
+        dispatch({ type: FETCH_LISTS, lists: data.lists});
       }); 
   };
 }
 // creating a new lead instance of the one the user saved and creating the association between list and lead
 export function addLead(leadObj, company, website, listId, newListName, userId) {
   return function(dispatch) {
+    const token = localStorage.token;
     dispatch({ type: START_FETCH_LEADS });
 
     fetch("http://localhost:3000/api/v1/leads", {
@@ -168,10 +169,11 @@ export function addLead(leadObj, company, website, listId, newListName, userId) 
           headers: {
             "Content-Type": 'application/json',
             "Accept": 'application/json'
+            // Authorization: 
           },
           body: JSON.stringify({
             name: newListName, 
-            user_id: userId
+            token: token
           })
         })
         .then(res => res.json())

@@ -3,9 +3,11 @@ import SearchBar from "../components/SearchBar";
 import SearchResults from "../components/SearchResults";
 import SearchResultsTest from "../components/SearchResultsTest";
 import NavBar from "../components/Navbar";
+import DatatablePage from "../NOT USING/DatatablePage";
 import LoginForm from "../components/LoginForm";
 import { thunkFetchLeads, thunkFetchLists } from "../actions";
 import { connect } from "react-redux";
+
 
 const CATEGORY_URL = "http://localhost:3000/api/v1/categories";
 const LEADS_URL = "http://localhost:3000/api/v1/leads";

@@ -9,7 +9,7 @@ import SearchResultsTest from "./SearchResultsTest";
 import LoginForm from "./LoginForm";
 import NewUserForm from "./NewUserForm";
 import LandingPage from "./LandingPage";
-import LeadsList from "./LeadsList";
+import LeadsList from "../NOT USING/LeadsList";
 import LeadNoteModal from "./LeadNoteModal";
 import { connect } from "react-redux";
 import { currentUser, thunkFetchLists } from "../actions";
@@ -19,8 +19,7 @@ import { currentUser, thunkFetchLists } from "../actions";
 class App extends React.Component {
   
   componentDidMount() {
-    this.props.currentUser(this.props.history);
-    this.props.thunkFetchLists(this.props.auth.id);
+    this.props.currentUser(this.props.history)
   }
 
   render() {

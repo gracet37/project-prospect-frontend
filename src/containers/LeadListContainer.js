@@ -1,25 +1,45 @@
 import React, { Component } from 'react';
 import Navbar from '../components/Navbar'
 import Dashboard from '../components/Dashboard'
-import EnhancedTable from '../components/LeadsList'
 import {connect} from 'react-redux'
+import { thunkFetchLists } from "../actions";
+import { withRouter} from "react-router-dom";
+
+
+
 
 class LeadListContainer extends Component {
+
+  componentDidMount() {
+    this.props.thunkFetchLists(17)
+  }
 
   render() {
     return (
       <div>
         <Dashboard />
-        {/* <EnhancedTable allLeads={this.props.leads}/> */}
       </div>
     );
   }
 }
 
+
+const mapDispatchToProps = dispatch => {
+  return {
+    thunkFetchLists: (id) => {
+      dispatch(thunkFetchLists(id));
+    }
+  };
+};
+
 const mapStateToProps = state => {
   return {
-    leads: state.leads
-  }
-}
+    leads: state.leads,
+    auth: state.auth
+  };
+};
 
-export default connect(mapStateToProps, null)(LeadListContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(LeadListContainer));

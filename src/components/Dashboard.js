@@ -12,6 +12,7 @@ class Dashboard extends Component {
     direction: null
   };
 
+
   handleSort = clickedColumn => () => {
     const { column, data, direction } = this.state;
 

@@ -8,7 +8,8 @@ import {
   Header,
   Button,
   Dropdown,
-  Input
+  Input,
+  Checkbox
 } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { addList, addLead } from "../actions";
@@ -26,7 +27,8 @@ class SearchResults extends Component {
     leadSelection: "",
     company: "",
     website: "",
-    newListName: ""
+    newListName: "",
+    leadsArray: []
   };
 
   componentDidMount() {
@@ -56,6 +58,17 @@ class SearchResults extends Component {
     // this.props.addList(this.state.listId)
   };
 
+  handleLeadClick = (lead, checked) => {
+    console.log(lead)
+    console.log(checked)
+    if (checked) { 
+    this.setState({leadsArray: [...this.state.leadsArray, lead]})
+    } else {
+      const newArray = this.state.leadsArray.filter(l => l.value !== lead.value) 
+      this.setState({ leadsArray: newArray })
+    }
+  }
+
   handleTest = () => {
     console.log("TEST");
   };
@@ -65,13 +78,13 @@ class SearchResults extends Component {
     console.log("list props", this.props.lists);
     let listArray = [];
     let lists = this.props.lists[0];
-    Object.keys(lists).forEach(function(i) {
-      listArray.push({
-        key: lists[i].id,
-        text: lists[i].name,
-        value: lists[i].id
-      });
-    });
+    // Object.keys(lists).forEach(function(i) {
+    //   listArray.push({
+    //     key: lists[i].id,
+    //     text: lists[i].name,
+    //     value: lists[i].id
+    //   });
+    // });
     // console.log("searchoptions", searchOptions)
     const dataArray = this.props.leads[0];
     console.log(dataArray);
@@ -84,7 +97,8 @@ class SearchResults extends Component {
           <Table.Cell>{lead.position}</Table.Cell>
           <Table.Cell>{dataArray.organization}</Table.Cell>
           <Table.Cell>{lead.confidence}</Table.Cell>
-          <Table.Cell>
+          <Table.Cell><Checkbox onClick={(event, { checked }) => this.handleLeadClick(lead, checked)}/></Table.Cell>
+          {/* <Table.Cell>
             <Modal
               centered
               trigger={
@@ -145,7 +159,7 @@ class SearchResults extends Component {
                 </div>
               )}
             </Modal>
-          </Table.Cell>
+          </Table.Cell> */}
         </Table.Row>
       );
     });
@@ -154,6 +168,11 @@ class SearchResults extends Component {
         <Navbar />
         <Table singleLine>
           <Table.Header>
+            {this.state.leadsArray.length > 0 ? 
+          <Table.Row>
+              <Table.HeaderCell>{this.state.leadsArray.length} leads selected</Table.HeaderCell>
+              <Table.HeaderCell><Button>Save</Button></Table.HeaderCell>
+            </Table.Row> : null }
             <Table.Row>
               <Table.HeaderCell>First Name</Table.HeaderCell>
               <Table.HeaderCell>Last Name</Table.HeaderCell>

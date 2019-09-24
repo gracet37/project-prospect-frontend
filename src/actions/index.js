@@ -27,24 +27,26 @@ export function logoutUser() {
 
 export function currentUser(history) {
   return (dispatch) => {
-    // const token = localStorage.token;
+    const token = localStorage.token;
     const reqObj = {
-      method: 'POST',
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.token}`
-      },
-      body: JSON.stringify(localStorage.token)
+        Authorization: `Bearer ${token}`
+      }
     }
+
+// dispatch with "loading" current user
 
     return fetch('http://localhost:3000/api/v1/current_user', reqObj)
       .then(resp => resp.json())
       .then(data => {
         if (data.error) {
           //handle error
-          console.log("currentUser error", data.error)
+          history.push('/')
+          console.log("current user", data.error)
         } else {
-          dispatch(loginUser({user: data.user}))
+          dispatch(loginUser({ user: data.user }))
           history.push('/search')
         }
       })
@@ -64,7 +66,7 @@ export function login(formData, history) {
       .then(data => {
         if (data.error){
           //handle error case
-          console.log(data.error)
+          console.log("login error", data.error)
         } else {
           console.log("fetch login", data)
           localStorage.token = data.token

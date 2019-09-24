@@ -17,6 +17,7 @@ import { currentUser, thunkFetchLists } from "../actions";
 // const LEADS_URL = 'http://localhost:3000/api/v1/leads'
 
 class App extends React.Component {
+  
   componentDidMount() {
     this.props.currentUser(this.props.history);
     this.props.thunkFetchLists(this.props.auth.id);

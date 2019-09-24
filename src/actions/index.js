@@ -156,38 +156,39 @@ export function addLead(leadsArray, company, website, listId, newListName, userI
       // })
     })
       .then(res => res.json())
-      .then(data => {
-        if (listId) { 
-        fetch("http://localhost:3000/api/v1/leadlists", {
-          method: "POST",
-          headers: {
-            "Content-Type": 'application/json',
-            "Accept": 'application/json'
-          },
-          body: JSON.stringify({
-            list_id: listId,
-            lead_id: data.id
-          })
-        }).catch(err => console.log(err));
-      } else { 
-        fetch("http://localhost:3000/api/v1/lists", {
-          method: "POST",
-          headers: {
-            "Content-Type": 'application/json',
-            "Accept": 'application/json'
-          },
-          body: JSON.stringify({
-            name: newListName, 
-            user_id: userId
-          })
-        })
-        .then(res => res.json())
-        // CREATE THE NEW LIST AND THEN DO ANOTHER FETCH CALL THAT CREATES THE ASSOCIATION BETWEEN LEAD ID AND LIST ID 
-        .then(data => console.log(data))
-        .catch(err => console.log(err));
-      }
-      })
-      .catch(err => console.log(err)); 
+      .then(console.log)
+  //     .then(data => {
+  //       if (listId) { 
+  //       fetch("http://localhost:3000/api/v1/leadlists", {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": 'application/json',
+  //           "Accept": 'application/json'
+  //         },
+  //         body: JSON.stringify({
+  //           list_id: listId,
+  //           lead_id: data.id
+  //         })
+  //       }).catch(err => console.log(err));
+  //     } else { 
+  //       fetch("http://localhost:3000/api/v1/lists", {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": 'application/json',
+  //           "Accept": 'application/json'
+  //         },
+  //         body: JSON.stringify({
+  //           name: newListName, 
+  //           user_id: userId
+  //         })
+  //       })
+  //       .then(res => res.json())
+  //       // CREATE THE NEW LIST AND THEN DO ANOTHER FETCH CALL THAT CREATES THE ASSOCIATION BETWEEN LEAD ID AND LIST ID 
+  //       .then(data => console.log(data))
+  //       .catch(err => console.log(err));
+  //     }
+  //     })
+  //     .catch(err => console.log(err)); 
   };
 }
 

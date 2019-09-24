@@ -47,27 +47,37 @@ class SearchResults extends Component {
     this.setState({ [targetName]: targetValue });
   };
 
-  handleLeadChange = lead => {
-    this.setState({ leadSelection: lead });
-  };
+  // handleLeadChange = lead => {
+  //   this.setState({ leadSelection: lead });
+  // };
 
   handleSubmit = () => {
-    const { leadSelection, company, website, listId, newListName } = this.state;
-    const userId = this.props.auth.id
-    this.props.addLead(leadSelection, company, website, listId, newListName, userId);
+    const { leadsArray, company, website, listId, newListName } = this.state;
+    console.log("SUBMIT", this.state)
+    const userId = this.props.auth.user.id;
+    this.props.addLead(
+      leadsArray,
+      company,
+      website,
+      listId,
+      newListName,
+      userId
+    );
     // this.props.addList(this.state.listId)
   };
 
   handleLeadClick = (lead, checked) => {
-    console.log(lead)
-    console.log(checked)
-    if (checked) { 
-    this.setState({leadsArray: [...this.state.leadsArray, lead]})
+    console.log(lead);
+    console.log(checked);
+    if (checked) {
+      this.setState({ leadsArray: [...this.state.leadsArray, lead] });
     } else {
-      const newArray = this.state.leadsArray.filter(l => l.value !== lead.value) 
-      this.setState({ leadsArray: newArray })
+      const newArray = this.state.leadsArray.filter(
+        l => l.value !== lead.value
+      );
+      this.setState({ leadsArray: newArray });
     }
-  }
+  };
 
   handleTest = () => {
     console.log("TEST");
@@ -75,17 +85,18 @@ class SearchResults extends Component {
 
   render() {
     console.log("state", this.state);
-    console.log("list props", this.props.lists);
+    console.log("list props", this.props.lists[0]);
     let listArray = [];
     let lists = this.props.lists[0];
-    // Object.keys(lists).forEach(function(i) {
-    //   listArray.push({
-    //     key: lists[i].id,
-    //     text: lists[i].name,
-    //     value: lists[i].id
-    //   });
-    // });
+    Object.keys(lists).forEach(function(i) {
+      listArray.push({
+        key: lists[i].id,
+        text: lists[i].name,
+        value: lists[i].id
+      });
+    });
     // console.log("searchoptions", searchOptions)
+    console.log("list array", listArray);
     const dataArray = this.props.leads[0];
     console.log(dataArray);
     const tableRow = dataArray.emails.map(lead => {
@@ -97,7 +108,13 @@ class SearchResults extends Component {
           <Table.Cell>{lead.position}</Table.Cell>
           <Table.Cell>{dataArray.organization}</Table.Cell>
           <Table.Cell>{lead.confidence}</Table.Cell>
-          <Table.Cell><Checkbox onClick={(event, { checked }) => this.handleLeadClick(lead, checked)}/></Table.Cell>
+          <Table.Cell>
+            <Checkbox
+              onClick={(event, { checked }) =>
+                this.handleLeadClick(lead, checked)
+              }
+            />
+          </Table.Cell>
           {/* <Table.Cell>
             <Modal
               centered
@@ -168,11 +185,82 @@ class SearchResults extends Component {
         <Navbar />
         <Table singleLine>
           <Table.Header>
-            {this.state.leadsArray.length > 0 ? 
-          <Table.Row>
-              <Table.HeaderCell>{this.state.leadsArray.length} leads selected</Table.HeaderCell>
-              <Table.HeaderCell><Button>Save</Button></Table.HeaderCell>
-            </Table.Row> : null }
+            {this.state.leadsArray.length > 0 ? (
+              <Table.Row>
+                <Table.HeaderCell colSpan="6">
+                  {this.state.leadsArray.length} leads selected
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  <Modal
+                    centered
+                    trigger={
+                      <Button onClick={this.handleLeadChange}>
+                        Save Leads
+                      </Button>
+                    }
+                    basic
+                    size="small"
+                  >
+                    {Object.keys(lists).length > 1 ? (
+                      <div>
+                        <Modal.Header as="h2">
+                          Select an Existing List:
+                        </Modal.Header>
+                        <Modal.Actions>
+                          <Dropdown
+                            onChange={this.handleDropdown}
+                            name="listId"
+                            style={styleDropdown}
+                            placeholder="Select list..."
+                            fluid
+                            disabled={this.state.newListName ? true : false}
+                            selection
+                            options={listArray}
+                          />
+                          <Modal.Header as="h2">
+                            Select an Existing List:
+                          </Modal.Header>
+                          <Form.Input
+                            placeholder="Create new list..."
+                            onChange={this.handleChange}
+                            name="newListName"
+                          />
+                          <Modal.Header as="h2">
+                          </Modal.Header>
+                          <Button
+                            onClick={this.handleSubmit}
+                            basic
+                            color="blue"
+                            inverted
+                          >
+                            <Icon name="add" /> Add Lead to List
+                          </Button>
+                        </Modal.Actions>
+                      </div>
+                    ) : (
+                      <div>
+                        <Modal.Header as="h2">Create A New List</Modal.Header>
+                        <Modal.Actions>
+                          <Form.Input
+                            placeholder="Create new list..."
+                            onChange={this.handleChange}
+                            name="newListName"
+                          />
+                          <Button
+                            onClick={this.handleSubmit}
+                            basic
+                            color="blue"
+                            inverted
+                          >
+                            <Icon name="add" /> Add Lead to List
+                          </Button>
+                        </Modal.Actions>
+                      </div>
+                    )}
+                  </Modal>
+                </Table.HeaderCell>
+              </Table.Row>
+            ) : null}
             <Table.Row>
               <Table.HeaderCell>First Name</Table.HeaderCell>
               <Table.HeaderCell>Last Name</Table.HeaderCell>
@@ -222,8 +310,8 @@ const mapDispatchToProps = dispatch => {
     addList: listName => {
       dispatch(addList(listName));
     },
-    addLead: (leadObj, company, website, listId) => {
-      dispatch(addLead(leadObj, company, website, listId));
+    addLead: (leadsArray, company, website, listId, newListName, userId) => {
+      dispatch(addLead(leadsArray, company, website, listId, newListName, userId));
     }
   };
 };
@@ -233,3 +321,4 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(SearchResults);
+

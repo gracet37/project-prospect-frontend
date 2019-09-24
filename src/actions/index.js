@@ -47,6 +47,7 @@ export function currentUser(history) {
           console.log("current user", data.error)
         } else {
           dispatch(loginUser({ user: data.user }))
+          dispatch(thunkFetchLists(data.user.id))
         }
       })
   }
@@ -127,7 +128,7 @@ export function thunkFetchLists(id) {
   };
 }
 // creating a new lead instance of the one the user saved and creating the association between list and lead
-export function addLead(leadObj, company, website, listId, newListName, userId) {
+export function addLead(leadsArray, company, website, listId, newListName, userId) {
   return function(dispatch) {
     const token = localStorage.token;
     dispatch({ type: START_FETCH_LEADS });
@@ -139,15 +140,20 @@ export function addLead(leadObj, company, website, listId, newListName, userId) 
         "Accept": 'application/json'
       },
       body: JSON.stringify({
-        first_name: leadObj.first_name,
-        last_name: leadObj.last_name, 
-        email: leadObj.value,
-        phone_number: leadObj.phone_number,
-        position: leadObj.position,
-        confidence_score: leadObj.confidence,
+        leadsArray,
         company: company,
         website: website
       })
+      // body: JSON.stringify({
+      //   first_name: leadObj.first_name,
+      //   last_name: leadObj.last_name, 
+      //   email: leadObj.value,
+      //   phone_number: leadObj.phone_number,
+      //   position: leadObj.position,
+      //   confidence_score: leadObj.confidence,
+      //   company: company,
+      //   website: website
+      // })
     })
       .then(res => res.json())
       .then(data => {
@@ -169,14 +175,14 @@ export function addLead(leadObj, company, website, listId, newListName, userId) 
           headers: {
             "Content-Type": 'application/json',
             "Accept": 'application/json'
-            // Authorization: 
           },
           body: JSON.stringify({
             name: newListName, 
-            token: token
+            user_id: userId
           })
         })
         .then(res => res.json())
+        // CREATE THE NEW LIST AND THEN DO ANOTHER FETCH CALL THAT CREATES THE ASSOCIATION BETWEEN LEAD ID AND LIST ID 
         .then(data => console.log(data))
         .catch(err => console.log(err));
       }

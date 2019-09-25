@@ -178,7 +178,7 @@ class SearchResults extends Component {
     // const tableRow = dataArray.emails.map(lead => {
       const tableRow = dataSlice.map(lead => {
       return (
-        <Table.Row>
+        <Table.Row >
           <Table.Cell>{lead.first_name}</Table.Cell>
           <Table.Cell>{lead.last_name}</Table.Cell>
           <Table.Cell>{lead.value}</Table.Cell>

@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import { FETCH_CATEGORIES, FETCH_LEADS, FETCH_LISTS, ADD_LIST, LOGIN_USER, LOGOUT_USER } from '../actions'
+import { FETCH_CATEGORIES, FETCH_LEADS, FETCH_LISTS, ADD_LIST, LOGIN_USER, LOGOUT_USER, DELETE_LIST } from '../actions'
 
 
 export default combineReducers({
@@ -31,9 +31,12 @@ function lists(state=[], action) {
   switch (action.type) {
      case FETCH_LISTS:
        return [{...action.lists}]
-      case ADD_LIST: 
+     case ADD_LIST: 
       return {...state,
       lists: [...state.lists, action.list]}
+     case DELETE_LIST:
+      const lists = state.lists.filter(list => list.id !== action.id)
+      return {...state, lists}
     default: 
      return state
   }

@@ -228,7 +228,7 @@ export function addLead(leadsArray, company, website, listId, newListName, userI
   };
 }
 
-export function addList(listName) {
+export function addList(listName, id) {
   return function(dispatch) {
 
     fetch("http://localhost:3000/api/v1/lists", {
@@ -243,7 +243,7 @@ export function addList(listName) {
     })
       .then(res => res.json())
       .then(data => {
-        dispatch({ type: ADD_LIST, lists: data})
+         
       })
       .catch(err => console.log(err)); 
   };
@@ -288,7 +288,7 @@ export function deleteList(id) {
     method: 'DELETE'
   }).then(res => res.json())
   .then(data => {
-    dispatch({type: DELETE_LIST, id: data.list.id})
+    dispatch({type: DELETE_LIST, id})
   })
   .catch(err => console.log(err))
   }

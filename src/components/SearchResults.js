@@ -400,8 +400,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    addList: listName => {
-      dispatch(addList(listName));
+    addList: (listName, id) => {
+      dispatch(addList(listName, id));
     },
     addLead: (leadsArray, company, website, listId, newListName, userId) => {
       dispatch(

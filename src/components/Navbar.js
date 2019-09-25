@@ -55,9 +55,9 @@ class Navbar extends React.Component {
         <NavLink style={styleLink} to="/leadlists">
           Dashboard
         </NavLink>
-        <NavLink style={styleLink} to="/results">
+        {/* <NavLink style={styleLink} to="/results">
           Results
-        </NavLink>
+        </NavLink> */}
         <NavLink style={styleLink} to="/profile">
           My Profile
         </NavLink>

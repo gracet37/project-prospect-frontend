@@ -5,7 +5,7 @@ import LeadListContainer from "../containers/LeadListContainer";
 import SearchContainer from "../containers/SearchContainer";
 import UserProfile from "./UserProfile";
 import SearchResults from "./SearchResults";
-import SearchResultsTest from "./SearchResultsTest";
+import SearchResultsTest from "../NOT USING/SearchResultsTest";
 import LoginForm from "./LoginForm";
 import NewUserForm from "./NewUserForm";
 import LandingPage from "./LandingPage";

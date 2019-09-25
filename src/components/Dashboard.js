@@ -9,23 +9,29 @@ class Dashboard extends Component {
   // UPDATE DATA WITH LISTS 
   state = {
     column: null,
-    data: null,
+    data: [],
     direction: null
   };
 
   componentDidMount() {
-    let listArray = [];
-    let lists = this.props.lists[0];
-    Object.keys(lists).forEach(function(i) {
-      let date = new Date(lists[i].created_at)
-      let dateString = date.toDateString()
-      listArray.push({
-        key: lists[i].id,
-        name: lists[i].name,
-        created: dateString
+   
+  }
+
+  formatListArray = (listArray) => {
+      console.log("list array", listArray)
+      let filteredArray = [];
+      // let lists = this.props.lists[0];
+      Object.keys(listArray).forEach(function(i) {
+        let date = new Date(listArray[i].created_at)
+        let dateString = date.toDateString()
+        filteredArray.push({
+          id: listArray[i].id,
+          name: listArray[i].name,
+          created: dateString
+        });
       });
-    });
-    this.setState({data: listArray})
+      // this.setState({data: listArray})}
+      return filteredArray
   }
 
   handleDeleteClick = (event, id) => {
@@ -58,7 +64,11 @@ class Dashboard extends Component {
   };
 
   render() {
-    const { column, data, direction } = this.state;
+    let data = []
+    if (this.props.lists.length) {
+      data = this.formatListArray(this.props.lists[0])
+    }
+    const { column, direction } = this.state;
     console.log(this.props.lists)
     console.log(this.state)
     return (

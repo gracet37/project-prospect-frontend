@@ -8,7 +8,7 @@ class UserProfile extends Component {
     return (
       <div>
         <Navbar />
-        This is {this.props.auth.user.first_name} profile page
+        This is {this.props.auth.user.first_name}'s profile page
       </div>
     )
   }

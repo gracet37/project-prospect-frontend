@@ -115,18 +115,41 @@ export function thunkFetchCategories() {
   };
 }
 
+// export function thunkFetchLists(id) {
+//   return function(dispatch) {
+//     dispatch({ type: START_FETCH_LISTS });
+
+//     fetch(`http://localhost:3000/users/${id}`)
+//       .then(res => res.json())
+//       .then(data => {
+//         console.log(data)
+//         dispatch({ type: FETCH_LISTS, lists: data.lists});
+//       }); 
+//   };
+// }
+
 export function thunkFetchLists(id) {
   return function(dispatch) {
     dispatch({ type: START_FETCH_LISTS });
 
-    fetch(`http://localhost:3000/users/${id}`)
+    fetch(`http://localhost:3000/api/v1/lists/${id}`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        "Accept": 'application/json'
+      },
+      body: JSON.stringify({
+        user_id: id
+      })
+    })
       .then(res => res.json())
       .then(data => {
         console.log(data)
-        dispatch({ type: FETCH_LISTS, lists: data.lists});
+        dispatch({ type: FETCH_LISTS, lists: data});
       }); 
   };
 }
+
 // creating a new lead instance of the one the user saved and creating the association between list and lead
 export function addLead(leadsArray, company, website, listId, newListName, userId) {
   return function(dispatch) {
@@ -202,7 +225,6 @@ export function addLead(leadsArray, company, website, listId, newListName, userI
     .catch(err => console.log(err)); 
   };
 }
-// CREATE THE NEW LIST AND THEN DO ANOTHER FETCH CALL THAT CREATES THE ASSOCIATION BETWEEN LEAD ID AND LIST ID 
 
 export function addList(listName) {
   return function(dispatch) {
@@ -230,7 +252,7 @@ export function thunkFetchLeads(domainName, history) {
     dispatch({ type: START_FETCH_LEADS });
 
     fetch(
-      `https://api.hunter.io/v2/domain-search?domain=${domainName}&limit=10&api_key=7ca084937e5e049696b7bb64c10366c3d077c650`
+      `https://api.hunter.io/v2/domain-search?domain=${domainName}&limit=100&api_key=7ca084937e5e049696b7bb64c10366c3d077c650`
     )
       .then(res => res.json())
       .then(result => {

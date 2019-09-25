@@ -9,7 +9,8 @@ import {
   Button,
   Dropdown,
   Input,
-  Checkbox
+  Checkbox,
+  Pagination
 } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { addList, addLead } from "../actions";
@@ -28,7 +29,9 @@ class SearchResults extends Component {
     company: "",
     website: "",
     newListName: "",
-    leadsArray: []
+    leadsArray: [], 
+    activePage: 1,
+    leadsPagination: []
   };
 
   componentDidMount() {
@@ -47,13 +50,9 @@ class SearchResults extends Component {
     this.setState({ [targetName]: targetValue });
   };
 
-  // handleLeadChange = lead => {
-  //   this.setState({ leadSelection: lead });
-  // };
-
   handleSubmit = () => {
     const { leadsArray, company, website, listId, newListName } = this.state;
-    console.log("SUBMIT", this.state)
+    console.log("SUBMIT", this.state);
     const userId = this.props.auth.user.id;
     this.props.addLead(
       leadsArray,
@@ -63,7 +62,6 @@ class SearchResults extends Component {
       newListName,
       userId
     );
-    // this.props.addList(this.state.listId)
   };
 
   handleLeadClick = (lead, checked) => {
@@ -79,11 +77,88 @@ class SearchResults extends Component {
     }
   };
 
-  handleTest = () => {
-    console.log("TEST");
-  };
+  handlePageChange = (activePage) => {
+    this.setState({activePage})
+  }
 
   render() {
+    const { activePage } = this.state
+    const dataArray = this.props.leads[0];
+    const dataArrayEmails = this.props.leads[0].emails;
+    let dataSlice
+    if (activePage === 1) {
+      dataSlice = dataArrayEmails.slice(0,9)
+    } else if (activePage === 2) {
+      dataSlice = dataArrayEmails.slice(10,19)
+    } else if (activePage === 3) {
+      dataSlice = dataArrayEmails.slice(20,29)
+    } else if (activePage === 4) {
+      dataSlice = dataArrayEmails.slice(30,39)
+    } else if (activePage === 5) {
+      dataSlice = dataArrayEmails.slice(40,49)
+    } else if (activePage === 6) {
+      dataSlice = dataArrayEmails.slice(50,59)
+    } else if (activePage === 7) {
+      dataSlice = dataArrayEmails.slice(60,69)
+    } else if (activePage === 8) {
+      dataSlice = dataArrayEmails.slice(70,79)
+    } else if (activePage === 9) {
+      dataSlice = dataArrayEmails.slice(80,89)
+    } else if (activePage === 10) {
+      dataSlice = dataArrayEmails.slice(90,99)
+    } else {
+      dataSlice = []
+    }
+
+
+    // const dataArraySLICE = dataArrayTEST.slice(10,19);
+    // console.log("data test", dataArrayTEST)
+    // console.log("data sliced???", dataArraySLICE)
+    // console.log(typeof dataArrayTEST)
+
+    // const leadsPagination = [
+    //   {
+    //     activePage: 1,
+    //     data: dataArray.slice(0,9)
+    //   },
+    //   {
+    //     activePage: 2,
+    //     data: dataArray.slice(10,19)
+    //   },
+    //   {
+    //     activePage: 3,
+    //     data: dataArray.slice(20,29)
+    //   },
+    //   {
+    //     activePage: 4,
+    //     data: dataArray.slice(30,39)
+    //   },
+    //   {
+    //     activePage: 5,
+    //     data: dataArray.slice(40,49)
+    //   },
+    //   {
+    //     activePage: 6,
+    //     data: dataArray.slice(50,59)
+    //   },
+    //   {
+    //     activePage: 7,
+    //     data: dataArray.slice(60,69)
+    //   },
+    //   {
+    //     activePage: 8,
+    //     data: dataArray.slice(70,79)
+    //   },
+    //   {
+    //     activePage: 9,
+    //     data: dataArray.slice(80,89)
+    //   },
+    //   {
+    //     activePage: 10,
+    //     data: dataArray.slice(90,99)
+    //   }
+    // ]
+
     console.log("state", this.state);
     console.log("list props", this.props.lists[0]);
     let listArray = [];
@@ -96,10 +171,12 @@ class SearchResults extends Component {
       });
     });
     // console.log("searchoptions", searchOptions)
-    console.log("list array", listArray);
-    const dataArray = this.props.leads[0];
-    console.log(dataArray);
-    const tableRow = dataArray.emails.map(lead => {
+    // console.log("list array", this.);
+    // const dataArray = this.props.leads[0];
+    // console.log("leads pagination", leadsPagination);
+    // const dataArray = 
+    // const tableRow = dataArray.emails.map(lead => {
+      const tableRow = dataSlice.map(lead => {
       return (
         <Table.Row>
           <Table.Cell>{lead.first_name}</Table.Cell>
@@ -183,6 +260,11 @@ class SearchResults extends Component {
     return (
       <div>
         <Navbar />
+        <div>
+          <h1>
+            SEARCH RESULTS
+          </h1>
+        </div>
         <Table singleLine>
           <Table.Header>
             {this.state.leadsArray.length > 0 ? (
@@ -218,15 +300,14 @@ class SearchResults extends Component {
                             options={listArray}
                           />
                           <Modal.Header as="h2">
-                            Select an Existing List:
+                            Create a New List:
                           </Modal.Header>
                           <Form.Input
                             placeholder="Create new list..."
                             onChange={this.handleChange}
                             name="newListName"
                           />
-                          <Modal.Header as="h2">
-                          </Modal.Header>
+                          <Modal.Header as="h2"></Modal.Header>
                           <Button
                             onClick={this.handleSubmit}
                             basic
@@ -276,7 +357,19 @@ class SearchResults extends Component {
           <Table.Footer>
             <Table.Row>
               <Table.HeaderCell colSpan="3">
-                <Menu floated="right" pagination>
+                <Pagination
+                  boundaryRange={0}
+                  defaultActivePage={1}
+                  ellipsisItem={"..."}
+                  firstItem={{ content: <Icon name='angle double left' />, icon: true }}
+                  lastItem={{ content: <Icon name='angle double right' />, icon: true }}
+                  prevItem={{ content: <Icon name='angle left' />, icon: true }}
+                  nextItem={{ content: <Icon name='angle right' />, icon: true }}
+                  siblingRange={1}
+                  totalPages={10}
+                  onPageChange={(event, { activePage }) => this.handlePageChange(activePage)}
+                />
+                {/* <Menu floated="right" pagination>
                   <Menu.Item as="a" icon>
                     <Icon name="chevron left" />
                   </Menu.Item>
@@ -287,7 +380,7 @@ class SearchResults extends Component {
                   <Menu.Item as="a" icon>
                     <Icon name="chevron right" />
                   </Menu.Item>
-                </Menu>
+                </Menu> */}
               </Table.HeaderCell>
             </Table.Row>
           </Table.Footer>
@@ -311,7 +404,9 @@ const mapDispatchToProps = dispatch => {
       dispatch(addList(listName));
     },
     addLead: (leadsArray, company, website, listId, newListName, userId) => {
-      dispatch(addLead(leadsArray, company, website, listId, newListName, userId));
+      dispatch(
+        addLead(leadsArray, company, website, listId, newListName, userId)
+      );
     }
   };
 };
@@ -321,4 +416,3 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(SearchResults);
-

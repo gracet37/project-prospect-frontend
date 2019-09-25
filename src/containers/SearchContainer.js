@@ -5,6 +5,7 @@ import SearchResultsTest from "../components/SearchResultsTest";
 import NavBar from "../components/Navbar";
 import DatatablePage from "../NOT USING/DatatablePage";
 import LoginForm from "../components/LoginForm";
+// import LeadList from "../components/LeadsList";
 import { thunkFetchLeads, thunkFetchLists } from "../actions";
 import { connect } from "react-redux";
 
@@ -21,6 +22,7 @@ class SearchContainer extends Component {
         <NavBar />
           <div>
             <SearchBar />
+            {/* <LeadList /> */}
             {/* <SearchResultsTest /> */}
           </div>
         {/* <SearchResultsTest />} */}

@@ -12,7 +12,23 @@ class Dashboard extends Component {
     direction: null
   };
 
+  componentDidMount() {
+    let listArray = [];
+    let lists = this.props.lists[0];
+    Object.keys(lists).forEach(function(i) {
+      listArray.push({
+        key: lists[i].id,
+        name: lists[i].name,
+        created: lists[i].created_at
+      });
+    });
+    this.setState({data: listArray})
+  }
 
+  handleClick = () => {
+
+  }
+  
   handleSort = clickedColumn => () => {
     const { column, data, direction } = this.state;
 
@@ -34,6 +50,8 @@ class Dashboard extends Component {
 
   render() {
     const { column, data, direction } = this.state;
+    console.log(this.props.lists)
+    console.log(this.state)
     return (
       <div style={{ height: "100%" }}>
         <Navbar />
@@ -82,7 +100,7 @@ class Dashboard extends Component {
 
           <Grid.Row columns={1}>
             <Grid.Column>
-              <Table sortable celled fixed>
+              <Table sortable selectable celled fixed>
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell
@@ -112,11 +130,12 @@ class Dashboard extends Component {
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                  {_.map(data, ({ age, gender, name }) => (
-                    <Table.Row key={name}>
+                  {_.map(data, ({ id, name, user_id, created, updated_at }) => (
+                    <Table.Row key={id} onClick={this.handleClick(id)}>
                       <Table.Cell>{name}</Table.Cell>
-                      <Table.Cell>{age}</Table.Cell>
-                      <Table.Cell>{gender}</Table.Cell>
+                      <Table.Cell>{user_id}</Table.Cell>
+                      <Table.Cell>{user_id}</Table.Cell>
+                      <Table.Cell>{created.slice(0,10)}</Table.Cell>
                     </Table.Row>
                   ))}
                 </Table.Body>

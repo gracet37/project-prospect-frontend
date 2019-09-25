@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { Grid, Image, Card, Table } from "semantic-ui-react";
+import { Grid, Image, Card, Table, Icon, Button } from "semantic-ui-react";
 import { connect } from "react-redux";
 import _ from 'lodash'
 import Navbar from "./Navbar";
+import { deleteList } from '../actions'
 
 class Dashboard extends Component {
   // UPDATE DATA WITH LISTS 
@@ -16,17 +17,25 @@ class Dashboard extends Component {
     let listArray = [];
     let lists = this.props.lists[0];
     Object.keys(lists).forEach(function(i) {
+      let date = new Date(lists[i].created_at)
+      let dateString = date.toDateString()
       listArray.push({
         key: lists[i].id,
         name: lists[i].name,
-        created: lists[i].created_at
+        created: dateString
       });
     });
     this.setState({data: listArray})
   }
 
-  handleClick = () => {
+  handleDeleteClick = (event, id) => {
+    event.preventDefault()
+    console.log(id)
+    this.props.deleteList(id)
+  }
 
+  handleRowClick = (id) => {
+    console.log("row clicked", id)
   }
   
   handleSort = clickedColumn => () => {
@@ -127,15 +136,22 @@ class Dashboard extends Component {
                     >
                       Date Created
                     </Table.HeaderCell>
+                    <Table.HeaderCell
+                      sorted={column === "date" ? direction : null}
+                      onClick={this.handleSort("date")}
+                    >
+                      Delete List
+                    </Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
                   {_.map(data, ({ id, name, user_id, created, updated_at }) => (
-                    <Table.Row key={id} onClick={this.handleClick(id)}>
+                    <Table.Row key={id} onClick={() => this.handleRowClick(id)}>
                       <Table.Cell>{name}</Table.Cell>
-                      <Table.Cell>{user_id}</Table.Cell>
-                      <Table.Cell>{user_id}</Table.Cell>
-                      <Table.Cell>{created.slice(0,10)}</Table.Cell>
+                      <Table.Cell></Table.Cell>
+                      <Table.Cell></Table.Cell>
+                      <Table.Cell>{created}</Table.Cell>
+                      <Table.Cell><Icon name={'trash alternate outline'} onClick={(event) => this.handleDeleteClick(event, id)} name='trash alternate outline' size='large' /></Table.Cell>
                     </Table.Row>
                   ))}
                 </Table.Body>
@@ -154,7 +170,15 @@ const mapStateToProps = state => {
   }
 };
 
+const mapDispatchToProps = dispatch => {
+  return {
+    deleteList: (id) => {
+      dispatch(deleteList(id))
+    }
+  }
+};
+
 export default connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(Dashboard);

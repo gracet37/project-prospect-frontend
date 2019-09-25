@@ -7,6 +7,8 @@ export const FETCH_LISTS = "FETCH_LISTS";
 export const ADD_LIST = "ADD_LIST";
 export const LOGIN_USER = "LOGIN_USER";
 export const LOGOUT_USER = "LOGOUT_USER";
+export const START_DELETE_LIST = "START_DELETE_LIST";
+export const DELETE_LIST = "DELETE_LIST";
 
 const uuidv1 = require('uuid/v1')
 
@@ -276,6 +278,20 @@ export function thunkFetchLeads(domainName, history) {
       //   .catch(err => console.log(err));
       // });
   };
+}
+
+export function deleteList(id) {
+  return function(dispatch) {
+    dispatch({type: START_DELETE_LIST})
+
+  fetch(`http://localhost:3000/api/v1/lists/${id}`, {
+    method: 'DELETE'
+  }).then(res => res.json())
+  .then(data => {
+    dispatch({type: DELETE_LIST, id: data.list.id})
+  })
+  .catch(err => console.log(err))
+  }
 }
 
 // .then(console.log

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Grid, Image, Card, Table, Icon, Button, Header } from "semantic-ui-react";
+import { Grid, Image, Card, Table, Icon, Button } from "semantic-ui-react";
 import { connect } from "react-redux";
 import _ from 'lodash'
 import Navbar from "./Navbar";
@@ -14,19 +14,59 @@ class Dashboard extends Component {
   };
 
   componentDidMount() {
-    let listArray = [];
-    let lists = this.props.lists[0];
-    Object.keys(lists).forEach(function(i) {
-      let date = new Date(lists[i].created_at)
-      let dateString = date.toDateString()
-      listArray.push({
-        key: lists[i].id,
-        name: lists[i].name,
-        created: dateString
-      });
-    });
-    this.setState({data: listArray})
+   this.formattedListArray()
   }
+
+  // formatListArray = (listArray) => {
+  //     console.log("list array", listArray)
+  //     let filteredArray = [];
+  //     // let lists = this.props.lists[0];
+  //     Object.keys(listArray).forEach(function(i) {
+  //       let date = new Date(listArray[i].created_at)
+  //       let dateString = date.toDateString()
+  //       filteredArray.push({
+  //         id: listArray[i].id,
+  //         name: listArray[i].name,
+  //         created: dateString
+  //       });
+  //     });
+  //     // this.setState({data: listArray})}
+  //     return filteredArray
+  // }
+
+//   formattedListArray = () => {
+//     // if (this.props.lists.length) {
+//     let array = []
+//     this.props.listlead.forEach(list => {
+//       let date = new Date(list.created_at)
+//       let dateString = date.toDateString()
+//       array.push({
+//         id: list.id,
+//         name: list.name,
+//         date: dateString
+//       })
+//     })
+//     this.setState({data: array})
+//     // return array
+// }
+
+formattedListArray = () => {
+  let array = this.props.listlead.map(lead => {
+    return {
+      id: lead.id,
+      first_name: lead.first_name,
+      last_name: lead.last_name, 
+      position: lead.position, 
+      company: lead.company,
+      status: null, 
+      next_steps: null, 
+      last_date_contacted: lead.contacted_date, 
+      email: lead.email,
+      phone_number: lead.phone_number
+    }
+  })
+  this.setState({data: array})
+}
 
   handleDeleteClick = (event, id) => {
     event.preventDefault()
@@ -58,15 +98,17 @@ class Dashboard extends Component {
   };
 
   render() {
+    // let data = []
+    // if (this.props.lists.length) {
+    //   this.formattedListArray(this.props.lists)
+    //   // this.setState({data})
+    // }
     const { column, data, direction } = this.state;
     console.log(this.props.lists)
     console.log(this.state)
     return (
       <div style={{ height: "100%" }}>
         <Navbar />
-        <div>
-          <Header as='h1'> TBC: LIST NAME  & LEADS </Header>
-        </div>
         <Grid divided="vertically">
           <Grid.Row columns={3}>
             <Grid.Column>
@@ -85,7 +127,7 @@ class Dashboard extends Component {
             <Grid.Column>
               <Card>
                 <Card.Content>
-                  <Card.Header>Meetings Booked</Card.Header>
+                  <Card.Header>Open Leads</Card.Header>
                   <Card.Description>XXXX</Card.Description>
                   <Image
                     floated="right"
@@ -98,7 +140,7 @@ class Dashboard extends Component {
             <Grid.Column>
               <Card>
                 <Card.Content>
-                  <Card.Header>Average Days Open</Card.Header>
+                  <Card.Header>Another METRIC</Card.Header>
                   <Card.Description>XXXX</Card.Description>
                   <Image
                     floated="right"
@@ -116,56 +158,63 @@ class Dashboard extends Component {
                 <Table.Header>
                   <Table.Row>
                     <Table.HeaderCell
-                      sorted={column === "name" ? direction : null}
-                      onClick={this.handleSort("name")}
+                      sorted={column === "first_name" ? direction : null}
+                      onClick={this.handleSort("first_name")}
                     >
                       First Name
                     </Table.HeaderCell>
                     <Table.HeaderCell
-                      sorted={column === "meetings" ? direction : null}
-                      onClick={this.handleSort("meetings")}
+                      sorted={column === "last_name" ? direction : null}
+                      onClick={this.handleSort("last_name")}
                     >
                       Last Name
                     </Table.HeaderCell>
                     <Table.HeaderCell
-                      sorted={column === "total" ? direction : null}
-                      onClick={this.handleSort("total")}
+                      sorted={column === "position" ? direction : null}
+                      onClick={this.handleSort("position")}
                     >
                       Position
                     </Table.HeaderCell>
                     <Table.HeaderCell
-                      sorted={column === "date" ? direction : null}
-                      onClick={this.handleSort("date")}
+                      sorted={column === "company" ? direction : null}
+                      onClick={this.handleSort("company")}
                     >
                       Company
                     </Table.HeaderCell>
                     <Table.HeaderCell
-                      sorted={column === "date" ? direction : null}
-                      onClick={this.handleSort("date")}
+                      sorted={column === "status" ? direction : null}
+                      onClick={this.handleSort("status")}
                     >
                       Status
                     </Table.HeaderCell>
                     <Table.HeaderCell
-                      sorted={column === "date" ? direction : null}
-                      onClick={this.handleSort("date")}
+                      sorted={column === "next_steps" ? direction : null}
+                      onClick={this.handleSort("next_steps")}
                     >
                       Next Steps
                     </Table.HeaderCell>
                     <Table.HeaderCell
-                      sorted={column === "date" ? direction : null}
-                      onClick={this.handleSort("date")}
+                      sorted={column === "last_date_contacted" ? direction : null}
+                      onClick={this.handleSort("last_date_contacted")}
                     >
                       Last Date Contacted
+                    </Table.HeaderCell>
+                    <Table.HeaderCell
+                    >
+                      Delete Lead
                     </Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                  {_.map(data, ({ id, name, user_id, created, updated_at }) => (
+                  {_.map(data, ({ id, first_name, last_name, position, company, status, next_steps, last_date_contacted}) => (
                     <Table.Row key={id} onClick={() => this.handleRowClick(id)}>
-                      <Table.Cell>{name}</Table.Cell>
-                      <Table.Cell></Table.Cell>
-                      <Table.Cell></Table.Cell>
-                      <Table.Cell>{created}</Table.Cell>
+                      <Table.Cell>{first_name}</Table.Cell>
+                      <Table.Cell>{last_name}</Table.Cell>
+                      <Table.Cell>{position}</Table.Cell>
+                      <Table.Cell>{company}</Table.Cell>
+                      <Table.Cell>{status}</Table.Cell>
+                      <Table.Cell>{next_steps}</Table.Cell>
+                      <Table.Cell>{last_date_contacted}</Table.Cell>
                       <Table.Cell><Icon name={'trash alternate outline'} onClick={(event) => this.handleDeleteClick(event, id)} name='trash alternate outline' size='large' /></Table.Cell>
                     </Table.Row>
                   ))}
@@ -181,7 +230,8 @@ class Dashboard extends Component {
 
 const mapStateToProps = state => {
   return {
-    lists: state.lists
+    lists: state.lists,
+    listlead: state.listlead
   }
 };
 

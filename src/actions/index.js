@@ -9,6 +9,7 @@ export const LOGIN_USER = "LOGIN_USER";
 export const LOGOUT_USER = "LOGOUT_USER";
 export const START_DELETE_LIST = "START_DELETE_LIST";
 export const DELETE_LIST = "DELETE_LIST";
+export const FETCH_LIST_BY_ID = "FETCH_LIST_BY_ID";
 
 const uuidv1 = require('uuid/v1')
 
@@ -49,7 +50,7 @@ export function currentUser(history) {
           console.log("current user", data.error)
         } else {
           dispatch(loginUser({ user: data.user }))
-          dispatch(thunkFetchLists(data.user.id))
+          // dispatch(thunkFetchLists(data.user.id))
         }
       })
   }
@@ -132,18 +133,17 @@ export function thunkFetchCategories() {
 
 export function thunkFetchLists(id) {
   return function(dispatch) {
-    dispatch({ type: START_FETCH_LISTS });
+    // dispatch({ type: START_FETCH_LISTS });
 
-    fetch(`http://localhost:3000/api/v1/lists/${id}`, {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-        "Accept": 'application/json'
-      },
-      body: JSON.stringify({
-        user_id: id
-      })
-    })
+    fetch(`http://localhost:3000/api/v1/lists/${id}`)
+      // method: "POST",
+      // headers: {
+      //   'Content-Type': 'application/json',
+      //   "Accept": 'application/json'
+      // },
+      // body: JSON.stringify({
+      //   user_id: id
+      // })
       .then(res => res.json())
       .then(data => {
         console.log(data)
@@ -152,10 +152,24 @@ export function thunkFetchLists(id) {
   };
 }
 
+export function thunkFetchListById(id, history) {
+  return function(dispatch) {
+    // dispatch({ type: START_FETCH_LISTS });
+
+    fetch(`http://localhost:3000/api/v1/lists/show/${id}`)
+      .then(res => res.json())
+      .then(data => {
+        console.log(data.leads)
+        dispatch({ type: FETCH_LIST_BY_ID, listlead: data.leads});
+        history.push('/leads')
+      }); 
+  };
+}
+
 // creating a new lead instance of the one the user saved and creating the association between list and lead
 export function addLead(leadsArray, company, website, listId, newListName, userId) {
   return function(dispatch) {
-    const token = localStorage.token;
+    // const token = localStorage.token;
     dispatch({ type: START_FETCH_LEADS });
 
     fetch("http://localhost:3000/api/v1/leads", {
@@ -205,6 +219,8 @@ export function addLead(leadsArray, company, website, listId, newListName, userI
         .then(res => res.json())
         // .then(console.log(leadsData))
         .then(data => {
+          dispatch({ type: ADD_LIST, list: data});
+          console.log("LIST", data)
           console.log(leadsData)
           leadsData.forEach(lead => {
           fetch("http://localhost:3000/api/v1/leadlists", {
@@ -262,21 +278,6 @@ export function thunkFetchLeads(domainName, history) {
         history.push('/results')
       });
 
-
-      // ! ASK FOR HELP HERE ////
-      // .then(data => {
-      //   // const dataArray = data[0];
-      //   fetch("http://localhost:3000/api/v1/leads", {
-      //     method: "POST",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //       Accept: "application/json"
-      //     },
-      //     body: JSON.stringify({data})
-      //   }).then(res => res.json())
-      //   .then(console.log)
-      //   .catch(err => console.log(err));
-      // });
   };
 }
 
@@ -287,64 +288,7 @@ export function deleteList(id) {
   fetch(`http://localhost:3000/api/v1/lists/${id}`, {
     method: 'DELETE'
   }).then(res => res.json())
-  .then(data => {
-    dispatch({type: DELETE_LIST, id})
-  })
+  .then(dispatch({type: DELETE_LIST, id}))
   .catch(err => console.log(err))
   }
 }
-
-// .then(console.log
-// const dataArray = data[0];
-// const leadData = dataArray.emails.map(lead => {
-//   return (
-//     first_name: lead.first_name,
-//     last_name: lead.last_name,
-//     confidence_score: lead.confidence,
-//     last_name: params[:last_name],
-//     phone_number: params[:phone_number],
-//     position: params[:position],
-//     email: params[:value],
-//     website: params[:website]
-//   )
-// })
-//   fetch("http://localhost:3000/api/v1/leads", {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//       "Accept": "application/json"
-//     },
-//     body: JSON.stringify({
-//       confidence_score:
-//       first_name:
-//       confidence_score: params[:confidence],
-//       first_name: params[:first_name],
-//       last_name: params[:last_name],
-//       linkedin: params[:linkedin],
-//       phone_number: params[:phone_number],
-//       position: params[:position],
-//       email: params[:value],
-//       website: params[:website]
-//     })
-//   })
-// })
-// .then(result => {
-//   dispatch({ type: FETCH_LEADS, leads: result.data })
-//   history.push('/results')
-// });
-
-// handleSubmit = () => {
-//   // ACTION - QUERYSEARCH
-//   const domainName = this.state.searchParam
-//   hunter.domainSearch(
-//     {domain: domainName},
-//     function(err, body) {
-//       if (err) {
-//         console.log(err);
-//       } else {
-//         // Will contain same body as the raw API call
-//         console.log(body);
-//       }
-//     }
-//   );
-// }

@@ -6,13 +6,14 @@ export default combineReducers({
   categories: categories,
   leads: leads,
   lists: lists,
-  auth: auth
+  auth: auth,
+  listlead: listlead
 })
 
 function categories(state=[], action) {
   switch (action.type) {
     case FETCH_CATEGORIES: 
-     return [...action.categories]
+     return action.categories
     default: 
      return state
   }
@@ -21,22 +22,21 @@ function categories(state=[], action) {
 function leads(state=[], action) {
   switch (action.type) {
      case FETCH_LEADS:
-       return [{...action.leads}]
+       return action.leads
     default: 
      return state
   }
 }
 
 function lists(state=[], action) {
+  // let newState = []
   switch (action.type) {
      case FETCH_LISTS:
-       return [{...action.lists}]
+       return action.lists
      case ADD_LIST: 
-      return {...state,
-      lists: [...state.lists, action.list]}
+       return [...state, action.list]
      case DELETE_LIST:
-      const lists = state.lists.filter(list => list.id !== action.id)
-      return {...state, lists}
+      return [...state.filter(list => list.id !== action.id)]
     default: 
      return state
   }
@@ -45,9 +45,18 @@ function lists(state=[], action) {
 function auth(state = {}, action) {
   switch (action.type) {
     case 'LOGIN_USER':
-      return {...action.user}
+      return action.user
     case 'LOGOUT_USER':
       return {}
+    default:
+      return state
+  }
+}
+
+function listlead(state = [], action) {
+  switch (action.type) {
+    case 'FETCH_LIST_BY_ID':
+      return action.listlead
     default:
       return state
   }

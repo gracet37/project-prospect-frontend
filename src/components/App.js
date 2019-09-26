@@ -9,7 +9,7 @@ import SearchResultsTest from "../NOT USING/SearchResultsTest";
 import LoginForm from "./LoginForm";
 import NewUserForm from "./NewUserForm";
 import LandingPage from "./LandingPage";
-import LeadsList from "./LeadList";
+import LeadList from "./LeadList";
 import LeadNoteModal from "./LeadNoteModal";
 import { connect } from "react-redux";
 import { currentUser, thunkFetchLists } from "../actions";
@@ -26,6 +26,9 @@ class App extends React.Component {
   }
 
   render() {
+    if (this.props.auth.user) {
+      this.props.thunkFetchLists(this.props.auth.user.id)
+    }
     return (
       <div className="app">
         {/* {this.props.auth.id ? <Navbar /> : null} */}
@@ -37,7 +40,7 @@ class App extends React.Component {
           <Route exact path="/profile" component={UserProfile} />
           <Route exact path="/search" component={SearchContainer} />
           <Route exact path="/signup" component={NewUserForm} />
-          <Route exact path="/leads" component={LeadsList} />
+          <Route exact path="/leads" component={LeadList} />
           <Route exact path="/leadnote" component={LeadNoteModal} />
         </Switch>
         {/* <Route exact path="/logout" component={} /> */}

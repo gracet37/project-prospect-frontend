@@ -11,8 +11,10 @@ import { withRouter} from "react-router-dom";
 class LeadListContainer extends Component {
 
   componentDidMount() {
-    // this.props.thunkFetchLists(17)
-  }
+    // // this.props.thunkFetchLists(17)
+    // if (this.props.auth.user.id) {
+    // this.thunkFetchLists(this.props.auth.user.id)
+    } 
 
   render() {
     return (
@@ -22,6 +24,7 @@ class LeadListContainer extends Component {
     );
   }
 }
+
 
 
 const mapDispatchToProps = dispatch => {

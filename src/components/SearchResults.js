@@ -35,7 +35,8 @@ class SearchResults extends Component {
   };
 
   componentDidMount() {
-    const array = this.props.leads[0];
+    console.log(this.props.leads)
+    const array = this.props.leads;
     this.setState({ company: array.organization, website: array.domain });
   }
 
@@ -83,8 +84,8 @@ class SearchResults extends Component {
 
   render() {
     const { activePage } = this.state
-    const dataArray = this.props.leads[0];
-    const dataArrayEmails = this.props.leads[0].emails;
+    const dataArray = this.props.leads;
+    const dataArrayEmails = this.props.leads.emails;
     let dataSlice
     if (activePage === 1) {
       dataSlice = dataArrayEmails.slice(0,9)
@@ -110,65 +111,15 @@ class SearchResults extends Component {
       dataSlice = []
     }
 
-
-    // const dataArraySLICE = dataArrayTEST.slice(10,19);
-    // console.log("data test", dataArrayTEST)
-    // console.log("data sliced???", dataArraySLICE)
-    // console.log(typeof dataArrayTEST)
-
-    // const leadsPagination = [
-    //   {
-    //     activePage: 1,
-    //     data: dataArray.slice(0,9)
-    //   },
-    //   {
-    //     activePage: 2,
-    //     data: dataArray.slice(10,19)
-    //   },
-    //   {
-    //     activePage: 3,
-    //     data: dataArray.slice(20,29)
-    //   },
-    //   {
-    //     activePage: 4,
-    //     data: dataArray.slice(30,39)
-    //   },
-    //   {
-    //     activePage: 5,
-    //     data: dataArray.slice(40,49)
-    //   },
-    //   {
-    //     activePage: 6,
-    //     data: dataArray.slice(50,59)
-    //   },
-    //   {
-    //     activePage: 7,
-    //     data: dataArray.slice(60,69)
-    //   },
-    //   {
-    //     activePage: 8,
-    //     data: dataArray.slice(70,79)
-    //   },
-    //   {
-    //     activePage: 9,
-    //     data: dataArray.slice(80,89)
-    //   },
-    //   {
-    //     activePage: 10,
-    //     data: dataArray.slice(90,99)
-    //   }
-    // ]
-
     console.log("state", this.state);
-    console.log("list props", this.props.lists[0]);
-    let listArray = [];
-    let lists = this.props.lists[0];
-    Object.keys(lists).forEach(function(i) {
-      listArray.push({
-        key: lists[i].id,
-        text: lists[i].name,
-        value: lists[i].id
-      });
+    console.log("list props", this.props.lists);
+    let lists = this.props.lists
+    let listArray = lists.map(list => {
+      return {
+        key: list.id,
+        text: list.name,
+        value: list.id
+      };
     });
     // console.log("searchoptions", searchOptions)
     // console.log("list array", this.);
@@ -283,7 +234,7 @@ class SearchResults extends Component {
                     basic
                     size="small"
                   >
-                    {Object.keys(lists).length > 1 ? (
+                    {listArray.length > 1 ? (
                       <div>
                         <Modal.Header as="h2">
                           Select an Existing List:
@@ -400,9 +351,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    addList: (listName, id) => {
-      dispatch(addList(listName, id));
-    },
+    // addList: (listName, id) => {
+    //   dispatch(addList(listName, id));
+    // },
     addLead: (leadsArray, company, website, listId, newListName, userId) => {
       dispatch(
         addLead(leadsArray, company, website, listId, newListName, userId)

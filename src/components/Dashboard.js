@@ -1,38 +1,58 @@
 import React, { Component } from "react";
 import { Grid, Image, Card, Table, Icon, Button } from "semantic-ui-react";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import _ from 'lodash'
 import Navbar from "./Navbar";
-import { deleteList } from '../actions'
+import { deleteList, thunkFetchListById } from '../actions'
+import thunk from "redux-thunk";
 
 class Dashboard extends Component {
   // UPDATE DATA WITH LISTS 
   state = {
     column: null,
-    data: [],
+    data: null,
     direction: null
   };
 
   componentDidMount() {
-   
+   this.formattedListArray()
   }
 
-  formatListArray = (listArray) => {
-      console.log("list array", listArray)
-      let filteredArray = [];
-      // let lists = this.props.lists[0];
-      Object.keys(listArray).forEach(function(i) {
-        let date = new Date(listArray[i].created_at)
-        let dateString = date.toDateString()
-        filteredArray.push({
-          id: listArray[i].id,
-          name: listArray[i].name,
-          created: dateString
-        });
-      });
-      // this.setState({data: listArray})}
-      return filteredArray
-  }
+
+  // formatListArray = (listArray) => {
+  //     console.log("list array", listArray)
+  //     let filteredArray = [];
+  //     // let lists = this.props.lists[0];
+  //     Object.keys(listArray).forEach(function(i) {
+  //       let date = new Date(listArray[i].created_at)
+  //       let dateString = date.toDateString()
+  //       filteredArray.push({
+  //         id: listArray[i].id,
+  //         name: listArray[i].name,
+  //         created: dateString
+  //       });
+  //     });
+  //     // this.setState({data: listArray})}
+  //     return filteredArray
+  // }
+
+  formattedListArray = () => {
+    // if (this.props.lists.length) {
+    let array = []
+    this.props.lists.forEach(list => {
+      let date = new Date(list.created_at)
+      let dateString = date.toDateString()
+      array.push({
+        id: list.id,
+        name: list.name,
+        date: dateString
+      })
+    })
+    this.setState({data: array})
+    // return array
+  
+}
 
   handleDeleteClick = (event, id) => {
     event.preventDefault()
@@ -42,6 +62,7 @@ class Dashboard extends Component {
 
   handleRowClick = (id) => {
     console.log("row clicked", id)
+    this.props.thunkFetchListById(id, this.props.history)
   }
   
   handleSort = clickedColumn => () => {
@@ -64,11 +85,12 @@ class Dashboard extends Component {
   };
 
   render() {
-    let data = []
-    if (this.props.lists.length) {
-      data = this.formatListArray(this.props.lists[0])
-    }
-    const { column, direction } = this.state;
+    // let data = []
+    // if (this.props.lists.length) {
+    //   this.formattedListArray(this.props.lists)
+    //   // this.setState({data})
+    // }
+    const { column, data, direction } = this.state;
     console.log(this.props.lists)
     console.log(this.state)
     return (
@@ -155,12 +177,12 @@ class Dashboard extends Component {
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                  {_.map(data, ({ id, name, user_id, created, updated_at }) => (
+                  {_.map(data, ({ id, name, date}) => (
                     <Table.Row key={id} onClick={() => this.handleRowClick(id)}>
                       <Table.Cell>{name}</Table.Cell>
                       <Table.Cell></Table.Cell>
                       <Table.Cell></Table.Cell>
-                      <Table.Cell>{created}</Table.Cell>
+                      <Table.Cell>{date}</Table.Cell>
                       <Table.Cell><Icon name={'trash alternate outline'} onClick={(event) => this.handleDeleteClick(event, id)} name='trash alternate outline' size='large' /></Table.Cell>
                     </Table.Row>
                   ))}
@@ -184,6 +206,9 @@ const mapDispatchToProps = dispatch => {
   return {
     deleteList: (id) => {
       dispatch(deleteList(id))
+    },
+    thunkFetchListById: (id, history) => {
+      dispatch(thunkFetchListById(id, history))
     }
   }
 };
@@ -191,4 +216,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Dashboard);
+)(withRouter(Dashboard));

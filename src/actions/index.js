@@ -8,7 +8,9 @@ export const ADD_LIST = "ADD_LIST";
 export const LOGIN_USER = "LOGIN_USER";
 export const LOGOUT_USER = "LOGOUT_USER";
 export const START_DELETE_LIST = "START_DELETE_LIST";
+export const START_DELETE_LEAD = "START_DELETE_LIST";
 export const DELETE_LIST = "DELETE_LIST";
+export const DELETE_LISTLEAD = "DELETE_LISTLEAD";
 export const FETCH_LIST_BY_ID = "FETCH_LIST_BY_ID";
 
 const uuidv1 = require('uuid/v1')
@@ -160,11 +162,30 @@ export function thunkFetchListById(id, history) {
       .then(res => res.json())
       .then(data => {
         console.log(data.leads)
-        dispatch({ type: FETCH_LIST_BY_ID, listlead: data.leads});
+        dispatch({ type: FETCH_LIST_BY_ID, listlead: data.leads, listid: data.id});
         history.push('/leads')
       }); 
   };
 }
+
+/////////////////// FETCHING LEADLIST /////////////////////////
+
+// export function thunkFetchListById(id, history) {
+//   return function(dispatch) {
+//     // dispatch({ type: START_FETCH_LISTS });
+
+//     fetch(`http://localhost:3000/api/v1/lists/show/${id}`)
+//       .then(res => res.json())
+//       .then(data => {
+//         console.log(data.leads)
+//         dispatch({ type: FETCH_LIST_BY_ID, listlead: data.leads, listid: data.id});
+//         history.push('/leads')
+//       }); 
+//   };
+// }
+
+
+
 
 // creating a new lead instance of the one the user saved and creating the association between list and lead
 export function addLead(leadsArray, company, website, listId, newListName, userId) {
@@ -292,3 +313,51 @@ export function deleteList(id) {
   .catch(err => console.log(err))
   }
 }
+
+
+export function deleteListLead(list_id, lead_id) {
+  return function(dispatch) {
+    dispatch({type: START_DELETE_LEAD})
+
+  fetch(`http://localhost:3000/api/v1/leadlists`, {
+    method: 'DELETE',
+    headers: {
+      "Content-Type": 'application/json',
+      "Accept": 'application/json'
+    },
+    body: JSON.stringify({
+      list_id: list_id,
+      lead_id: lead_id
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    dispatch({type: DELETE_LISTLEAD, lead_id: lead_id, list: list_id})})
+  .catch(err => console.log(err))
+  }
+}
+
+export function addLeadNote(leadnoteObj, user_id, lead_id) {
+  return function(dispatch) {
+
+    fetch("http://localhost:3000/leadnotes", {
+      method: "POST",
+      headers: {
+        "Content-Type": 'application/json',
+        "Accept": 'application/json'
+      },
+      body: JSON.stringify({
+        leadnoteObj,
+        user_id: user_id,
+        lead_id: lead_id
+      })
+    })
+      .then(res => res.json())
+      .then(data => {
+         console.log(data)
+      })
+      .catch(err => console.log(err)); 
+  };
+}
+//// ! ADD COMMENTS AS THE CALL BACK using the leadnote id received back from data
+

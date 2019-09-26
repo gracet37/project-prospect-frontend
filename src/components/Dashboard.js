@@ -178,11 +178,11 @@ class Dashboard extends Component {
                 </Table.Header>
                 <Table.Body>
                   {_.map(data, ({ id, name, date}) => (
-                    <Table.Row key={id} onClick={() => this.handleRowClick(id)}>
-                      <Table.Cell>{name}</Table.Cell>
-                      <Table.Cell></Table.Cell>
-                      <Table.Cell></Table.Cell>
-                      <Table.Cell>{date}</Table.Cell>
+                    <Table.Row key={id}>
+                      <Table.Cell onClick={() => this.handleRowClick(id)}>{name}</Table.Cell>
+                      <Table.Cell onClick={() => this.handleRowClick(id)}></Table.Cell>
+                      <Table.Cell onClick={() => this.handleRowClick(id)}></Table.Cell>
+                      <Table.Cell onClick={() => this.handleRowClick(id)}>{date}</Table.Cell>
                       <Table.Cell><Icon name={'trash alternate outline'} onClick={(event) => this.handleDeleteClick(event, id)} name='trash alternate outline' size='large' /></Table.Cell>
                     </Table.Row>
                   ))}

@@ -227,7 +227,7 @@ class SearchResults extends Component {
                   <Modal
                     centered
                     trigger={
-                      <Button onClick={this.handleLeadChange}>
+                      <Button>
                         Save Leads
                       </Button>
                     }

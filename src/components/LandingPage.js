@@ -34,7 +34,7 @@ const HomepageHeading = ({ mobile }) => (
   <Container text>
     <Header
       as='h1'
-      content='Imagine-a-Company'
+      content='Search for Prospects Instantly'
       inverted
       style={{
         fontSize: mobile ? '2em' : '4em',

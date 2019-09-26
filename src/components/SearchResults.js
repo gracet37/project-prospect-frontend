@@ -111,7 +111,6 @@ class SearchResults extends Component {
       dataSlice = []
     }
 
-    console.log("state", this.state);
     console.log("list props", this.props.lists);
     let lists = this.props.lists
     let listArray = lists.map(list => {
@@ -121,6 +120,7 @@ class SearchResults extends Component {
         value: list.id
       };
     });
+    console.log("list array", listArray);
     // console.log("searchoptions", searchOptions)
     // console.log("list array", this.);
     // const dataArray = this.props.leads[0];
@@ -234,7 +234,7 @@ class SearchResults extends Component {
                     basic
                     size="small"
                   >
-                    {listArray.length > 1 ? (
+                    {listArray.length ? (
                       <div>
                         <Modal.Header as="h2">
                           Select an Existing List:

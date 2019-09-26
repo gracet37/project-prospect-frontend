@@ -337,7 +337,7 @@ export function deleteListLead(list_id, lead_id) {
   }
 }
 
-export function addLeadNote(leadnoteObj, user_id, lead_id) {
+export function addLeadNote(status, nextSteps, userId, leadId, comment) {
   return function(dispatch) {
 
     fetch("http://localhost:3000/leadnotes", {
@@ -347,17 +347,30 @@ export function addLeadNote(leadnoteObj, user_id, lead_id) {
         "Accept": 'application/json'
       },
       body: JSON.stringify({
-        leadnoteObj,
-        user_id: user_id,
-        lead_id: lead_id
+        status: status,
+        next_steps: nextSteps,
+        lead_id: leadId,
+        user_id: userId
       })
     })
       .then(res => res.json())
       .then(data => {
          console.log(data)
+         fetch("http://localhost:3000/comments", {
+          method: "POST",
+          headers: {
+            "Content-Type": 'application/json',
+            "Accept": 'application/json'
+          },
+          body: JSON.stringify({
+            leadnote_id: data.id,
+            status: comment
+          })
+        })
       })
       .catch(err => console.log(err)); 
   };
 }
 //// ! ADD COMMENTS AS THE CALL BACK using the leadnote id received back from data
+// ! Create a reducer for this action 
 

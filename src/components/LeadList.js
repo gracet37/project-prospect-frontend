@@ -16,17 +16,17 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import _ from "lodash";
 import Navbar from "./Navbar";
-import { deleteList, deleteListLead } from "../actions";
+import { deleteList, deleteListLead, addLeadNote } from "../actions";
 
 const statusArray = [
-  {key: "10", text: "Meeting booked", value: "10"},
-  {key: "25", text: "Met with decision maker", value: "25"},
-  {key: "50", text: "Proposal sent", value: "50"},
-  {key: "90", text: "Verbal confirmation", value: "90"},
-  {key: "100", text: "Sale closed", value: "100"},
-  {key: "notfit", text: "Not fit for business", value: "notfit"},
-  {key: "incorrect", text: "Incorrect contact", value: "incorrect"},
-  {key: "contact", text: "Contact at later date", value: "contact"}
+  {key: "10", text: "Meeting booked", value: "Meeting booked"},
+  {key: "25", text: "Met with decision maker", value: "Met with decision maker"},
+  {key: "50", text: "Proposal sent", value: "Proposal sent"},
+  {key: "90", text: "Verbal confirmation", value: "Verbal confirmation"},
+  {key: "100", text: "Sale closed", value: "Sale closed"},
+  {key: "notfit", text: "Not fit for business", value: "Not fit for business"},
+  {key: "incorrect", text: "Incorrect contact", value: "Incorrect contact"},
+  {key: "contact", text: "Contact at later date", value: "Contact at later date"}
   ]
   
 
@@ -36,12 +36,16 @@ class Dashboard extends Component {
     column: null,
     data: null,
     direction: null,
-    activePage: 1
+    activePage: 1,
+    statusInput: "",
+    nextStepsInput: "",
+    commentsInput: ""
   };
 
   componentDidMount() {
     this.formattedListArray();
   }
+
 
   formattedListArray = () => {
     let listArray = this.props.listlead[0];
@@ -66,13 +70,16 @@ class Dashboard extends Component {
   };
 
   handleDeleteClick = (event, lead_id) => {
-    event.preventDefault();
-    this.props.deleteListLead(this.props.listlead[1], lead_id);
-  };
+    event.preventDefault()
+    let newArray = this.state.data.filter(data => data.id !== lead_id)
+    this.setState({data: newArray})
+    this.props.deleteList(lead_id)
+    // debugger
+  }
 
-  handleRowClick = id => {
-    console.log("row clicked", id);
-  };
+  // handleRowClick = id => {
+  //   console.log("row clicked", id);
+  // };
 
   handleSort = clickedColumn => () => {
     const { column, data, direction } = this.state;
@@ -97,12 +104,31 @@ class Dashboard extends Component {
     this.setState({ activePage });
   };
 
+  handleChange = e => {
+    const targetValue = e.target.value;
+    const targetName = e.target.name;
+    this.setState({ [targetName]: targetValue });
+  };
+
+  handleDropdown = (e, data) => {
+    const targetValue = data.value;
+    this.setState({ statusInput: targetValue });
+  };
+
+  handleAddLead = (leadId) => {
+    console.log(leadId)
+    const { statusInput, nextStepsInput, commentsInput } = this.state
+    this.props.addLeadNote(statusInput, nextStepsInput, this.props.auth.user.id, leadId, commentsInput)
+  }
+  
+
   render() {
     // let data = []
     // if (this.props.lists.length) {
     //   this.formattedListArray(this.props.lists)
     //   // this.setState({data})
     // }
+    console.log(this.state)
     const { column, data, direction, activePage } = this.state;
 
     let dataSlice;
@@ -249,7 +275,7 @@ class Dashboard extends Component {
                       }) => (
                         <Table.Row
                           key={id}
-                          onClick={() => this.handleRowClick(id)}
+                          // onClick={() => this.handleRowClick(id)}
                         >
                           <Table.Cell>{first_name}</Table.Cell>
                           <Table.Cell>{last_name}</Table.Cell>
@@ -269,6 +295,11 @@ class Dashboard extends Component {
                                 {first_name} {last_name} <br />{" "}
                                 {position ? position + "," : null} {company}
                               </Modal.Header>
+                              <Modal.Header as="h3">
+                                {phone_number ? "Phone:" + phone_number : null} Email: {email} 
+                  
+                                <Icon name={"envelope"}></Icon>
+                              </Modal.Header>
                               {/* <Modal.Header as='h3'>{position}, {company}</Modal.Header> */}
                 
                                 <Modal.Content>
@@ -276,16 +307,18 @@ class Dashboard extends Component {
                                     <Form.Group>
                                       <Form.Select
                                         // fluid
+                                        onChange={this.handleDropdown}
+                                        name="statusInput"
                                         label="Status"
                                         options={statusArray}
                                         placeholder="Select status"
                                       />
                                       {/* <Form.Header>Next Steps</Form.Header> */}
-                                      <Form.Input label="Next Steps"></Form.Input>
+                                      <Form.Input onChange={this.handleChange} name="nextStepsInput" label="Next Steps"></Form.Input>
                                     </Form.Group>
-                                    <Form.Input control='textarea' rows='3' label="Notes"/>
-                                    <Form.Field control={Button}>Save</Form.Field>
-                                    <Form.Description></Form.Description>
+                                    <Form.Input onChange={this.handleChange} name="commentsInput" control='textarea' rows='3' label="Notes"/>
+                                    <Button onClick={() => this.handleAddLead(id)}>Save</Button>
+                                    {/* <Form.Description></Form.Description> */} 
                                   </Form>
                                 </Modal.Content>
                     
@@ -388,6 +421,9 @@ const mapDispatchToProps = dispatch => {
     },
     deleteListLead: (list_id, lead_id) => {
       dispatch(deleteListLead(list_id, lead_id));
+    },
+    addLeadNote: (status, nextSteps, userId, leadId, comment) => {
+      dispatch(addLeadNote(status, nextSteps, userId, leadId, comment))
     }
   };
 };

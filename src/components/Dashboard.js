@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import { Grid, Image, Card, Table, Icon, Button } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
@@ -11,7 +11,7 @@ class Dashboard extends Component {
   // UPDATE DATA WITH LISTS 
   state = {
     column: null,
-    data: null,
+    data: [],
     direction: null
   };
 
@@ -19,6 +19,18 @@ class Dashboard extends Component {
    this.formattedListArray()
   }
 
+  // shouldComponentUpdate() {
+  //   if (this.state.data.length !== this.props.lists.length) {
+  //     return true
+  //   } else {
+  //     return false
+  //   }
+  // }
+
+  // componentDidUpdate() {
+  //   this.formattedListArray()
+  // }
+  
 
   // formatListArray = (listArray) => {
   //     console.log("list array", listArray)
@@ -51,13 +63,16 @@ class Dashboard extends Component {
     })
     this.setState({data: array})
     // return array
-  
 }
 
   handleDeleteClick = (event, id) => {
     event.preventDefault()
-    console.log(id)
+    // console.log(id)
+    // console.log(this.state.data)
+    let newArray = this.state.data.filter(data => data.id !== id)
+    this.setState({data: newArray})
     this.props.deleteList(id)
+    // debugger
   }
 
   handleRowClick = (id) => {

@@ -22,35 +22,7 @@ export default class LeadNoteModal extends Component {
   render() {
     return (
       <div>
-        <Modal trigger={<Button>Show Modal</Button>}>
-          <Modal.Header>Select a Photo</Modal.Header>
-          <Modal.Content image>
-            <Modal.Description>
-              <Header>LEAD DETAILS</Header>
-            </Modal.Description>
-            <Form.Group>
-              <Dropdown.Header>Status:</Dropdown.Header>
-              <Dropdown
-                onChange={this.handleDropdown}
-                name="listId"
-                style={styleDropdown}
-                placeholder="Select list..."
-                fluid
-                selection
-                options={statusArray}
-              />
-              <Form.Field>
-                <label>Next Steps</label>
-                <input placeholder="Next Steps..." />
-              </Form.Field>
-              <Form.TextArea
-                label="Notes"
-                // placeholder=""
-              />
-              <Button> Save</Button>
-            </Form.Group>
-          </Modal.Content>
-        </Modal>
+      
       </div>
     );
   }

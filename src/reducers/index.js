@@ -17,8 +17,9 @@ export default combineReducers({
   leads: leads,
   lists: lists,
   auth: auth,
-  listlead: listlead,
+  listleads: listleads,
   leadnotes: leadnotes
+  // specialLists: specialLists
 });
 
 function categories(state = [], action) {
@@ -64,28 +65,14 @@ function auth(state = {}, action) {
   }
 }
 
-// ! NEED TO FINISH OFF THE DELETE LIST LEAD ACTION
+// ? Updates state with the lead-> leadnote association data for LeadList.js
 
-function listlead(state = [], action) {
-  // let findLead = state.find(lead => lead.id === action.id);
-  // let leadId = findLead.id
-  // let leadlist = state.find(leadlist => )
-
+function listleads(state = [], action) {
   switch (action.type) {
     case "FETCH_LIST_BY_ID":
-      return [action.listlead, action.listid];
+      return {leads: action.leads, lists: action.list};
     // case "DELETE_LISTLEAD":
-    //   let listlead_state = state;
-    //   let newListState = [
-    //     ...state[0].filter(listlead => listlead.id !== action.id)
-    //   ];
-    //   let newListLeadState = [
-    //     {
-    //       leads: newListState,
-    //       id: state[1].id
-    //     }
-    //   ];
-    //   return newListLeadState;
+    //   return ;
     default:
       return state;
   }

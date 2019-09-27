@@ -18,40 +18,10 @@ class Dashboard extends Component {
    this.formattedListArray()
   }
 
-  // shouldComponentUpdate() {
-  //   if (this.state.data.length !== this.props.lists.length) {
-  //     return true
-  //   } else {
-  //     return false
-  //   }
-  // }
-
-  // componentDidUpdate() {
-  //   this.formattedListArray()
-  // }
-  
-
-  // formatListArray = (listArray) => {
-  //     console.log("list array", listArray)
-  //     let filteredArray = [];
-  //     // let lists = this.props.lists[0];
-  //     Object.keys(listArray).forEach(function(i) {
-  //       let date = new Date(listArray[i].created_at)
-  //       let dateString = date.toDateString()
-  //       filteredArray.push({
-  //         id: listArray[i].id,
-  //         name: listArray[i].name,
-  //         created: dateString
-  //       });
-  //     });
-  //     // this.setState({data: listArray})}
-  //     return filteredArray
-  // }
-
   formattedListArray = () => {
     // if (this.props.lists.length) {
     let array = []
-    this.props.lists.lists.forEach(list => {
+    this.props.lists.forEach(list => {
       let date = new Date(list.created_at)
       let dateString = date.toDateString()
       array.push({
@@ -99,6 +69,7 @@ class Dashboard extends Component {
   };
 
   render() {
+
     // let data = []
     // if (this.props.lists.length) {
     //   this.formattedListArray(this.props.lists)

@@ -55,7 +55,6 @@ export function currentUser(history) {
           console.log("current user", data.error)
         } else {
           dispatch(loginUser({ user: data.user }))
-          // dispatch(thunkFetchLists(data.user.id))
         }
       })
   }
@@ -123,20 +122,14 @@ export function thunkFetchCategories() {
   };
 }
 
+// ? Invoked on App.js and fetches all lists in array format with leads data
+// ? Used to populate the Dashboard.js
 
 export function thunkFetchLists(id) {
   return function(dispatch) {
     // dispatch({ type: START_FETCH_LISTS });
 
-    fetch(`http://localhost:3000/api/v1/lists/${id}`)
-      // method: "POST",
-      // headers: {
-      //   'Content-Type': 'application/json',
-      //   "Accept": 'application/json'
-      // },
-      // body: JSON.stringify({
-      //   user_id: id
-      // })
+    fetch(`http://localhost:3000/api/v1/lists/show_lists/${id}`)
       .then(res => res.json())
       .then(data => {
         console.log(data)
@@ -145,15 +138,16 @@ export function thunkFetchLists(id) {
   };
 }
 
+// ? Search by id of the LIST and return a list with leads and leadnote data
+// ? Used to populate LeadList.js
+
 export function thunkFetchListById(id, history) {
   return function(dispatch) {
-    // dispatch({ type: START_FETCH_LISTS });
-
-    fetch(`http://localhost:3000/api/v1/lists/show/${id}`)
+    fetch(`http://localhost:3000/api/v1/lists/show_special/${id}`)
       .then(res => res.json())
       .then(data => {
-        console.log(data.leads)
-        dispatch({ type: FETCH_LIST_BY_ID, listlead: data.leads, listid: data.id});
+        console.log(data)
+        dispatch({ type: FETCH_LIST_BY_ID, leads: data.leads, list: data.list});
         history.push('/leads')
       }); 
   };
@@ -270,6 +264,7 @@ export function addLead(leadsArray, company, website, listId, newListName, userI
         })
         .then(res => res.json())
         .then(data => {
+          console.log(data)
           dispatch({ type: ADD_LIST, list: data});
           leadsData.forEach(lead => {
           fetch("http://localhost:3000/api/v1/leadlists", {
@@ -293,26 +288,26 @@ export function addLead(leadsArray, company, website, listId, newListName, userI
   };
 }
 
-export function addList(listName, id) {
-  return function(dispatch) {
+// export function addList(listName, id) {
+//   return function(dispatch) {
 
-    fetch("http://localhost:3000/api/v1/lists", {
-      method: "POST",
-      headers: {
-        "Content-Type": 'application/json',
-        "Accept": 'application/json'
-      },
-      body: JSON.stringify({
-        name: listName
-      })
-    })
-      .then(res => res.json())
-      .then(data => {
+//     fetch("http://localhost:3000/api/v1/lists", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": 'application/json',
+//         "Accept": 'application/json'
+//       },
+//       body: JSON.stringify({
+//         name: listName
+//       })
+//     })
+//       .then(res => res.json())
+//       .then(data => {
          
-      })
-      .catch(err => console.log(err)); 
-  };
-}
+//       })
+//       .catch(err => console.log(err)); 
+//   };
+// }
 
 export function thunkFetchLeads(domainName, history) {
   return function(dispatch) {

@@ -112,7 +112,7 @@ class SearchResults extends Component {
     }
 
     console.log("list props", this.props.lists);
-    let lists = this.props.lists
+    let lists = this.props.lists.lists
     let listArray = lists.map(list => {
       return {
         key: list.id,

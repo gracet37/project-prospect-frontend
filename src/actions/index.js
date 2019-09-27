@@ -3,7 +3,9 @@ export const START_FETCH_CATEGORIES = "START_FETCH_CATEGORIES";
 export const START_FETCH_LEADS = "START_FETCH_LEADS";
 export const FETCH_LEADS = "FETCH_LEADS";
 export const START_FETCH_LISTS = "FETCH_LISTS";
+export const START_FETCH_LEADNOTES = "START_FETCH_LEADNOTES";
 export const FETCH_LISTS = "FETCH_LISTS";
+export const FETCH_LEADNOTES = "FETCH_LEADNOTES";
 export const ADD_LIST = "ADD_LIST";
 export const LOGIN_USER = "LOGIN_USER";
 export const LOGOUT_USER = "LOGOUT_USER";
@@ -12,6 +14,7 @@ export const START_DELETE_LEAD = "START_DELETE_LIST";
 export const DELETE_LIST = "DELETE_LIST";
 export const DELETE_LISTLEAD = "DELETE_LISTLEAD";
 export const FETCH_LIST_BY_ID = "FETCH_LIST_BY_ID";
+export const ADD_LEAD_NOTE = "ADD_LEAD_NOTE";
 
 const uuidv1 = require('uuid/v1')
 
@@ -75,7 +78,7 @@ export function login(formData, history) {
         } else {
           console.log("fetch login", data)
           localStorage.token = data.token
-          dispatch(loginUser(data.user))
+          dispatch(loginUser({ user: data.user }))
           history.push('/search')
         }
       })
@@ -120,18 +123,6 @@ export function thunkFetchCategories() {
   };
 }
 
-// export function thunkFetchLists(id) {
-//   return function(dispatch) {
-//     dispatch({ type: START_FETCH_LISTS });
-
-//     fetch(`http://localhost:3000/users/${id}`)
-//       .then(res => res.json())
-//       .then(data => {
-//         console.log(data)
-//         dispatch({ type: FETCH_LISTS, lists: data.lists});
-//       }); 
-//   };
-// }
 
 export function thunkFetchLists(id) {
   return function(dispatch) {
@@ -167,6 +158,49 @@ export function thunkFetchListById(id, history) {
       }); 
   };
 }
+
+
+//! FETCHES ONE LEADNOTE (DONT THINK I NEED THIS ANYMORE)
+// export function thunkFetchLeadNote(user_id, lead_id) {
+//   return function(dispatch) {
+//     dispatch({ type: START_FETCH_LEADNOTE });
+
+//     fetch("http://localhost:3000/leadnotes/show", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": 'application/json',
+//         "Accept": 'application/json'
+//       },
+//       body: JSON.stringify({
+//         user_id: user_id,
+//         lead_id: lead_id
+//       })
+//     })
+//     .then(res => res.json())
+//     .then(data => {
+//       console.log("leadnote", data)
+//       // dispatch({ type: FETCH_LEADNOTE, leadnote: data});
+//       // history.push('/leads')
+//     })
+//   }
+// }
+
+// ! FETCHES ALL LEADNOTES 
+
+// export function thunkFetchLeadNotes(user_id) {
+//   return function(dispatch) {
+//     dispatch({ type: START_FETCH_LEADNOTES });
+
+//     fetch(`http://localhost:3000/leadnotes/${user_id}`)
+//     .then(res => res.json())
+//     .then(data => {
+//       console.log("leadnotes", data)
+//       dispatch({ type: FETCH_LEADNOTES, leadnotes: data});
+//       // history.push('/leads')
+//     })
+//   }
+// }
+
 
 /////////////////// FETCHING LEADLIST /////////////////////////
 
@@ -206,11 +240,8 @@ export function addLead(leadsArray, company, website, listId, newListName, userI
       })
     })
       .then(res => res.json())
-      // .then(console.log)
       .then(data => {
-        // console.log(data)
         const leadsData = data
-        // console.log(leadsData)
         if (listId) { 
         data.forEach(lead => {
         fetch("http://localhost:3000/api/v1/leadlists", {
@@ -238,11 +269,8 @@ export function addLead(leadsArray, company, website, listId, newListName, userI
           })
         })
         .then(res => res.json())
-        // .then(console.log(leadsData))
         .then(data => {
           dispatch({ type: ADD_LIST, list: data});
-          console.log("LIST", data)
-          console.log(leadsData)
           leadsData.forEach(lead => {
           fetch("http://localhost:3000/api/v1/leadlists", {
             method: "POST",
@@ -340,7 +368,7 @@ export function deleteListLead(list_id, lead_id) {
 export function addLeadNote(status, nextSteps, userId, leadId, comment) {
   return function(dispatch) {
 
-    fetch("http://localhost:3000/leadnotes", {
+    fetch("http://localhost:3000/leadnotes/create", {
       method: "POST",
       headers: {
         "Content-Type": 'application/json',
@@ -349,28 +377,31 @@ export function addLeadNote(status, nextSteps, userId, leadId, comment) {
       body: JSON.stringify({
         status: status,
         next_steps: nextSteps,
+        comments: comment,
         lead_id: leadId,
         user_id: userId
       })
     })
       .then(res => res.json())
-      .then(data => {
-         console.log(data)
-         fetch("http://localhost:3000/comments", {
-          method: "POST",
-          headers: {
-            "Content-Type": 'application/json',
-            "Accept": 'application/json'
-          },
-          body: JSON.stringify({
-            leadnote_id: data.id,
-            status: comment
-          })
-        })
-      })
+      .then(console.log)
+      // .then(data => {
+        // dispatch({type: ADD_LEAD_NOTE, leadnote: data})})
       .catch(err => console.log(err)); 
   };
 }
 //// ! ADD COMMENTS AS THE CALL BACK using the leadnote id received back from data
 // ! Create a reducer for this action 
+
+
+      // .then(data => {
+      //    console.log(data)
+      //    fetch("http://localhost:3000/comments", {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": 'application/json',
+      //       "Accept": 'application/json'
+      //     },
+      //     body: JSON.stringify({
+      //       leadnote_id: data.id,
+      //       status: comment
 

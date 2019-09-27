@@ -7,7 +7,9 @@ import {
   LOGIN_USER,
   LOGOUT_USER,
   DELETE_LIST,
-  DELETE_LISTLEAD
+  DELETE_LISTLEAD,
+  FETCH_LEADNOTES,
+  ADD_LEAD_NOTE
 } from "../actions";
 
 export default combineReducers({
@@ -15,7 +17,8 @@ export default combineReducers({
   leads: leads,
   lists: lists,
   auth: auth,
-  listlead: listlead
+  listlead: listlead,
+  leadnotes: leadnotes
 });
 
 function categories(state = [], action) {
@@ -61,6 +64,8 @@ function auth(state = {}, action) {
   }
 }
 
+// ! NEED TO FINISH OFF THE DELETE LIST LEAD ACTION
+
 function listlead(state = [], action) {
   // let findLead = state.find(lead => lead.id === action.id);
   // let leadId = findLead.id
@@ -85,3 +90,15 @@ function listlead(state = [], action) {
       return state;
   }
 }
+
+function leadnotes(state = [], action) {
+  switch (action.type) {
+    case "FETCH_LEADNOTES":
+      return action.leadnotes;
+    case "ADD_LEAD_NOTE":
+      return action.leadnote
+    default:
+      return state;
+  }
+}
+

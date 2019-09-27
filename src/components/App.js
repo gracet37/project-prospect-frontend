@@ -1,18 +1,15 @@
 import React from "react";
 import { Route, withRouter, Switch } from "react-router-dom";
-import Navbar from "./Navbar";
 import LeadListContainer from "../containers/LeadListContainer";
 import SearchContainer from "../containers/SearchContainer";
 import UserProfile from "./UserProfile";
 import SearchResults from "./SearchResults";
-import SearchResultsTest from "../NOT USING/SearchResultsTest";
 import LoginForm from "./LoginForm";
 import NewUserForm from "./NewUserForm";
 import LandingPage from "./LandingPage";
 import LeadList from "./LeadList";
-import LeadNoteModal from "./LeadNoteModal";
 import { connect } from "react-redux";
-import { currentUser, thunkFetchLists } from "../actions";
+import { currentUser, thunkFetchLists, thunkFetchLeadNotes } from "../actions";
 
 // const LEADS_URL = 'http://localhost:3000/api/v1/leads'
 
@@ -20,14 +17,12 @@ class App extends React.Component {
   
   componentDidMount() {
     this.props.currentUser(this.props.history)
-    // this.props.thunkFetchLists(this.props.auth.user.id)
-        // this.props.thunkFetchLists(17) //HARDCODING THIS FOR NOW
-    // console.log())
   }
 
   render() {
     if (this.props.auth.user) {
       this.props.thunkFetchLists(this.props.auth.user.id)
+      // this.props.thunkFetchLeadNotes(this.props.auth.user.id)
     }
     return (
       <div className="app">
@@ -41,7 +36,6 @@ class App extends React.Component {
           <Route exact path="/search" component={SearchContainer} />
           <Route exact path="/signup" component={NewUserForm} />
           <Route exact path="/leads" component={LeadList} />
-          <Route exact path="/leadnote" component={LeadNoteModal} />
         </Switch>
         {/* <Route exact path="/logout" component={} /> */}
       </div>

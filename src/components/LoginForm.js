@@ -4,13 +4,10 @@ import {
   Form,
   Grid,
   Header,
-  Image,
-  Message,
   Segment
 } from "semantic-ui-react";
 import { NavLink, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import SearchContainer from "../containers/SearchContainer";
 import { login } from "../actions";
 import "../App.css";
 

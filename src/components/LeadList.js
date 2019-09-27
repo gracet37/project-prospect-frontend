@@ -9,7 +9,6 @@ import {
   Pagination,
   Header,
   Modal,
-  Dropdown,
   Form
 } from "semantic-ui-react";
 import { Link } from "react-router-dom";
@@ -29,7 +28,6 @@ const statusArray = [
   {key: "contact", text: "Contact at later date", value: "Contact at later date"}
   ]
   
-
 class Dashboard extends Component {
   // UPDATE DATA WITH LISTS
   state = {
@@ -48,23 +46,36 @@ class Dashboard extends Component {
 
 
   formattedListArray = () => {
-    let listArray = this.props.listlead[0];
+    // let listArray = this.props.listlead[0];
+    let listArray = this.props.lists.leads
+    // let leadNotesArray = this.props.leadnotes
+    // let leadnoteArray= lead.leadnotes
+    // let lastLeadnote = leadnoteArray.slice(-1)[0]
     if (listArray) {
       // console.log("LISTARRAY??", listArray)
       let array = listArray.map(lead => {
-        return {
-          id: lead.id,
-          first_name: lead.first_name,
-          last_name: lead.last_name,
-          position: lead.position,
-          company: lead.company,
-          status: null,
-          next_steps: null,
-          last_date_contacted: lead.contacted_date,
-          email: lead.email,
-          phone_number: lead.phone_number
-        };
-      });
+        // const oneLead = lead.lead
+        // if (lead.leadnotes) {
+        // const leadnotesArray = lead.leadnotes
+        // const lastLeadnote = leadnotesArray.slice(-1)[0]
+        // console.log("SLICE??", lastLeadnote)
+          return {
+            id: lead.lead.id,
+            first_name: lead.lead.first_name,
+            last_name: lead.lead.last_name,
+            position: lead.lead.position,
+            company: lead.lead.company,
+            status: null,
+            next_steps: null,
+            comments: null,
+            comments_date: null,
+            last_date_contacted: lead.lead.contacted_date,
+            email: lead.lead.email,
+            phone_number: lead.lead.phone_number
+          };
+      
+    });
+    console.log("LISTARRAY", listArray)
       this.setState({ data: array });
     }
   };
@@ -115,21 +126,22 @@ class Dashboard extends Component {
     this.setState({ statusInput: targetValue });
   };
 
-  handleAddLead = (leadId) => {
+  handleAddLeadNote = (leadId) => {
     console.log(leadId)
     const { statusInput, nextStepsInput, commentsInput } = this.state
     this.props.addLeadNote(statusInput, nextStepsInput, this.props.auth.user.id, leadId, commentsInput)
   }
   
+  // handleFetchClick = (id) => {
+  //   this.props.thunkFetchLeadNote(this.props.auth.user.id, id)
+  // }
 
   render() {
-    // let data = []
-    // if (this.props.lists.length) {
-    //   this.formattedListArray(this.props.lists)
-    //   // this.setState({data})
-    // }
-    console.log(this.state)
+
+    console.log("LEADLIST", this.state)
     const { column, data, direction, activePage } = this.state;
+    const leadnotesArray = this.props.leadnotes
+
 
     let dataSlice;
     if (data) {
@@ -204,7 +216,7 @@ class Dashboard extends Component {
               </Card>
             </Grid.Column>
           </Grid.Row>
-          {this.props.listlead[0].length > 0 ? (
+          {this.props.lists.leads.length > 0 ? (
             <Grid.Row columns={1}>
               <Grid.Column>
                 <Table sortable selectable celled fixed>
@@ -271,7 +283,9 @@ class Dashboard extends Component {
                         next_steps,
                         last_date_contacted,
                         phone_number,
-                        email
+                        email,
+                        comments,
+                        comments_date
                       }) => (
                         <Table.Row
                           key={id}
@@ -285,7 +299,7 @@ class Dashboard extends Component {
                           <Table.Cell>{next_steps}</Table.Cell>
                           <Table.Cell>{last_date_contacted}</Table.Cell>
                           <Table.Cell>
-                            {" "}
+                            {/* {leadnotesArray.find(lead => )} */}
                             <Modal
                               trigger={
                                 <Icon name={"edit outline"} size="large" />
@@ -311,26 +325,20 @@ class Dashboard extends Component {
                                         name="statusInput"
                                         label="Status"
                                         options={statusArray}
-                                        placeholder="Select status"
+                                        placeholder={status ? status : "Select status"}
                                       />
                                       {/* <Form.Header>Next Steps</Form.Header> */}
-                                      <Form.Input onChange={this.handleChange} name="nextStepsInput" label="Next Steps"></Form.Input>
+                                      <Form.Input onChange={this.handleChange} name="nextStepsInput" label="Next Steps" placeholder={next_steps ? next_steps : "Next steps"}></Form.Input>
                                     </Form.Group>
-                                    <Form.Input onChange={this.handleChange} name="commentsInput" control='textarea' rows='3' label="Notes"/>
-                                    <Button onClick={() => this.handleAddLead(id)}>Save</Button>
+                                    <Form.Input onChange={this.handleChange} name="commentsInput" control='textarea' rows='3' label="Notes" value={ comments ? comments_date + comments : null } />
+                                    <Button onClick={() => this.handleAddLeadNote(id)}>Save</Button>
                                     {/* <Form.Description></Form.Description> */} 
                                   </Form>
                                 </Modal.Content>
                     
                               
                             </Modal>
-                            {/* <Icon
-                              name={"edit outline"}
-                              onClick={event =>
-                                this.handleLeadNoteModal(event, id)
-                              }
-                              size="large"
-                            /> */}
+              
                           </Table.Cell>
                           <Table.Cell>
                             <Icon
@@ -410,25 +418,31 @@ const mapStateToProps = state => {
   return {
     lists: state.lists,
     listlead: state.listlead,
-    auth: state.auth
+    auth: state.auth,
+    leadnotes: state.leadnotes
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    deleteList: id => {
-      dispatch(deleteList(id));
-    },
-    deleteListLead: (list_id, lead_id) => {
-      dispatch(deleteListLead(list_id, lead_id));
-    },
-    addLeadNote: (status, nextSteps, userId, leadId, comment) => {
-      dispatch(addLeadNote(status, nextSteps, userId, leadId, comment))
-    }
-  };
-};
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     deleteList: id => {
+//       dispatch(deleteList(id));
+//     },
+//     deleteListLead: (list_id, lead_id) => {
+//       dispatch(deleteListLead(list_id, lead_id));
+//     },
+//     addLeadNote: (status, nextSteps, userId, leadId, comment) => {
+//       dispatch(addLeadNote(status, nextSteps, userId, leadId, comment))
+//     }
+//   };
+// };
+
+// export default connect(
+//   mapStateToProps,
+//   mapDispatchToProps
+// )(Dashboard);
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  {deleteList, deleteListLead, addLeadNote}
 )(Dashboard);

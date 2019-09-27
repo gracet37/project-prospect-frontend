@@ -1,11 +1,10 @@
-import React, { Component, useEffect } from "react";
-import { Grid, Image, Card, Table, Icon, Button } from "semantic-ui-react";
+import React, { Component } from "react";
+import { Grid, Image, Card, Table, Icon } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import _ from 'lodash'
 import Navbar from "./Navbar";
 import { deleteList, thunkFetchListById } from '../actions'
-import thunk from "redux-thunk";
 
 class Dashboard extends Component {
   // UPDATE DATA WITH LISTS 
@@ -52,7 +51,7 @@ class Dashboard extends Component {
   formattedListArray = () => {
     // if (this.props.lists.length) {
     let array = []
-    this.props.lists.forEach(list => {
+    this.props.lists.lists.forEach(list => {
       let date = new Date(list.created_at)
       let dateString = date.toDateString()
       array.push({
@@ -106,7 +105,7 @@ class Dashboard extends Component {
     //   // this.setState({data})
     // }
     const { column, data, direction } = this.state;
-    console.log(this.props.lists)
+    // console.log(this.props.lists)
     console.log(this.state)
     return (
       <div style={{ height: "100%" }}>

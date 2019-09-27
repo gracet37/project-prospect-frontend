@@ -48,7 +48,7 @@ class SearchBar extends Component {
     return (
       <div style={styleDiv}>
         <Form style={styleDiv}> 
-          <Dropdown
+          {/* <Dropdown
             onChange={this.handleDropdown}
             name="selectionParam"
             style={styleDropdown}
@@ -56,9 +56,9 @@ class SearchBar extends Component {
             fluid
             selection
             options={searchOptions}
-          />
-          {this.state.selectionParam === "industry" ? (
-            <Form>
+          /> */}
+          {/* {this.state.selectionParam === "industry" ? ( */}
+            {/* <Form>
               <Form.Input
                 onChange={this.handleChange}
                 name="searchParam"
@@ -73,7 +73,8 @@ class SearchBar extends Component {
               />
               <Button type="submit">Search</Button>
             </Form>
-          ) : (
+          ) :  */}
+          
             <Form>
               <Form.Input
                 onChange={this.handleChange}
@@ -82,10 +83,10 @@ class SearchBar extends Component {
                 placeholder="Enter domain name..."
               />
               <Button type="submit" onClick={this.handleSubmit}>
-                Search D
+                Search
               </Button>
             </Form>
-          )}
+          
         </Form>
       </div>
     );

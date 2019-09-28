@@ -15,6 +15,7 @@ export const DELETE_LIST = "DELETE_LIST";
 export const DELETE_LISTLEAD = "DELETE_LISTLEAD";
 export const FETCH_LIST_BY_ID = "FETCH_LIST_BY_ID";
 export const ADD_LEAD_NOTE = "ADD_LEAD_NOTE";
+// export const START_DELETE_LEADLIST = "START_DELETE_LEADLIST";
 
 const uuidv1 = require('uuid/v1')
 
@@ -337,10 +338,9 @@ export function deleteList(id) {
   }
 }
 
-
+// ? delete lead from LeadList.js
 export function deleteListLead(list_id, lead_id) {
   return function(dispatch) {
-    dispatch({type: START_DELETE_LEAD})
 
   fetch(`http://localhost:3000/api/v1/leadlists`, {
     method: 'DELETE',
@@ -354,8 +354,8 @@ export function deleteListLead(list_id, lead_id) {
     })
   })
   .then(res => res.json())
-  .then(data => {
-    dispatch({type: DELETE_LISTLEAD, lead_id: lead_id, list: list_id})})
+  .then(data => dispatch({type: DELETE_LISTLEAD, id: lead_id}))
+    // dispatch({type: DELETE_LISTLEAD, lead_id: lead_id, list: list_id})})
   .catch(err => console.log(err))
   }
 }

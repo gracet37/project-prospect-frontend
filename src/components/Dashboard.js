@@ -2,63 +2,120 @@ import React, { Component } from "react";
 import { Grid, Image, Card, Table, Icon, Confirm } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import _ from 'lodash'
+import _ from "lodash";
 import Navbar from "./Navbar";
-import { deleteList, thunkFetchListById } from '../actions'
+import { deleteList, thunkFetchListById } from "../actions";
 
 class Dashboard extends Component {
-  // UPDATE DATA WITH LISTS 
+  // UPDATE DATA WITH LISTS
   state = {
     column: null,
     data: [],
     direction: null,
-    deleteConfirmation: false
+    deleteConfirmation: false,
+    totalLeadCount: 0,
+    totalMeetingsBooked: 0, 
+    totalNotContacted: 0
   };
 
   componentDidMount() {
-   this.formattedListArray()
+    this.formattedListArray();
+     this.countTotalLeads()
+     this.countMeetingsBooked()
+     this.countNotContacted()
   }
 
-  show = (dimmer) => this.setState({ dimmer, deleteConfirmation: true })
-  handleConfirm = () => this.setState({ deleteConfirmation: false })
-  handleCancel = (id) => {
-    this.setState({ deleteConfirmation: false })
-    let newArray = this.state.data.filter(data => data.id !== id)
-    this.setState({data: newArray})
-    this.props.deleteList(id)
-  }
+  show = dimmer => this.setState({ dimmer, deleteConfirmation: true });
+  handleConfirm = () => this.setState({ deleteConfirmation: false });
+  handleCancel = () => {
+    this.setState({ deleteConfirmation: false });
+    // let newArray = this.state.data.filter(data => data.id !== id);
+    // this.setState({ data: newArray });
+    // this.props.deleteList(id);
+  };
 
   formattedListArray = () => {
     // if (this.props.lists.length) {
-    let array = []
+    let array = [];
     this.props.lists.forEach(list => {
-      let date = new Date(list.created_at)
-      let dateString = date.toDateString()
+      let date = new Date(list.created_at);
+      let dateString = date.toDateString();
       array.push({
         id: list.id,
         name: list.name,
         date: dateString
-      })
-    })
-    this.setState({data: array})
+      });
+    });
+    this.setState({ data: array });
     // return array
-}
+  };
 
-  handleDeleteClick = (event, id) => {
+  countTotalLeads = () => {
+    if (this.props.lists) {
+    let leadCountArray = []
+    let totalLeads
+    console.log(this.props.lists)
+    this.props.lists.forEach(list => {
+      let count = list.leads.length
+      leadCountArray.push(count)
+    })
+    totalLeads = leadCountArray.reduce((total, count) => total + count)
+    this.setState({totalLeadCount: totalLeads})
+    } else {
+      return null
+    }
+  }
+
+  countMeetingsBooked = () => {
+    let meetingsBookedCount = 0
+    if (this.props.listWithLeadNotes) {
+      this.props.listWithLeadNotes.forEach(lead => {
+        lead.leadnotes.forEach(leadnote => {
+          if(leadnote.status === "Meeting booked") {
+            meetingsBookedCount += 1
+          }
+        })
+      })
+      this.setState({totalMeetingsBooked: meetingsBookedCount})
+      } else {
+        return null
+      }
+  }
+
+    countNotContacted = () => {
+    let notContacted = 0
+    // let testArray = []
+    if (this.props.listWithLeadNotes) {
+      this.props.listWithLeadNotes.forEach(lead => {
+        if (lead.leadnotes.length < 1) {
+          notContacted += 1
+          console.log(notContacted)
+        }
+      })
+      this.setState({totalNotContacted: notContacted})
+      } else {
+        return null
+      }
+  }
+
+  handleConfirm = (event, id) => {
     event.preventDefault()
-    // console.log(id)
+    console.log(id)
     // console.log(this.state.data)
-    let newArray = this.state.data.filter(data => data.id !== id)
-    this.setState({data: newArray})
-    this.props.deleteList(id)
+    let newArray = this.state.data.filter(data => data.id !== id);
+    this.setState({ data: newArray, deleteConfirmation: false });
+    this.countTotalLeads()
+    this.countMeetingsBooked()
+    this.countNotContacted()
+    this.props.deleteList(id);
     // debugger
-  }
+  };
 
-  handleRowClick = (id) => {
-    console.log("row clicked", id)
-    this.props.thunkFetchListById(id, this.props.history)
-  }
-  
+  handleRowClick = id => {
+    console.log("row clicked", id);
+    this.props.thunkFetchListById(id, this.props.history);
+  };
+
   handleSort = clickedColumn => () => {
     const { column, data, direction } = this.state;
 
@@ -79,25 +136,33 @@ class Dashboard extends Component {
   };
 
   render() {
-
     // let data = []
     // if (this.props.lists.length) {
     //   this.formattedListArray(this.props.lists)
     //   // this.setState({data})
     // }
-    const { column, data, direction } = this.state;
+    const { column, data, direction, totalLeadCount, totalMeetingsBooked, totalNotContacted } = this.state;
     // console.log(this.props.lists)
-    console.log(this.state)
+    console.log(this.state);
     return (
       <div>
-        <Navbar />
+        {/* <Navbar /> */}
         <Grid divided="vertically">
-          <Grid.Row style={{marginTop:"40px", marginLeft: "70px"}} columns={3}>
+          <Grid.Row
+            style={{
+              position: "fixed",
+              top: "40px",
+              margin: "40px",
+              marginLeft: "70px",
+              padding: "px"
+            }}
+            columns={3}
+          >
             <Grid.Column>
               <Card>
                 <Card.Content>
                   <Card.Header>Total Leads</Card.Header>
-                  <Card.Description>XXXXXX</Card.Description>
+                  <Card.Description>{totalLeadCount}</Card.Description>
                   <Image
                     floated="right"
                     size="small"
@@ -109,8 +174,8 @@ class Dashboard extends Component {
             <Grid.Column>
               <Card>
                 <Card.Content>
-                  <Card.Header>Open Leads</Card.Header>
-                  <Card.Description>XXXX</Card.Description>
+                  <Card.Header>Total Meetings Booked</Card.Header>
+                  <Card.Description>{totalMeetingsBooked}</Card.Description>
                   <Image
                     floated="right"
                     size="small"
@@ -122,8 +187,8 @@ class Dashboard extends Component {
             <Grid.Column>
               <Card>
                 <Card.Content>
-                  <Card.Header>Another METRIC</Card.Header>
-                  <Card.Description>XXXX</Card.Description>
+                  <Card.Header>Not Yet Contacted</Card.Header>
+                  <Card.Description>{totalNotContacted}</Card.Description>
                   <Image
                     floated="right"
                     size="small"
@@ -134,7 +199,15 @@ class Dashboard extends Component {
             </Grid.Column>
           </Grid.Row>
 
-          <Grid.Row style={{margin:"60px", minHeight:'450px'}} columns={1}>
+          <Grid.Row
+            style={{
+              position: "fixed",
+              top: "250px",
+              margin: "40px",
+              minHeight: "600px"
+            }}
+            columns={1}
+          >
             <Grid.Column>
               <Table sortable selectable celled fixed>
                 <Table.Header>
@@ -164,29 +237,42 @@ class Dashboard extends Component {
                       Date Created
                     </Table.HeaderCell>
                     <Table.HeaderCell
-                      sorted={column === "date" ? direction : null}
-                      onClick={this.handleSort("date")}
                     >
                       Delete List
                     </Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                  {_.map(data, ({ id, name, date}) => (
+                  {_.map(data, ({ id, name, date }) => (
                     <Table.Row key={id}>
-                      <Table.Cell onClick={() => this.handleRowClick(id)}>{name}</Table.Cell>
-                      <Table.Cell onClick={() => this.handleRowClick(id)}></Table.Cell>
-                      <Table.Cell onClick={() => this.handleRowClick(id)}></Table.Cell>
-                      <Table.Cell onClick={() => this.handleRowClick(id)}>{date}</Table.Cell>
+                      <Table.Cell onClick={() => this.handleRowClick(id)}>
+                        {name}
+                      </Table.Cell>
+                      <Table.Cell
+                        onClick={() => this.handleRowClick(id)}
+                      ></Table.Cell>
+                      <Table.Cell
+                        onClick={() => this.handleRowClick(id)}
+                      ></Table.Cell>
+                      <Table.Cell onClick={() => this.handleRowClick(id)}>
+                        {date}
+                      </Table.Cell>
                       {/* <Table.Cell><Icon name={'trash alternate outline'} onClick={(event) => this.handleDeleteClick(event, id)} name='trash alternate outline' size='large' /></Table.Cell> */}
-                      <Table.Cell><Icon name={'trash alternate outline'} onClick={() => this.show('inverted')} name='trash alternate outline' size='large' /></Table.Cell>
+                      <Table.Cell>
+                        <Icon
+                          name={"trash alternate outline"}
+                          onClick={() => this.show("inverted")}
+                          name="trash alternate outline"
+                          size="large"
+                        />
                       <Confirm
                         open={this.state.deleteConfirmation}
-                        cancelButton='Cancel'
+                        cancelButton="Cancel"
                         confirmButton="Confirm"
                         onCancel={this.handleCancel}
-                        onConfirm={() => this.handleConfirm(id)}
-                        />
+                        onConfirm={(event) => this.handleConfirm(event, id)}
+                      />
+                      </Table.Cell>
                     </Table.Row>
                   ))}
                 </Table.Body>
@@ -201,19 +287,20 @@ class Dashboard extends Component {
 
 const mapStateToProps = state => {
   return {
-    lists: state.lists
-  }
+    lists: state.lists,
+    listWithLeadNotes: state.listWithLeadNotes
+  };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    deleteList: (id) => {
-      dispatch(deleteList(id))
+    deleteList: id => {
+      dispatch(deleteList(id));
     },
     thunkFetchListById: (id, history) => {
-      dispatch(thunkFetchListById(id, history))
+      dispatch(thunkFetchListById(id, history));
     }
-  }
+  };
 };
 
 export default connect(

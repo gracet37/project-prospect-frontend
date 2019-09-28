@@ -24,10 +24,10 @@ const styleBar = {
   backgroundColor: '#5400E8',
   height: '50px',
   textAlign: 'center',
-  verticalAlign: 'middle'
-  // position: 'fixed',
-  // top: '0',
-  // width: '100%'
+  verticalAlign: 'middle',
+  position: 'fixed',
+  top: '0',
+  width: '100%'
 }
 
 const styleLink = {
@@ -67,6 +67,7 @@ class Navbar extends React.Component {
         <NavLink style={styleLink} to="/">
           Home
         </NavLink>
+        
       </div>
     );
   }

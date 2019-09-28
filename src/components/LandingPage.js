@@ -107,15 +107,15 @@ class DesktopContainer extends Component {
                   as={Link}
                   to="/profile"
                 >
-                  My Profile
+                  My Account
                 </Menu.Item>
-                <Menu.Item
+                {/* <Menu.Item
                   style={{ fontSize: "large", color: "#43425D" }}
                   as={Link}
                   to="/results"
                 >
                   Results
-                </Menu.Item>
+                </Menu.Item> */}
                 <Menu.Item position="right">
                   <Button as={Link} to="/login" inverted={!fixed}>
                     Log in

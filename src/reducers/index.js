@@ -67,12 +67,12 @@ function auth(state = {}, action) {
 
 // ? Updates state with the lead-> leadnote association data for LeadList.js
 
-function listleads(state = [], action) {
+function listleads(state = {leads: [], list: []}, action) {
   switch (action.type) {
     case "FETCH_LIST_BY_ID":
-      return {leads: action.leads, lists: action.list};
-    // case "DELETE_LISTLEAD":
-    //   return ;
+      return {leads: action.leads, list: action.list};
+    case "DELETE_LISTLEAD":
+        return {...state, leads: state.leads.filter(lead => lead.id !== action.id)};
     default:
       return state;
   }

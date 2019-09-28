@@ -3,7 +3,7 @@ import { Form, Dropdown, Button } from "semantic-ui-react";
 import { thunkFetchCategories, thunkFetchLeads } from "../actions";
 import { connect } from "react-redux";
 import { Link, withRouter } from 'react-router-dom';
-
+import Loading from './Loading'
 /////////////////////// STYLING /////////////////////////
 const searchOptions = [
   { key: "industry", text: "Industry", value: "industry" },
@@ -24,7 +24,8 @@ class SearchBar extends Component {
     selectionParam: "",
     searchParam: "",
     locationParam: "",
-    leadsResults: []
+    leadsResults: [],
+    searchClicked: false
   };
 
   handleDropdown = (e, data) => {
@@ -40,6 +41,7 @@ class SearchBar extends Component {
   };
 
   handleSubmit = () => {
+    this.setState({searchClicked: true})
     this.props.thunkFetchLeads(this.state.searchParam, this.props.history)
   };
 
@@ -47,6 +49,7 @@ class SearchBar extends Component {
     console.log(this.state);
     return (
       <div style={styleDiv}>
+        {/* {this.state.searchClicked ? <Loading /> : null} */}
         <Form style={styleDiv}> 
           {/* <Dropdown
             onChange={this.handleDropdown}
@@ -75,18 +78,19 @@ class SearchBar extends Component {
             </Form>
           ) :  */}
           
-            <Form>
+            <Form centered>
+              <Form.Group>
               <Form.Input
                 onChange={this.handleChange}
                 name="searchParam"
-                fluid
                 placeholder="Enter domain name..."
+                loading={this.state.searchClicked ? true : false }
               />
               <Button type="submit" onClick={this.handleSubmit}>
                 Search
               </Button>
+            </Form.Group>
             </Form>
-          
         </Form>
       </div>
     );

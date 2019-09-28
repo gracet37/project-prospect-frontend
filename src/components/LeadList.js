@@ -18,16 +18,28 @@ import Navbar from "./Navbar";
 import { deleteList, deleteListLead, addLeadNote } from "../actions";
 
 const statusArray = [
-  {key: "10", text: "Meeting booked", value: "Meeting booked"},
-  {key: "25", text: "Met with decision maker", value: "Met with decision maker"},
-  {key: "50", text: "Proposal sent", value: "Proposal sent"},
-  {key: "90", text: "Verbal confirmation", value: "Verbal confirmation"},
-  {key: "100", text: "Sale closed", value: "Sale closed"},
-  {key: "notfit", text: "Not fit for business", value: "Not fit for business"},
-  {key: "incorrect", text: "Incorrect contact", value: "Incorrect contact"},
-  {key: "contact", text: "Contact at later date", value: "Contact at later date"}
-  ]
-  
+  { key: "10", text: "Meeting booked", value: "Meeting booked" },
+  {
+    key: "25",
+    text: "Met with decision maker",
+    value: "Met with decision maker"
+  },
+  { key: "50", text: "Proposal sent", value: "Proposal sent" },
+  { key: "90", text: "Verbal confirmation", value: "Verbal confirmation" },
+  { key: "100", text: "Sale closed", value: "Sale closed" },
+  {
+    key: "notfit",
+    text: "Not fit for business",
+    value: "Not fit for business"
+  },
+  { key: "incorrect", text: "Incorrect contact", value: "Incorrect contact" },
+  {
+    key: "contact",
+    text: "Contact at later date",
+    value: "Contact at later date"
+  }
+];
+
 class Dashboard extends Component {
   // UPDATE DATA WITH LISTS
   state = {
@@ -44,10 +56,9 @@ class Dashboard extends Component {
     this.formattedListArray();
   }
 
-
   formattedListArray = () => {
     // let listArray = this.props.listlead[0];
-    let listArray = this.props.lists.leads
+    let listArray = this.props.listleads.leads;
     // let leadNotesArray = this.props.leadnotes
     // let leadnoteArray= lead.leadnotes
     // let lastLeadnote = leadnoteArray.slice(-1)[0]
@@ -55,38 +66,56 @@ class Dashboard extends Component {
       // console.log("LISTARRAY??", listArray)
       let array = listArray.map(lead => {
         // const oneLead = lead.lead
-        // if (lead.leadnotes) {
-        // const leadnotesArray = lead.leadnotes
-        // const lastLeadnote = leadnotesArray.slice(-1)[0]
-        // console.log("SLICE??", lastLeadnote)
-          return {
-            id: lead.lead.id,
-            first_name: lead.lead.first_name,
-            last_name: lead.lead.last_name,
-            position: lead.lead.position,
-            company: lead.lead.company,
-            status: null,
-            next_steps: null,
-            comments: null,
-            comments_date: null,
-            last_date_contacted: lead.lead.contacted_date,
-            email: lead.lead.email,
-            phone_number: lead.lead.phone_number
-          };
-      
-    });
-    console.log("LISTARRAY", listArray)
+        let last = null
+        if (lead.leadnotes.length) {
+          last = lead.leadnotes[lead.leadnotes.length - 1];
+        }
+        console.log("LAST", last)
+        if (lead.leadnotes.length > 0) {
+          let date = new Date(last.created_at)
+          let dateString = date.toDateString()
+        return {
+          id: lead.lead.id,
+          first_name: lead.lead.first_name,
+          last_name: lead.lead.last_name,
+          position: lead.lead.position,
+          company: lead.lead.company,
+          status: last.status,
+          next_steps: last.next_steps,
+          comments: last.comments,
+          comments_date: dateString,
+          last_date_contacted: lead.lead.contacted_date,
+          email: lead.lead.email,
+          phone_number: lead.lead.phone_number
+        }
+      } else {
+        return {
+          id: lead.lead.id,
+          first_name: lead.lead.first_name,
+          last_name: lead.lead.last_name,
+          position: lead.lead.position,
+          company: lead.lead.company,
+          status: null,
+          next_steps: null,
+          comments: null,
+          comments_date: null,
+          last_date_contacted: lead.lead.contacted_date,
+          email: lead.lead.email,
+          phone_number: lead.lead.phone_number
+        }}
+      });
+      console.log("LISTARRAY", listArray);
       this.setState({ data: array });
     }
   };
 
   handleDeleteClick = (event, lead_id) => {
-    event.preventDefault()
-    let newArray = this.state.data.filter(data => data.id !== lead_id)
-    this.setState({data: newArray})
-    this.props.deleteList(lead_id)
+    event.preventDefault();
+    let newArray = this.state.data.filter(data => data.id !== lead_id);
+    this.setState({ data: newArray });
+    this.props.deleteListLead(this.props.listleads.list.id, lead_id);
     // debugger
-  }
+  };
 
   // handleRowClick = id => {
   //   console.log("row clicked", id);
@@ -126,22 +155,26 @@ class Dashboard extends Component {
     this.setState({ statusInput: targetValue });
   };
 
-  handleAddLeadNote = (leadId) => {
-    console.log(leadId)
-    const { statusInput, nextStepsInput, commentsInput } = this.state
-    this.props.addLeadNote(statusInput, nextStepsInput, this.props.auth.user.id, leadId, commentsInput)
-  }
-  
+  handleAddLeadNote = leadId => {
+    console.log(leadId);
+    const { statusInput, nextStepsInput, commentsInput } = this.state;
+    this.props.addLeadNote(
+      statusInput,
+      nextStepsInput,
+      this.props.auth.user.id,
+      leadId,
+      commentsInput
+    );
+  };
+
   // handleFetchClick = (id) => {
   //   this.props.thunkFetchLeadNote(this.props.auth.user.id, id)
   // }
 
   render() {
-
-    console.log("LEADLIST", this.state)
+    console.log("LEADLIST", this.state);
     const { column, data, direction, activePage } = this.state;
-    const leadnotesArray = this.props.leadnotes
-
+    const leadnotesArray = this.props.leadnotes;
 
     let dataSlice;
     if (data) {
@@ -216,7 +249,7 @@ class Dashboard extends Component {
               </Card>
             </Grid.Column>
           </Grid.Row>
-          {this.props.lists.leads.length > 0 ? (
+          {this.props.listleads.leads ? (
             <Grid.Row columns={1}>
               <Grid.Column>
                 <Table sortable selectable celled fixed>
@@ -297,7 +330,7 @@ class Dashboard extends Component {
                           <Table.Cell>{company}</Table.Cell>
                           <Table.Cell>{status}</Table.Cell>
                           <Table.Cell>{next_steps}</Table.Cell>
-                          <Table.Cell>{last_date_contacted}</Table.Cell>
+                          <Table.Cell>{comments_date}</Table.Cell>
                           <Table.Cell>
                             {/* {leadnotesArray.find(lead => )} */}
                             <Modal
@@ -310,35 +343,54 @@ class Dashboard extends Component {
                                 {position ? position + "," : null} {company}
                               </Modal.Header>
                               <Modal.Header as="h3">
-                                {phone_number ? "Phone:" + phone_number : null} Email: {email} 
-                  
+                                {phone_number ? "Phone:" + phone_number : null}{" "}
+                                Email: {email}
                                 <Icon name={"envelope"}></Icon>
                               </Modal.Header>
                               {/* <Modal.Header as='h3'>{position}, {company}</Modal.Header> */}
-                
-                                <Modal.Content>
-                                  <Form>
-                                    <Form.Group>
-                                      <Form.Select
-                                        // fluid
-                                        onChange={this.handleDropdown}
-                                        name="statusInput"
-                                        label="Status"
-                                        options={statusArray}
-                                        placeholder={status ? status : "Select status"}
-                                      />
-                                      {/* <Form.Header>Next Steps</Form.Header> */}
-                                      <Form.Input onChange={this.handleChange} name="nextStepsInput" label="Next Steps" placeholder={next_steps ? next_steps : "Next steps"}></Form.Input>
-                                    </Form.Group>
-                                    <Form.Input onChange={this.handleChange} name="commentsInput" control='textarea' rows='3' label="Notes" value={ comments ? comments_date + comments : null } />
-                                    <Button onClick={() => this.handleAddLeadNote(id)}>Save</Button>
-                                    {/* <Form.Description></Form.Description> */} 
-                                  </Form>
-                                </Modal.Content>
-                    
-                              
+
+                              <Modal.Content>
+                                <Form>
+                                  <Form.Group>
+                                    <Form.Select
+                                      // fluid
+                                      onChange={this.handleDropdown}
+                                      name="statusInput"
+                                      label="Status"
+                                      options={statusArray}
+                                      placeholder={
+                                        status ? status : "Select status"
+                                      }
+                                    />
+                                    {/* <Form.Header>Next Steps</Form.Header> */}
+                                    <Form.Input
+                                      onChange={this.handleChange}
+                                      name="nextStepsInput"
+                                      label="Next Steps"
+                                      placeholder={
+                                        next_steps ? next_steps : "Next steps"
+                                      }
+                                    ></Form.Input>
+                                  </Form.Group>
+                                  <Form.Input
+                                    onChange={this.handleChange}
+                                    name="commentsInput"
+                                    control="textarea"
+                                    rows="3"
+                                    label="Notes"
+                                    value={
+                                      comments ? comments_date + comments : null
+                                    }
+                                  />
+                                  <Button
+                                    onClick={() => this.handleAddLeadNote(id)}
+                                  >
+                                    Save
+                                  </Button>
+                                  {/* <Form.Description></Form.Description> */}
+                                </Form>
+                              </Modal.Content>
                             </Modal>
-              
                           </Table.Cell>
                           <Table.Cell>
                             <Icon
@@ -417,7 +469,7 @@ class Dashboard extends Component {
 const mapStateToProps = state => {
   return {
     lists: state.lists,
-    listlead: state.listlead,
+    listleads: state.listleads,
     auth: state.auth,
     leadnotes: state.leadnotes
   };
@@ -444,5 +496,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  {deleteList, deleteListLead, addLeadNote}
+  { deleteList, deleteListLead, addLeadNote }
 )(Dashboard);

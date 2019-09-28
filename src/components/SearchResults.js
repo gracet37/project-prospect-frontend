@@ -29,13 +29,13 @@ class SearchResults extends Component {
     company: "",
     website: "",
     newListName: "",
-    leadsArray: [], 
+    leadsArray: [],
     activePage: 1,
     leadsPagination: []
   };
 
   componentDidMount() {
-    console.log(this.props.leads)
+    console.log(this.props.leads);
     const array = this.props.leads;
     this.setState({ company: array.organization, website: array.domain });
   }
@@ -78,41 +78,41 @@ class SearchResults extends Component {
     }
   };
 
-  handlePageChange = (activePage) => {
-    this.setState({activePage})
-  }
+  handlePageChange = activePage => {
+    this.setState({ activePage });
+  };
 
   render() {
-    const { activePage } = this.state
+    const { activePage } = this.state;
     const dataArray = this.props.leads;
     const dataArrayEmails = this.props.leads.emails;
-    let dataSlice
+    let dataSlice;
     if (activePage === 1) {
-      dataSlice = dataArrayEmails.slice(0,9)
+      dataSlice = dataArrayEmails.slice(0, 9);
     } else if (activePage === 2) {
-      dataSlice = dataArrayEmails.slice(10,19)
+      dataSlice = dataArrayEmails.slice(10, 19);
     } else if (activePage === 3) {
-      dataSlice = dataArrayEmails.slice(20,29)
+      dataSlice = dataArrayEmails.slice(20, 29);
     } else if (activePage === 4) {
-      dataSlice = dataArrayEmails.slice(30,39)
+      dataSlice = dataArrayEmails.slice(30, 39);
     } else if (activePage === 5) {
-      dataSlice = dataArrayEmails.slice(40,49)
+      dataSlice = dataArrayEmails.slice(40, 49);
     } else if (activePage === 6) {
-      dataSlice = dataArrayEmails.slice(50,59)
+      dataSlice = dataArrayEmails.slice(50, 59);
     } else if (activePage === 7) {
-      dataSlice = dataArrayEmails.slice(60,69)
+      dataSlice = dataArrayEmails.slice(60, 69);
     } else if (activePage === 8) {
-      dataSlice = dataArrayEmails.slice(70,79)
+      dataSlice = dataArrayEmails.slice(70, 79);
     } else if (activePage === 9) {
-      dataSlice = dataArrayEmails.slice(80,89)
+      dataSlice = dataArrayEmails.slice(80, 89);
     } else if (activePage === 10) {
-      dataSlice = dataArrayEmails.slice(90,99)
+      dataSlice = dataArrayEmails.slice(90, 99);
     } else {
-      dataSlice = []
+      dataSlice = [];
     }
 
     console.log("list props", this.props.lists);
-    let lists = this.props.lists
+    let lists = this.props.lists;
     let listArray = lists.map(list => {
       return {
         key: list.id,
@@ -120,16 +120,9 @@ class SearchResults extends Component {
         value: list.id
       };
     });
-    console.log("list array", listArray);
-    // console.log("searchoptions", searchOptions)
-    // console.log("list array", this.);
-    // const dataArray = this.props.leads[0];
-    // console.log("leads pagination", leadsPagination);
-    // const dataArray = 
-    // const tableRow = dataArray.emails.map(lead => {
-      const tableRow = dataSlice.map(lead => {
+    const tableRow = dataSlice.map(lead => {
       return (
-        <Table.Row >
+        <Table.Row>
           <Table.Cell>{lead.first_name}</Table.Cell>
           <Table.Cell>{lead.last_name}</Table.Cell>
           <Table.Cell>{lead.value}</Table.Cell>
@@ -143,68 +136,6 @@ class SearchResults extends Component {
               }
             />
           </Table.Cell>
-          {/* <Table.Cell>
-            <Modal
-              centered
-              trigger={
-                <Button onClick={() => this.handleLeadChange(lead)}>Add</Button>
-              }
-              basic
-              size="small"
-            >
-              {Object.keys(lists).length > 1 ? (
-                <div>
-                  <Modal.Header as='h2'>Select an Existing List:</Modal.Header>
-                  <Modal.Actions>
-                    <Dropdown
-                      onChange={this.handleDropdown}
-                      name="listId"
-                      style={styleDropdown}
-                      placeholder="Select list..."
-                      fluid
-                      selection
-                      options={listArray}
-                    />
-                    <Form.Input
-                      placeholder="Create new list..."
-                      onChange={this.handleChange}
-                      name="newListName"
-                    />
-                    <Button
-                      onClick={this.handleSubmit}
-                      basic
-                      color="red"
-                      inverted
-                    >
-                      <Icon name="add" /> Add Lead to List
-                    </Button>
-                  </Modal.Actions>{" "}
-                </div>
-              ) : (
-                <div>
-                  <Modal.Header as='h2'>
-                    You have no existing lists. 
-                    Create a new list:
-                  </Modal.Header>
-                  <Modal.Actions>
-                    <Form.Input
-                      placeholder="Create new list..."
-                      onChange={this.handleChange}
-                      name="newListName"
-                    />
-                    <Button
-                      onClick={this.handleSubmit}
-                      basic
-                      color="red"
-                      inverted
-                    >
-                      <Icon name="add" /> Add Lead to List
-                    </Button>
-                  </Modal.Actions>
-                </div>
-              )}
-            </Modal>
-          </Table.Cell> */}
         </Table.Row>
       );
     });
@@ -212,9 +143,7 @@ class SearchResults extends Component {
       <div>
         <Navbar />
         <div>
-          <h1>
-            SEARCH RESULTS
-          </h1>
+          <h1>SEARCH RESULTS</h1>
         </div>
         <Table singleLine>
           <Table.Header>
@@ -226,11 +155,7 @@ class SearchResults extends Component {
                 <Table.HeaderCell>
                   <Modal
                     centered
-                    trigger={
-                      <Button>
-                        Save Leads
-                      </Button>
-                    }
+                    trigger={<Button>Save Leads</Button>}
                     basic
                     size="small"
                   >
@@ -312,13 +237,24 @@ class SearchResults extends Component {
                   boundaryRange={0}
                   defaultActivePage={1}
                   ellipsisItem={"..."}
-                  firstItem={{ content: <Icon name='angle double left' />, icon: true }}
-                  lastItem={{ content: <Icon name='angle double right' />, icon: true }}
-                  prevItem={{ content: <Icon name='angle left' />, icon: true }}
-                  nextItem={{ content: <Icon name='angle right' />, icon: true }}
+                  firstItem={{
+                    content: <Icon name="angle double left" />,
+                    icon: true
+                  }}
+                  lastItem={{
+                    content: <Icon name="angle double right" />,
+                    icon: true
+                  }}
+                  prevItem={{ content: <Icon name="angle left" />, icon: true }}
+                  nextItem={{
+                    content: <Icon name="angle right" />,
+                    icon: true
+                  }}
                   siblingRange={1}
                   totalPages={10}
-                  onPageChange={(event, { activePage }) => this.handlePageChange(activePage)}
+                  onPageChange={(event, { activePage }) =>
+                    this.handlePageChange(activePage)
+                  }
                 />
                 {/* <Menu floated="right" pagination>
                   <Menu.Item as="a" icon>

@@ -10,13 +10,10 @@ const searchOptions = [
   { key: "domain", text: "Company Domain", value: "domain" }
 ];
 
-const styleDropdown = {
-  width: "20%"
-};
+const styleSearchBar = {
 
-const styleDiv = {
-  backgroundImage: "https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/s2048x2048/70590332_836756946718765_3473765009224368128_n.png?_nc_cat=111&_nc_oc=AQnqWP4HyrAi7q61EL8yVFptltQa3xI5h09a4-BztmyG9-4Dby2fVE1e_IVK7Rn_WHg&_nc_ht=scontent-ort2-2.xx&oh=1a1fd9abc2dba4016521fba11ffaa3b6&oe=5E3DD369"
 }
+
 /////////////////////// STYLING /////////////////////////
 
 class SearchBar extends Component {
@@ -48,50 +45,24 @@ class SearchBar extends Component {
   render() {
     console.log(this.state);
     return (
-      <div style={styleDiv}>
+      <div>
         {/* {this.state.searchClicked ? <Loading /> : null} */}
-        <Form style={styleDiv}> 
-          {/* <Dropdown
-            onChange={this.handleDropdown}
-            name="selectionParam"
-            style={styleDropdown}
-            placeholder="Search by..."
-            fluid
-            selection
-            options={searchOptions}
-          /> */}
-          {/* {this.state.selectionParam === "industry" ? ( */}
-            {/* <Form>
-              <Form.Input
-                onChange={this.handleChange}
-                name="searchParam"
-                fluid
-                placeholder="Industry"
-              />
-              <Form.Input
-                onChange={this.handleChange}
-                name="locationParam"
-                fluid
-                placeholder="Enter city name..."
-              />
-              <Button type="submit">Search</Button>
-            </Form>
-          ) :  */}
-          
-            <Form centered>
-              <Form.Group>
+        {/* <Form>  */}
+            <Form >
+              <Form.Group >
               <Form.Input
                 onChange={this.handleChange}
                 name="searchParam"
                 placeholder="Enter domain name..."
                 loading={this.state.searchClicked ? true : false }
+                style={{fontSize:"large", marginLeft:"40px", marginTop:"20px", height:"50px", borderColor:"#6200EE", borderWidth:"medium", width:"490px"}}
               />
-              <Button type="submit" onClick={this.handleSubmit}>
+              <Button style={{fontSize:"large", backgroundColor:"#6200EE", marginTop:"20px",color: 'white', width:"120px"}} type="submit" onClick={this.handleSubmit}>
                 Search
               </Button>
             </Form.Group>
             </Form>
-        </Form>
+        {/* </Form> */}
       </div>
     );
   }

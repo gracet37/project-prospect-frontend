@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Grid, Image, Card, Table, Icon } from "semantic-ui-react";
+import { Grid, Image, Card, Table, Icon, Confirm } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import _ from 'lodash'
@@ -11,11 +11,21 @@ class Dashboard extends Component {
   state = {
     column: null,
     data: [],
-    direction: null
+    direction: null,
+    deleteConfirmation: false
   };
 
   componentDidMount() {
    this.formattedListArray()
+  }
+
+  show = (dimmer) => this.setState({ dimmer, deleteConfirmation: true })
+  handleConfirm = () => this.setState({ deleteConfirmation: false })
+  handleCancel = (id) => {
+    this.setState({ deleteConfirmation: false })
+    let newArray = this.state.data.filter(data => data.id !== id)
+    this.setState({data: newArray})
+    this.props.deleteList(id)
   }
 
   formattedListArray = () => {
@@ -79,10 +89,10 @@ class Dashboard extends Component {
     // console.log(this.props.lists)
     console.log(this.state)
     return (
-      <div style={{ height: "100%" }}>
+      <div>
         <Navbar />
         <Grid divided="vertically">
-          <Grid.Row columns={3}>
+          <Grid.Row style={{marginTop:"40px", marginLeft: "70px"}} columns={3}>
             <Grid.Column>
               <Card>
                 <Card.Content>
@@ -124,7 +134,7 @@ class Dashboard extends Component {
             </Grid.Column>
           </Grid.Row>
 
-          <Grid.Row columns={1}>
+          <Grid.Row style={{margin:"60px", minHeight:'450px'}} columns={1}>
             <Grid.Column>
               <Table sortable selectable celled fixed>
                 <Table.Header>
@@ -168,7 +178,15 @@ class Dashboard extends Component {
                       <Table.Cell onClick={() => this.handleRowClick(id)}></Table.Cell>
                       <Table.Cell onClick={() => this.handleRowClick(id)}></Table.Cell>
                       <Table.Cell onClick={() => this.handleRowClick(id)}>{date}</Table.Cell>
-                      <Table.Cell><Icon name={'trash alternate outline'} onClick={(event) => this.handleDeleteClick(event, id)} name='trash alternate outline' size='large' /></Table.Cell>
+                      {/* <Table.Cell><Icon name={'trash alternate outline'} onClick={(event) => this.handleDeleteClick(event, id)} name='trash alternate outline' size='large' /></Table.Cell> */}
+                      <Table.Cell><Icon name={'trash alternate outline'} onClick={() => this.show('inverted')} name='trash alternate outline' size='large' /></Table.Cell>
+                      <Confirm
+                        open={this.state.deleteConfirmation}
+                        cancelButton='Cancel'
+                        confirmButton="Confirm"
+                        onCancel={this.handleCancel}
+                        onConfirm={() => this.handleConfirm(id)}
+                        />
                     </Table.Row>
                   ))}
                 </Table.Body>

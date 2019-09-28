@@ -205,10 +205,10 @@ class Dashboard extends Component {
     }
 
     return (
-      <div style={{ height: "100%" }}>
+      <div>
         <Navbar />
-        <Grid divided="vertically">
-          <Grid.Row columns={3}>
+        <Grid style={{backgroundImage: `url(${"https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/s2048x2048/71093458_463527317706998_6857018496128122880_n.png?_nc_cat=101&_nc_oc=AQl2gDIEaIvqJ9nlneGMjfaDHtgfbFjLjkXKrF1ATz_lG8I8Qq2SYVjDCYwbysjSCwM&_nc_ht=scontent-ort2-2.xx&oh=644556da3c91d328452fcb67714c1c7d&oe=5E3A8CD8"})`}} divided="vertically">
+          <Grid.Row style={{marginTop:"40px", marginLeft: "70px"}} columns={3}>
             <Grid.Column>
               <Card>
                 <Card.Content>
@@ -250,7 +250,7 @@ class Dashboard extends Component {
             </Grid.Column>
           </Grid.Row>
           {this.props.listleads.leads ? (
-            <Grid.Row columns={1}>
+            <Grid.Row style={{margin:"40px", minHeight:'450px'}} columns={1}>
               <Grid.Column>
                 <Table sortable selectable celled fixed>
                   <Table.Header>

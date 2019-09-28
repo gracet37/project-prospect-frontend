@@ -21,7 +21,10 @@ import {
 
 const styleBar = {
   overflow: 'hidden',
-  backgroundColor: '#5400E8'
+  backgroundColor: '#5400E8',
+  height: '50px',
+  textAlign: 'center',
+  verticalAlign: 'middle'
   // position: 'fixed',
   // top: '0',
   // width: '100%'
@@ -61,7 +64,7 @@ class Navbar extends React.Component {
         <NavLink style={styleLink} to="/profile">
           My Profile
         </NavLink>
-        <NavLink style={styleLink} to="/search">
+        <NavLink style={styleLink} to="/">
           Home
         </NavLink>
       </div>

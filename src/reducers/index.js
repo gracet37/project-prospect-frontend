@@ -9,7 +9,9 @@ import {
   DELETE_LIST,
   DELETE_LISTLEAD,
   FETCH_LEADNOTES,
-  ADD_LEAD_NOTE
+  ADD_LEAD_NOTE,
+  ACTION_SUCCESS,
+  FETCH_LIST_WITH_LEADNOTES
 } from "../actions";
 
 export default combineReducers({
@@ -18,14 +20,23 @@ export default combineReducers({
   lists: lists,
   auth: auth,
   listleads: listleads,
-  leadnotes: leadnotes
-  // specialLists: specialLists
+  leadnotes: leadnotes,
+  listWithLeadNotes: listWithLeadNotes
 });
 
 function categories(state = [], action) {
   switch (action.type) {
     case FETCH_CATEGORIES:
       return action.categories;
+    default:
+      return state;
+  }
+}
+
+function listWithLeadNotes(state = [], action) {
+  switch (action.type) {
+    case  FETCH_LIST_WITH_LEADNOTES:
+      return action.leads;
     default:
       return state;
   }
@@ -56,6 +67,8 @@ function lists(state = [], action) {
 
 function auth(state = {}, action) {
   switch (action.type) {
+    case "ACTION_SUCESS":
+        return action.user;
     case "LOGIN_USER":
       return action.user;
     case "LOGOUT_USER":

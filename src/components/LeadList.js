@@ -44,7 +44,7 @@ class Dashboard extends Component {
   // UPDATE DATA WITH LISTS
   state = {
     column: null,
-    data: null,
+    data: [],
     direction: null,
     activePage: 1,
     statusInput: "",

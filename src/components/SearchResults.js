@@ -10,7 +10,8 @@ import {
   Dropdown,
   Input,
   Checkbox,
-  Pagination
+  Pagination,
+  Message
 } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { addList, addLead } from "../actions";
@@ -32,7 +33,7 @@ class SearchResults extends Component {
     leadsArray: [],
     activePage: 1,
     leadsPagination: []
-  };
+    };
 
   componentDidMount() {
     console.log(this.props.leads);
@@ -65,11 +66,35 @@ class SearchResults extends Component {
     );
   };
 
+  // handleLeadClick = (lead, checked) => {
+  //   console.log(lead);
+  //   console.log(checked);
+  //   if (checked) {
+  //     this.setState({ leadsArray: [...this.state.leadsArray, lead] });
+  //   } else {
+  //     const newArray = this.state.leadsArray.filter(
+  //       l => l.value !== lead.value
+  //     );
+  //     this.setState({ leadsArray: newArray });
+  //   }
+  // };
+
   handleLeadClick = (lead, checked) => {
     console.log(lead);
     console.log(checked);
     if (checked) {
-      this.setState({ leadsArray: [...this.state.leadsArray, lead] });
+      this.props.listWithLeadNotes.forEach(l => {
+        console.log("what is l", l)
+        if (l.lead.email !== lead.value) {
+          this.setState({ leadsArray: [...this.state.leadsArray, lead] });
+        } else {
+          return (
+            <Message>
+              <Message.Header>Heads up! You have already added this lead</Message.Header>
+            </Message>
+          )
+        }
+      })
     } else {
       const newArray = this.state.leadsArray.filter(
         l => l.value !== lead.value
@@ -110,7 +135,7 @@ class SearchResults extends Component {
     } else {
       dataSlice = [];
     }
-
+    console.log("search results", this.state)
     console.log("list props", this.props.lists);
     let lists = this.props.lists;
     let listArray = lists.map(list => {
@@ -281,7 +306,8 @@ const mapStateToProps = state => {
   return {
     leads: state.leads,
     lists: state.lists,
-    auth: state.auth
+    auth: state.auth,
+    listWithLeadNotes: state.listWithLeadNotes
   };
 };
 

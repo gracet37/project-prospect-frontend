@@ -1,3 +1,6 @@
+// ! This is an unfinished Component
+
+
 import React, { Component } from "react";
 import {
   Button,
@@ -10,7 +13,7 @@ import {
 } from "semantic-ui-react";
 import { Link, withRouter, NavLink } from "react-router-dom";
 import { connect } from "react-redux";
-import { registerUser } from "../actions";
+import { updateUser} from "../actions";
 
 const styleColumn = {
   float: "left",
@@ -30,7 +33,7 @@ const styleForm = {
   // paddingLeft: "20px"
 };
 
-class NewUserForm extends Component {
+class EditUserForm extends Component {
   state = {
     firstName: "",
     lastName: "",
@@ -46,17 +49,17 @@ class NewUserForm extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    this.props.registerUser(this.state, this.props.history);
+    this.props.updateUser(this.state, this.props.history);
   };
 
   render() {
     return (
-      <div className="new-user-form">
+      <div className="edit-user-form">
         <Grid textAlign="center" verticalAlign="middle">
           <Form.Group>
             <Form style={styleForm} size="large" onSubmit={this.handleSubmit}>
               <Header as="h2" style={{ color: "#03DAC6" }} textAlign="center">
-                Create A New Account
+                Edit Account
               </Header>
               <Segment>
                 <Form.Input
@@ -65,7 +68,7 @@ class NewUserForm extends Component {
                   fluid
                   icon="user"
                   iconPosition="left"
-                  placeholder="First Name"
+                  placeholder={this.props.auth.user.first_name}
                 />
                 <Form.Input
                   onChange={this.handleChange}
@@ -73,7 +76,7 @@ class NewUserForm extends Component {
                   fluid
                   icon="user"
                   iconPosition="left"
-                  placeholder="Last Name"
+                  placeholder={this.props.auth.user.last_name}
                 />
                 <Form.Input
                   onChange={this.handleChange}
@@ -81,7 +84,7 @@ class NewUserForm extends Component {
                   fluid
                   icon="envelope open icon"
                   iconPosition="left"
-                  placeholder="Email"
+                  placeholder={this.props.auth.user.email}
                 />
                 <Form.Input
                   onChange={this.handleChange}
@@ -97,11 +100,8 @@ class NewUserForm extends Component {
                   fluid
                   size="large"
                 >
-                  Create Account
+                  Update Account
                 </Button>
-                <NavLink to="/" activeClassName="hurray">
-                  Back to Login
-                </NavLink>
               </Segment>
             </Form>
           </Form.Group>
@@ -111,14 +111,13 @@ class NewUserForm extends Component {
   }
 }
 
-function mapDispatchToProps(dispatch) {
+function mapStateToProps(state) {
   return {
-    registerUser: (formData, history) =>
-      dispatch(registerUser(formData, history))
-  };
+    auth: state.auth
+  }
 }
 
 export default connect(
-  null,
-  mapDispatchToProps
-)(withRouter(NewUserForm));
+  mapStateToProps,
+  {updateUser}
+)(withRouter(EditUserForm));

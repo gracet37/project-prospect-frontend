@@ -8,8 +8,9 @@ import LoginForm from "./LoginForm";
 import NewUserForm from "./NewUserForm";
 import LandingPage from "./LandingPage";
 import LeadList from "./LeadList";
+import EditUserForm from "./EditUserForm";
 import { connect } from "react-redux";
-import { currentUser, thunkFetchLists, thunkFetchLeadNotes } from "../actions";
+import { currentUser, thunkFetchLists, thunkFetchAllListById } from "../actions";
 
 // const LEADS_URL = 'http://localhost:3000/api/v1/leads'
 
@@ -22,6 +23,7 @@ class App extends React.Component {
   render() {
     if (this.props.auth.user) {
       this.props.thunkFetchLists(this.props.auth.user.id)
+      this.props.thunkFetchAllListById(this.props.auth.user.id)
       // this.props.thunkFetchLeadNotes(this.props.auth.user.id)
     }
     return (
@@ -36,6 +38,7 @@ class App extends React.Component {
           <Route exact path="/search" component={SearchContainer} />
           <Route exact path="/signup" component={NewUserForm} />
           <Route exact path="/leads" component={LeadList} />
+          <Route exact path="/edit" component={EditUserForm} />
         </Switch>
         {/* <Route exact path="/logout" component={} /> */}
       </div>
@@ -43,16 +46,16 @@ class App extends React.Component {
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    currentUser: history => {
-      dispatch(currentUser(history));
-    },
-    thunkFetchLists: id => {
-      dispatch(thunkFetchLists(id));
-    }
-  };
-};
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     currentUser: history => {
+//       dispatch(currentUser(history));
+//     },
+//     thunkFetchLists: id => {
+//       dispatch(thunkFetchLists(id));
+//     }
+//   };
+// };
 
 const mapStateToProps = state => {
   return {
@@ -63,5 +66,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  {currentUser, thunkFetchAllListById, thunkFetchLists}
 )(withRouter(App));

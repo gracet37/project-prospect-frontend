@@ -14,8 +14,8 @@ const searchOptions = [
 const styleSearchBar = {
   marginLeft: '30px',
   marginTop: '10px',
-  width: "490px",
-  borderRadius: "70px",
+  width: "500px",
+  borderRadius: "50px",
   borderColor: "#6200EE",
   borderWidth: "3px",
   height: "60px",
@@ -52,7 +52,7 @@ class SearchBar extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{verticalAlign:'center', textAlign:'center'}}>
         {/* {this.state.searchClicked ? <Loading /> : null} */}
         {/* <Form>  */}
         <Form>
@@ -69,7 +69,7 @@ class SearchBar extends Component {
               type="submit"
               loading={this.state.searchClicked ? true : false}
               onClick={this.handleSubmit}
-              style={{borderRadius: "100px", marginLeft: '10px', backgroundColor: '#6200EE', color: 'white', marginTop: '10px', width: '130px',height: '60px', fontSize: 'large', textAlign: 'center' }}
+              style={{borderRadius: "50px", marginLeft: '10px', backgroundColor: '#6200EE', color: 'white', marginTop: '10px', width: '130px',height: '60px', fontSize: 'large', textAlign: 'center' }}
             >
               Search
             </Button>

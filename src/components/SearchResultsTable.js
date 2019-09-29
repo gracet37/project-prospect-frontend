@@ -9,7 +9,7 @@ const style={
   backgroundSize: "cover",
   width: "100%",
   height: "100%",
-  minHeight: 800,
+  minHeight: 1000,
   padding: "1em 0em"
 }
 

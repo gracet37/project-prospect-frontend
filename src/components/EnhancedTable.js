@@ -1,5 +1,5 @@
 import React from "react";
-import { userEffect, useState } from "react";
+import { userEffect, useState } from "react"
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { lighten, makeStyles } from "@material-ui/core/styles";
@@ -134,8 +134,8 @@ EnhancedTableHead.propTypes = {
 
 const useToolbarStyles = makeStyles(theme => ({
   root: {
-    // paddingLeft: theme.spacing(2),
-    // paddingRight: theme.spacing(1),
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(1),
   },
   highlight:
     theme.palette.type === "light"
@@ -235,7 +235,6 @@ class EnhancedTableToolbar extends React.Component {
   };
 
   render() {
-    console.log(this.state);
     const classes = getClasses();
     const { numSelected } = this.props;
     return (
@@ -263,12 +262,12 @@ class EnhancedTableToolbar extends React.Component {
               {/* <IconButton aria-label="delete"> */}
               <Modal
                 centered
-                trigger={<Button style={{borderRadius: "100px", backgroundColor: '#6200EE', color: 'white', width: '150px',fontSize: 'medium', verticalAlign: 'middle', textAlign: 'center'}}>Save Leads</Button>}
+                trigger={<Button style={{borderRadius: "20px", backgroundColor: '#6200EE', color: 'white', width: '150px',fontSize: 'medium', verticalAlign: 'middle', textAlign: 'center'}}>Save Leads</Button>}
                 basic
                 size="small"
               >
                 {this.props.listArray.length ? (
-                  <div style={{position: 'absolute', left: '30%', bottom: '-30%'}}>
+                  <div style={{verticalAlign:'center', textAlign:'center'}}>
                     <Modal.Header as="h2">
                       Select an Existing List:
                     </Modal.Header>
@@ -276,7 +275,7 @@ class EnhancedTableToolbar extends React.Component {
                       <Dropdown
                         onChange={this.handleDropdown}
                         name="listId"
-                        style={{ width: "40%" }}
+                        style={{ width: "40%", borderRadius: '20px' }}
                         placeholder="Select list..."
                         // fluid
                         disabled={this.state.newListName ? true : false}
@@ -285,38 +284,44 @@ class EnhancedTableToolbar extends React.Component {
                       />
                       <Modal.Header as="h2">Create a New List:</Modal.Header>
                       <Form.Input
-                        placeholder="Create new list..."
-                        onChange={this.handleChange}
-                        name="newListName"
-                      />
+                      placeholder="Create new list..."
+                      onChange={this.handleChange}
+                      name="newListName"
+                    >
+                    <input style={{borderRadius: '20px' , width: '200px'}}></input>
+                    </Form.Input>
                       <Modal.Header as="h2"></Modal.Header>
-                      <Button
-                        onClick={this.handleSubmit}
-                        basic
-                        color="blue"
-                        inverted
-                      >
+                      <Form.Button
+                      onClick={this.handleSubmit}
+                      basic
+                      color="violet"
+                      inverted
+                      style={{ borderRadius: '20px' }}
+                    >
                         <Icon name="add" /> Add Lead to List
-                      </Button>
+                    </Form.Button>
                     </Modal.Actions>
                   </div>
                 ) : (
                   <div>
                     <Modal.Header as="h2">Create A New List</Modal.Header>
                     <Modal.Actions>
-                      <Form.Input
-                        placeholder="Create new list..."
-                        onChange={this.handleChange}
-                        name="newListName"
-                      />
-                      <Button
-                        onClick={this.handleSubmit}
-                        basic
-                        color="blue"
-                        inverted
-                      >
+                    <Form.Input
+                      placeholder="Create new list..."
+                      onChange={this.handleChange}
+                      name="newListName"
+                    >
+                    <input style={{borderRadius: '30px' , width: '200px'}}></input>
+                    </Form.Input>
+                    <Form.Button
+                      onClick={this.handleSubmit}
+                      basic
+                      color="violet"
+                      inverted
+                      style={{ borderRadius: '30px' }}
+                    >
                         <Icon name="add" /> Add Lead to List
-                      </Button>
+                    </Form.Button>
                     </Modal.Actions>
                   </div>
                 )}
@@ -376,7 +381,7 @@ export default function EnhancedTable(props) {
   const listArray = props.listArray;
   const classes = useStyles();
   const [order, setOrder] = React.useState("asc");
-  const [orderBy, setOrderBy] = React.useState("last_name");
+  const [orderBy, setOrderBy] = React.useState("name");
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -384,8 +389,6 @@ export default function EnhancedTable(props) {
   const [leadsArray, setLeadsArray] = React.useState([]);
 
   const handleLeadClick = (lead, event) => {
-    console.log(lead);
-    console.log(event.target.checked);
     if (event.target.checked) {
       setLeadsArray(leadsArray => [...leadsArray, lead]);
     } else {
@@ -446,7 +449,6 @@ export default function EnhancedTable(props) {
 
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, props.rows.length - page * rowsPerPage);
-  console.log(leadsArray);
   if (props.rows) {
     return (
       <div className={classes.root}>

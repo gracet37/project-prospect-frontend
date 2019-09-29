@@ -8,8 +8,8 @@ import {
   LOGOUT_USER,
   DELETE_LIST,
   DELETE_LISTLEAD,
-  FETCH_LEADNOTES,
-  ADD_LEAD_NOTE,
+  // FETCH_LEADNOTES,
+  // ADD_LEAD_NOTE,
   ACTION_SUCCESS,
   FETCH_LIST_WITH_LEADNOTES
 } from "../actions";
@@ -20,7 +20,7 @@ export default combineReducers({
   lists: lists,
   auth: auth,
   listleads: listleads,
-  leadnotes: leadnotes,
+  // leadnotes: leadnotes,
   listWithLeadNotes: listWithLeadNotes
 });
 
@@ -91,14 +91,14 @@ function listleads(state = {leads: [], list: []}, action) {
   }
 }
 
-function leadnotes(state = [], action) {
-  switch (action.type) {
-    case "FETCH_LEADNOTES":
-      return action.leadnotes;
-    case "ADD_LEAD_NOTE":
-      return action.leadnote
-    default:
-      return state;
-  }
-}
+// function leadnotes(state = [], action) {
+//   switch (action.type) {
+//     case "FETCH_LEADNOTES":
+//       return action.leadnotes;
+//     case "ADD_LEAD_NOTE":
+//       return action.leadnote
+//     default:
+//       return state;
+//   }
+// }
 

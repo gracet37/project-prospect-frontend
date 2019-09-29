@@ -18,6 +18,17 @@ import Navbar from "./Navbar";
 import MailForm from "./MailForm";
 import { deleteList, deleteListLead, addLeadNote } from "../actions";
 
+const styleMetrics = {
+  borderWidth: "3px",
+  borderRadius: "10px",
+  borderColor: "#808495",
+  borderStyle: "solid",
+  margin: "40px", 
+  width: "10px",
+  height: "180px",
+  padding: "20px"
+}
+
 const statusArray = [
   { key: "10", text: "Meeting booked", value: "Meeting booked" },
   {
@@ -206,47 +217,42 @@ class Dashboard extends Component {
           divided="vertically"
         >
           <Grid.Row
-            style={{ marginTop: "40px", marginLeft: "70px" }}
-            columns={3}
+            columns="equal"
+            style={{
+              top: "70px",
+              paddingRight: "70px",
+              paddingLeft: "70px",
+              paddingBottom: "35px",
+              position: "relative",
+              textAlign: "left"
+            }}
           >
-            <Grid.Column>
-              <Card>
-                <Card.Content>
-                  <Card.Header>Total Leads</Card.Header>
-                  <Card.Description>XXXXXX</Card.Description>
-                  <Image
-                    floated="right"
-                    size="small"
-                    src="https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/71382639_511374239440274_5689414491201077248_n.png?_nc_cat=102&_nc_oc=AQmxMPkcSBw3tsH3vtHdty3xBIiwwwo1u58qIFM6JBWKhgr_vArb8fKIvHJeZbUXVHA&_nc_ht=scontent-ort2-2.xx&oh=5ecbfc218c65ca3f290c9e06988b2804&oe=5DF1636E"
-                  />
-                </Card.Content>
-              </Card>
+            <Grid.Column style={styleMetrics}>
+              <Header as="h2">Total Leads</Header>
+              <Header as="h3"></Header>
+              <Image
+                size="small"
+                floated="right"
+                src="https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/71338480_839476829779627_88982982114672640_n.png?_nc_cat=103&_nc_oc=AQk-PoFytrGO-egRH0bNhdK77YgmvNvozJbUsZvn9xAPPpjioM-SRk6hyr3rXfVVq2Y&_nc_ht=scontent-ort2-2.xx&oh=c1bc858aa386c365cae63c3eea610b9e&oe=5DF88CFF"
+              />
             </Grid.Column>
-            <Grid.Column>
-              <Card>
-                <Card.Content>
-                  <Card.Header>Open Leads</Card.Header>
-                  <Card.Description>XXXX</Card.Description>
-                  <Image
-                    floated="right"
-                    size="small"
-                    src="https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/71338480_839476829779627_88982982114672640_n.png?_nc_cat=103&_nc_oc=AQlz6riL_5nCn_aFSeq7vrwmHLIvmmoEXuFWQLi-o0ouY9NmTb65RrwrN8grKcefjAc&_nc_ht=scontent-ort2-2.xx&oh=abcf184851a1381d3c1e6f1a2655708f&oe=5DF88CFF"
-                  />
-                </Card.Content>
-              </Card>
+            <Grid.Column style={styleMetrics}>
+              <Header as="h2">Meetings Booked</Header>
+              <Header as="h3"></Header>
+              <Image
+                size="small"
+                floated="right"
+                src="https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/71382639_511374239440274_5689414491201077248_n.png?_nc_cat=102&_nc_oc=AQkSRgZv9fHBIZ5lFzTKwmraacs6QUA5uRFBuJR4EydKHSVwwZgfGIlTbZ1xT9ZobnU&_nc_ht=scontent-ort2-2.xx&oh=22d18caf4e251af44eb4b5b5807195cc&oe=5DF1636E"
+              />
             </Grid.Column>
-            <Grid.Column>
-              <Card>
-                <Card.Content>
-                  <Card.Header>Another METRIC</Card.Header>
-                  <Card.Description>XXXX</Card.Description>
-                  <Image
-                    floated="right"
-                    size="small"
-                    src="https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/70880021_751349978649592_7265954774900539392_n.png?_nc_cat=101&_nc_oc=AQn6B5Hc2QHFjLfjzwx8QK_KTfxQXSwEJn6eWDeWtUc5nEU37bRyVKv1v3-ZPPbd7p8&_nc_ht=scontent-ort2-2.xx&oh=9b4a7332352bb07373e20a8830861a35&oe=5E35AB9A"
-                  />
-                </Card.Content>
-              </Card>
+            <Grid.Column style={styleMetrics}>
+              <Header as="h2">Not Yet Contacted</Header>
+              <Header as="h3"></Header>
+              <Image
+                size="small"
+                floated="right"
+                src="https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/70880021_751349978649592_7265954774900539392_n.png?_nc_cat=101&_nc_oc=AQk5RRMoC9mgfA61QWoq_mT8y4SylOWJWzRclLynSDsznJetifnuN5Ks-YcHFkuFiMs&_nc_ht=scontent-ort2-2.xx&oh=51a411e11a9181923a23d3a7d1e05c21&oe=5E35AB9A"
+              />
             </Grid.Column>
           </Grid.Row>
           {this.props.listleads.leads ? (
@@ -352,9 +358,14 @@ class Dashboard extends Component {
                                 <Modal
                                   trigger={<Icon name={"envelope"}></Icon>}
                                 >
-                                  <Modal.Header>Send an email to {first_name}</Modal.Header>
-                                    <Modal.Content>
-                                    <MailForm email={email} myEmail={this.props.auth.user.email}/>
+                                  <Modal.Header>
+                                    Send an email to {first_name}
+                                  </Modal.Header>
+                                  <Modal.Content>
+                                    <MailForm
+                                      email={email}
+                                      myEmail={this.props.auth.user.email}
+                                    />
                                   </Modal.Content>
                                 </Modal>
                               </Modal.Header>
@@ -417,37 +428,38 @@ class Dashboard extends Component {
                     )}
                   </Table.Body>
                   <Table.Footer>
-                    {data.length > 10 ? 
-                    <Table.Row>
-                      <Table.HeaderCell colSpan="3">
-                        <Pagination
-                          boundaryRange={0}
-                          defaultActivePage={1}
-                          ellipsisItem={"..."}
-                          firstItem={{
-                            content: <Icon name="angle double left" />,
-                            icon: true
-                          }}
-                          lastItem={{
-                            content: <Icon name="angle double right" />,
-                            icon: true
-                          }}
-                          prevItem={{
-                            content: <Icon name="angle left" />,
-                            icon: true
-                          }}
-                          nextItem={{
-                            content: <Icon name="angle right" />,
-                            icon: true
-                          }}
-                          siblingRange={1}
-                          totalPages={10}
-                          onPageChange={(event, { activePage }) =>
-                            this.handlePageChange(activePage)
-                          }
-                        />
-                      </Table.HeaderCell>
-                    </Table.Row> : null}
+                    {data.length > 10 ? (
+                      <Table.Row>
+                        <Table.HeaderCell colSpan="3">
+                          <Pagination
+                            boundaryRange={0}
+                            defaultActivePage={1}
+                            ellipsisItem={"..."}
+                            firstItem={{
+                              content: <Icon name="angle double left" />,
+                              icon: true
+                            }}
+                            lastItem={{
+                              content: <Icon name="angle double right" />,
+                              icon: true
+                            }}
+                            prevItem={{
+                              content: <Icon name="angle left" />,
+                              icon: true
+                            }}
+                            nextItem={{
+                              content: <Icon name="angle right" />,
+                              icon: true
+                            }}
+                            siblingRange={1}
+                            totalPages={10}
+                            onPageChange={(event, { activePage }) =>
+                              this.handlePageChange(activePage)
+                            }
+                          />
+                        </Table.HeaderCell>
+                      </Table.Row>
+                    ) : null}
                   </Table.Footer>
                 </Table>
               </Grid.Column>

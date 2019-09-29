@@ -52,6 +52,7 @@ class Navbar extends React.Component {
   render() {
     return (
       <div style={styleBar}>
+        <div className='style-links' style={{marginRight:'60px'}}>
         <NavLink style={styleLink} onClick={() => this.handleLogout()}>
           Logout
         </NavLink>
@@ -67,7 +68,7 @@ class Navbar extends React.Component {
         <NavLink style={styleLink} to="/">
           Home
         </NavLink>
-        
+        </div>
       </div>
     );
   }

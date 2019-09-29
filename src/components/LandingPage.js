@@ -82,11 +82,7 @@ class DesktopContainer extends Component {
             style={{
               backgroundImage: `url(${"https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/s2048x2048/71093458_463527317706998_6857018496128122880_n.png?_nc_cat=101&_nc_oc=AQl2gDIEaIvqJ9nlneGMjfaDHtgfbFjLjkXKrF1ATz_lG8I8Qq2SYVjDCYwbysjSCwM&_nc_ht=scontent-ort2-2.xx&oh=644556da3c91d328452fcb67714c1c7d&oe=5E3A8CD8"})`,
               backgroundSize: "cover",
-              height: 'inherit',
               minHeight: '1000px',
-              // width: "100%",
-              // height: "100%",
-              // objectFit: 'cover',
               padding: "1em 0em"
             }}
           >

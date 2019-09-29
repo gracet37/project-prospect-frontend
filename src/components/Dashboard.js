@@ -8,7 +8,8 @@ import {
   Confirm,
   Button,
   Modal,
-  Form
+  Form,
+  Header
 } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
@@ -17,6 +18,18 @@ import Navbar from "./Navbar";
 import { deleteList, thunkFetchListById, addList } from "../actions";
 
 const uuidv1 = require("uuid/v1");
+
+const styleMetrics = {
+  borderWidth: "3px",
+  borderRadius: "10px",
+  borderColor: "#808495",
+  borderStyle: "solid",
+  margin: "40px", 
+  width: "10px",
+  height: "180px",
+  padding: "20px"
+}
+
 
 class Dashboard extends Component {
   // UPDATE DATA WITH LISTS
@@ -33,7 +46,7 @@ class Dashboard extends Component {
 
   componentDidMount() {
     this.formattedListArray();
-    //  this.countTotalLeads()
+    //  ! this.countTotalLeads()
     this.countMeetingsBooked();
     this.countNotContacted();
   }
@@ -56,14 +69,15 @@ class Dashboard extends Component {
       array.push({
         id: list.id,
         name: list.name,
-        date: dateString
+        date: dateString,
+        leadCount: list.leads.length
       });
     });
     this.setState({ data: array });
     // return array
   };
 
-  // countTotalLeads = () => {
+  // ! countTotalLeads = () => {
   //   if (this.props.lists) {
   //   let leadCountArray = []
   //   let totalLeads
@@ -114,7 +128,7 @@ class Dashboard extends Component {
     event.preventDefault();
     let newArray = this.state.data.filter(data => data.id !== id);
     this.setState({ data: newArray, deleteConfirmation: false });
-    // this.countTotalLeads();
+    // !this.countTotalLeads();
     this.countMeetingsBooked();
     this.countNotContacted();
     this.props.deleteList(id);
@@ -154,7 +168,7 @@ class Dashboard extends Component {
     const { newListName } = this.state;
     const userId = this.props.auth.user.id;
     this.props.addList(newListName, userId);
-    this.formattedListArray()
+    this.formattedListArray();
   };
 
   render() {
@@ -170,107 +184,103 @@ class Dashboard extends Component {
     console.log(this.state);
     return (
       <div>
+        {/* METRIC CARDS */}
         <Grid>
           <Grid.Row
-            style={{
-              // position: "fixed",
-              top: "40px",
-              margin: "40px",
-              marginLeft: "70px",
-              padding: "px"
-            }}
-            columns={3}
+            columns="equal"
+            style={{ top: '70px', paddingRight: "70px", paddingLeft: '70px', paddingBottom: "35px", position:'relative', textAlign: 'left'}}
           >
-            <Grid.Column>
-              <Card>
-                <Card.Content>
-                  <Card.Header>Total Leads</Card.Header>
-                  <Card.Description>{totalLeadCount}</Card.Description>
-                  <Image
-                    floated="right"
-                    size="small"
-                    src="https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/71382639_511374239440274_5689414491201077248_n.png?_nc_cat=102&_nc_oc=AQmxMPkcSBw3tsH3vtHdty3xBIiwwwo1u58qIFM6JBWKhgr_vArb8fKIvHJeZbUXVHA&_nc_ht=scontent-ort2-2.xx&oh=5ecbfc218c65ca3f290c9e06988b2804&oe=5DF1636E"
-                  />
-                </Card.Content>
-              </Card>
+            <Grid.Column
+              style={styleMetrics}
+            >
+              <Header as="h2">Total Leads</Header>
+              <Header as='h3'>{totalLeadCount}</Header>
+              <Image size='small' floated='right' src="https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/71338480_839476829779627_88982982114672640_n.png?_nc_cat=103&_nc_oc=AQk-PoFytrGO-egRH0bNhdK77YgmvNvozJbUsZvn9xAPPpjioM-SRk6hyr3rXfVVq2Y&_nc_ht=scontent-ort2-2.xx&oh=c1bc858aa386c365cae63c3eea610b9e&oe=5DF88CFF" />
             </Grid.Column>
-            <Grid.Column>
-              <Card>
-                <Card.Content>
-                  <Card.Header>Total Meetings Booked</Card.Header>
-                  <Card.Description>{totalMeetingsBooked}</Card.Description>
-                  <Image
-                    floated="right"
-                    size="small"
-                    src="https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/71338480_839476829779627_88982982114672640_n.png?_nc_cat=103&_nc_oc=AQlz6riL_5nCn_aFSeq7vrwmHLIvmmoEXuFWQLi-o0ouY9NmTb65RrwrN8grKcefjAc&_nc_ht=scontent-ort2-2.xx&oh=abcf184851a1381d3c1e6f1a2655708f&oe=5DF88CFF"
-                  />
-                </Card.Content>
-              </Card>
+            <Grid.Column
+              style={styleMetrics}
+            >
+              <Header as="h2">Meetings Booked</Header>
+              <Header as='h3'>{totalMeetingsBooked}</Header>
+              <Image size='small' floated='right' src="https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/71382639_511374239440274_5689414491201077248_n.png?_nc_cat=102&_nc_oc=AQkSRgZv9fHBIZ5lFzTKwmraacs6QUA5uRFBuJR4EydKHSVwwZgfGIlTbZ1xT9ZobnU&_nc_ht=scontent-ort2-2.xx&oh=22d18caf4e251af44eb4b5b5807195cc&oe=5DF1636E" />
             </Grid.Column>
-            <Grid.Column>
-              <Card>
-                <Card.Content>
-                  <Card.Header>Not Yet Contacted</Card.Header>
-                  <Card.Description>{totalNotContacted}</Card.Description>
-                  <Image
-                    floated="right"
-                    size="small"
-                    src="https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/70880021_751349978649592_7265954774900539392_n.png?_nc_cat=101&_nc_oc=AQn6B5Hc2QHFjLfjzwx8QK_KTfxQXSwEJn6eWDeWtUc5nEU37bRyVKv1v3-ZPPbd7p8&_nc_ht=scontent-ort2-2.xx&oh=9b4a7332352bb07373e20a8830861a35&oe=5E35AB9A"
-                  />
-                </Card.Content>
-              </Card>
+            <Grid.Column
+              style={styleMetrics}
+            >
+              <Header as="h2">Not Yet Contacted</Header>
+              <Header as='h3'>{totalNotContacted}</Header>
+              <Image size='small' floated='right' src="https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/70880021_751349978649592_7265954774900539392_n.png?_nc_cat=101&_nc_oc=AQk5RRMoC9mgfA61QWoq_mT8y4SylOWJWzRclLynSDsznJetifnuN5Ks-YcHFkuFiMs&_nc_ht=scontent-ort2-2.xx&oh=51a411e11a9181923a23d3a7d1e05c21&oe=5E35AB9A" />
             </Grid.Column>
           </Grid.Row>
 
-          <Grid.Row
-            style={{ marginTop: "40px", marginLeft: "70px" }}
-            columns={1}
-          >
-            <Grid.Column>
+          {/* STYLING FOR THE BUTTON */}
+          <Grid.Row columns={1} >
+            <Grid.Column style={{margin: "20px"}}> 
               <Modal
                 centered
-                trigger={<Button>New List</Button>}
+                trigger={
+                  <Button
+                    style={{
+                      borderRadius: "30px",
+                      color: "white",
+                      backgroundColor: "#6200EE"
+                    }}
+                  >
+                    <Icon name="add" /> Create New List
+                  </Button>
+                }
                 basic
                 size="small"
               >
-                <div>
+                <div style={{ verticalAlign: "center", textAlign: "center" }}>
                   <Modal.Header as="h2">Create a New List:</Modal.Header>
-                  <Form.Input
-                    placeholder="Create new list..."
-                    onChange={this.handleChange}
-                    name="newListName"
-                  />
-                  <Button
-                    onClick={this.handleSubmit}
-                    basic
-                    color="blue"
-                    inverted
-                  >
-                    <Icon name="add" /> Add Lead to List
-                  </Button>
+                  <Form.Group>
+                    <Form.Input
+                      placeholder="Create new list..."
+                      onChange={this.handleChange}
+                      name="newListName"
+                    >
+                      <input
+                        style={{ borderRadius: "30px", width: "200px" }}
+                      ></input>
+                    </Form.Input>
+                    <Form.Button
+                      onClick={this.handleSubmit}
+                      basic
+                      color="violet"
+                      inverted
+                      style={{ margin: "20px", borderRadius: "30px" }}
+                    >
+                      <Icon name="add" /> Add Lead to List
+                    </Form.Button>
+                  </Form.Group>
                 </div>
               </Modal>
             </Grid.Column>
           </Grid.Row>
-
+          {/* TABLE OF CONTENTS */}
           <Grid.Row
             style={{
-              // position: "fixed",
-              top: "250px",
-              margin: "40px",
-              minHeight: "600px"
+              marginLeft: "150px",
+              marginRight: "150px"
             }}
             columns={1}
           >
             <Grid.Column>
-              <Table sortable selectable celled fixed>
+              <Table sortable selectable celled>
                 <Table.Header>
-                  <Table.Row>
+                  <Table.Row textAlign="center">
                     <Table.HeaderCell
                       sorted={column === "name" ? direction : null}
                       onClick={this.handleSort("name")}
                     >
                       List Name
+                    </Table.HeaderCell>
+                    <Table.HeaderCell
+                      sorted={column === "name" ? direction : null}
+                      onClick={this.handleSort("name")}
+                    >
+                      No. of Leads
                     </Table.HeaderCell>
                     <Table.HeaderCell
                       sorted={column === "date" ? direction : null}
@@ -282,10 +292,13 @@ class Dashboard extends Component {
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                  {_.map(data, ({ id, name, date }) => (
-                    <Table.Row key={uuidv1()}>
+                  {_.map(data, ({ id, name, date, leadCount }) => (
+                    <Table.Row textAlign="center" key={uuidv1()}>
                       <Table.Cell onClick={() => this.handleRowClick(id)}>
                         {name}
+                      </Table.Cell>
+                      <Table.Cell onClick={() => this.handleRowClick(id)}>
+                        {leadCount}
                       </Table.Cell>
                       <Table.Cell onClick={() => this.handleRowClick(id)}>
                         {date}

@@ -1,6 +1,7 @@
 export const FETCH_CATEGORIES = "FETCH_CATEGORIES";
 export const START_FETCH_CATEGORIES = "START_FETCH_CATEGORIES";
 export const START_FETCH_LEADS = "START_FETCH_LEADS";
+export const START_FETCH_LEADS_AND_LIST = "START_FETCH_LEADS_AND_LIST";
 export const FETCH_LEADS = "FETCH_LEADS";
 export const START_FETCH_LISTS = "FETCH_LISTS";
 export const START_FETCH_LEADNOTES = "START_FETCH_LEADNOTES";
@@ -17,7 +18,9 @@ export const FETCH_LIST_BY_ID = "FETCH_LIST_BY_ID";
 export const ADD_LEAD_NOTE = "ADD_LEAD_NOTE";
 export const ACTION_SUCCESS = "ACTION_SUCCESS";
 export const FETCH_LIST_WITH_LEADNOTES = "FETCH_LIST_WITH_LEADNOTES";
+export const COMPLETE_FETCH_LEADS_AND_LIST = "COMPLETE_FETCH_LEADS_AND_LIST";
 // export const START_DELETE_LEADLIST = "START_DELETE_LEADLIST";
+
 
 const uuidv1 = require("uuid/v1");
 
@@ -266,7 +269,7 @@ export function addLead(
 ) {
   return function(dispatch) {
     // const token = localStorage.token;
-    dispatch({ type: START_FETCH_LEADS });
+    dispatch({ type: START_FETCH_LEADS_AND_LIST });
 
     fetch("http://localhost:3000/api/v1/leads", {
       method: "POST",
@@ -325,9 +328,9 @@ export function addLead(
                   })
                 })
                   .then(res => res.json())
-                  .then(data =>
-                    console.log("leadlist from creation of new list", data)
-                  )
+                  .then(data =>{
+                    dispatch({ type: COMPLETE_FETCH_LEADS_AND_LIST })
+                  })
                   .catch(err => console.log(err));
               });
             })
@@ -428,26 +431,11 @@ export function addLeadNote(status, nextSteps, userId, leadId, comment) {
       })
     })
       .then(res => res.json())
-      .then(console.log)
-      // .then(data => {
-      // dispatch({type: ADD_LEAD_NOTE, leadnote: data})})
+      .then(data => {
+      dispatch({type: ADD_LEAD_NOTE})})
       .catch(err => console.log(err));
   };
 }
-//// ! ADD COMMENTS AS THE CALL BACK using the leadnote id received back from data
-// ! Create a reducer for this action
-
-// .then(data => {
-//    console.log(data)
-//    fetch("http://localhost:3000/comments", {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": 'application/json',
-//       "Accept": 'application/json'
-//     },
-//     body: JSON.stringify({
-//       leadnote_id: data.id,
-//       status: comment
 
 
 // ! I DONT THINK THIS FUNCTION IS FINISHED YET (29/SEP)

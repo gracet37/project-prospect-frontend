@@ -39,7 +39,6 @@ class SearchResults extends Component {
     };
 
   componentDidMount() {
-    console.log(this.props.leads);
     const array = this.props.leads;
     this.setState({ company: array.organization, website: array.domain });
   }
@@ -57,7 +56,6 @@ class SearchResults extends Component {
 
   handleSubmit = () => {
     const { leadsArray, company, website, listId, newListName } = this.state;
-    console.log("SUBMIT", this.state);
     const userId = this.props.auth.user.id;
     this.props.addLead(
       leadsArray,
@@ -83,8 +81,6 @@ class SearchResults extends Component {
   // };
 
   handleLeadClick = (lead, checked) => {
-    console.log(lead);
-    console.log(checked);
     if (checked) {
       this.props.listWithLeadNotes.forEach(l => {
         console.log("what is l", l)
@@ -138,8 +134,7 @@ class SearchResults extends Component {
     } else {
       dataSlice = [];
     }
-    console.log("search results", this.state)
-    console.log("list props", this.props.lists);
+
     let lists = this.props.lists;
     let listArray = lists.map(list => {
       return {

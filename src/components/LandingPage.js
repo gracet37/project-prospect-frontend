@@ -1,24 +1,23 @@
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import React, { Component } from "react";
 import {
   Button,
   Container,
-  Divider,
-  Grid,
+
   Header,
   Icon,
-  Image,
-  List,
+  Loader,
   Menu,
   Responsive,
   Segment,
   Sidebar,
   Visibility,
-  Input,
-  Pagination
+
 } from "semantic-ui-react";
 import SearchBar from "./SearchBar";
+import { connect } from "react-redux";
+import { logoutUser } from "../actions";
 
 // Heads up!
 // We using React Static to prerender our docs with server side rendering, this is a quite simple solution.
@@ -34,10 +33,10 @@ const HomepageHeading = ({ mobile }) => (
       as="h1"
       content="Search for Prospects Instantly"
       style={{
-        fontSize: mobile ? "2em" : "3em",
+        fontSize: mobile ? "2em" : "3.2em",
         fontWeight: "bold",
-        marginBottom: 0,
-        marginTop: mobile ? "1.5em" : "5em"
+        marginBottom: "10px",
+        marginTop: mobile ? "1.5em" : "4.5em"
       }}
     />
     <SearchBar />
@@ -49,10 +48,20 @@ HomepageHeading.propTypes = {
 };
 
 class DesktopContainer extends Component {
-  state = {};
+  state = {
+    logoutChange: false
+  };
 
   hideFixedMenu = () => this.setState({ fixed: false });
   showFixedMenu = () => this.setState({ fixed: true });
+
+  handleLogout = () => {
+    this.props.logoutUser();
+    localStorage.removeItem("token");
+    this.setState({ logoutChange: true });
+    // this.props.history.push("/");
+    // redirect to landing page
+  };
 
   render() {
     const { children } = this.props;
@@ -73,9 +82,11 @@ class DesktopContainer extends Component {
             style={{
               backgroundImage: `url(${"https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/s2048x2048/71093458_463527317706998_6857018496128122880_n.png?_nc_cat=101&_nc_oc=AQl2gDIEaIvqJ9nlneGMjfaDHtgfbFjLjkXKrF1ATz_lG8I8Qq2SYVjDCYwbysjSCwM&_nc_ht=scontent-ort2-2.xx&oh=644556da3c91d328452fcb67714c1c7d&oe=5E3A8CD8"})`,
               backgroundSize: "cover",
-              width: "100%",
-              height: "100%",
-              minHeight: 800,
+              height: 'inherit',
+              minHeight: '1000px',
+              // width: "100%",
+              // height: "100%",
+              // objectFit: 'cover',
               padding: "1em 0em"
             }}
           >
@@ -109,27 +120,46 @@ class DesktopContainer extends Component {
                 >
                   My Account
                 </Menu.Item>
-                {/* <Menu.Item
-                  style={{ fontSize: "large", color: "#43425D" }}
-                  as={Link}
-                  to="/results"
-                >
-                  Results
-                </Menu.Item> */}
-                <Menu.Item position="right">
-                  <Button as={Link} to="/login" inverted={!fixed}>
-                    Log in
-                  </Button>
-                  <Button
-                    as={Link}
-                    to="/signup"
-                    inverted={!fixed}
-                    primary={fixed}
-                    style={{ marginLeft: "0.5em" }}
-                  >
-                    Sign Up
-                  </Button>
-                </Menu.Item>
+                {this.props.auth.user ? (
+                  <Menu.Item position="right">
+                    <Button
+                      onClick={() => this.handleLogout()}
+                      basic
+                      color="grey"
+                      primary={fixed}
+                      style={{
+                        backgroundColor: "#03DAC6",
+                        color: "white",
+                        marginLeft: "1em"
+                      }}
+                    >
+                      Logout
+                    </Button>
+                  </Menu.Item>
+                ) : (
+                  <Menu.Item position="right">
+                    <Button
+                      as={Link}
+                      to="/login"
+                      style={{ backgroundColor: "#6200EE", color: "white" }}
+                    >
+                      Log in
+                    </Button>
+                    <Button
+                      as={Link}
+                      to="/signup"
+                      // basic
+                      style={{
+                        backgroundColor: "#03DAC6",
+                        color: "white",
+                        marginLeft: "0.5em"
+                      }}
+                      primary={fixed}
+                    >
+                      Sign Up
+                    </Button>
+                  </Menu.Item>
+                )}
               </Container>
             </Menu>
             <HomepageHeading />
@@ -232,6 +262,16 @@ const ResponsiveContainer = ({ children }) => (
 ResponsiveContainer.propTypes = {
   children: PropTypes.node
 };
+
+const mapStateToProps = state => {
+  return {
+    auth: state.auth
+  };
+};
+export default connect(
+  mapStateToProps,
+  { logoutUser }
+)(withRouter(DesktopContainer));
 
 // const HomepageLayout = () => (
 //   <ResponsiveContainer>
@@ -366,4 +406,3 @@ ResponsiveContainer.propTypes = {
 //     </Segment>
 //   </ResponsiveContainer>
 // );
-export default DesktopContainer;

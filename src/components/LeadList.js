@@ -58,20 +58,13 @@ class Dashboard extends Component {
   }
 
   formattedListArray = () => {
-    // let listArray = this.props.listlead[0];
     let listArray = this.props.listleads.leads;
-    // let leadNotesArray = this.props.leadnotes
-    // let leadnoteArray= lead.leadnotes
-    // let lastLeadnote = leadnoteArray.slice(-1)[0]
     if (listArray) {
-      // console.log("LISTARRAY??", listArray)
       let array = listArray.map(lead => {
-        // const oneLead = lead.lead
         let last = null;
         if (lead.leadnotes.length) {
           last = lead.leadnotes[lead.leadnotes.length - 1];
         }
-        console.log("LAST", last);
         if (lead.leadnotes.length > 0) {
           let date = new Date(last.created_at);
           let dateString = date.toDateString();
@@ -106,7 +99,6 @@ class Dashboard extends Component {
           };
         }
       });
-      console.log("LISTARRAY", listArray);
       this.setState({ data: array });
     }
   };
@@ -158,7 +150,6 @@ class Dashboard extends Component {
   };
 
   handleAddLeadNote = leadId => {
-    console.log(leadId);
     const { statusInput, nextStepsInput, commentsInput } = this.state;
     this.props.addLeadNote(
       statusInput,
@@ -174,7 +165,6 @@ class Dashboard extends Component {
   // }
 
   render() {
-    console.log("LEADLIST", this.state);
     const { column, data, direction, activePage } = this.state;
     const leadnotesArray = this.props.leadnotes;
 
@@ -427,6 +417,7 @@ class Dashboard extends Component {
                     )}
                   </Table.Body>
                   <Table.Footer>
+                    {data.length > 10 ? 
                     <Table.Row>
                       <Table.HeaderCell colSpan="3">
                         <Pagination
@@ -455,20 +446,8 @@ class Dashboard extends Component {
                             this.handlePageChange(activePage)
                           }
                         />
-                        {/* <Menu floated="right" pagination>
-                  <Menu.Item as="a" icon>
-                    <Icon name="chevron left" />
-                  </Menu.Item>
-                  <Menu.Item as="a">1</Menu.Item>
-                  <Menu.Item as="a">2</Menu.Item>
-                  <Menu.Item as="a">3</Menu.Item>
-                  <Menu.Item as="a">4</Menu.Item>
-                  <Menu.Item as="a" icon>
-                    <Icon name="chevron right" />
-                  </Menu.Item>
-                </Menu> */}
                       </Table.HeaderCell>
-                    </Table.Row>
+                    </Table.Row> : null}
                   </Table.Footer>
                 </Table>
               </Grid.Column>

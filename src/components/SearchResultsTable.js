@@ -1,28 +1,17 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import { lighten, makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import DeleteIcon from '@material-ui/icons/Delete';
-import FilterListIcon from '@material-ui/icons/FilterList';
 import {connect} from 'react-redux';
-import { addList, addLead } from "../actions";
+import { addLead } from "../actions";
 import Navbar from "./Navbar";
 import EnhancedTable from "./EnhancedTable";
+
+const style={
+  backgroundImage: `url(${"https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/s2048x2048/71093458_463527317706998_6857018496128122880_n.png?_nc_cat=101&_nc_oc=AQl2gDIEaIvqJ9nlneGMjfaDHtgfbFjLjkXKrF1ATz_lG8I8Qq2SYVjDCYwbysjSCwM&_nc_ht=scontent-ort2-2.xx&oh=644556da3c91d328452fcb67714c1c7d&oe=5E3A8CD8"})`,
+  backgroundSize: "cover",
+  width: "100%",
+  height: "100%",
+  minHeight: 800,
+  padding: "1em 0em"
+}
 
 
 class DataTable extends React.Component {
@@ -120,7 +109,7 @@ class DataTable extends React.Component {
       return <div>Loading</div>
     }
     return (
-      <div>
+      <div style={style}>
         <Navbar />
         <EnhancedTable addLead={this.props.addLead} company={this.state.company} website={this.state.website} rows={this.state.rows} listArray={listArray} userId={this.props.auth.user.id}/>
       </div>

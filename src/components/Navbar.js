@@ -46,7 +46,7 @@ class Navbar extends React.Component {
     this.props.logoutUser()
     localStorage.removeItem('token')
     this.props.history.push('/')
-    // redirect to login page
+    // redirect to landing page
   }
 
   render() {

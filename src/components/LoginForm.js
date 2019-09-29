@@ -11,13 +11,6 @@ import { connect } from "react-redux";
 import { login } from "../actions";
 import "../App.css";
 
-// const styleColumn = {
-//   float: "left",
-//   width: "50%",
-//   padding: "14px"
-//   // margin: '10px'
-// };
-
 const styleForm = {
   // float: "right",
   width: "500px",
@@ -28,6 +21,12 @@ const styleForm = {
   marginTop: '150px'
   // paddingLeft: "20px"
 };
+
+const style = {
+  backgroundImage: `url(${"https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/s2048x2048/70590332_836756946718765_3473765009224368128_n.png?_nc_cat=111&_nc_oc=AQnI8TKKO2F4LqO-fZDRyZuRDWWLWhMONIpEB2mHf1QEmAP04HdNNIq8JU0QUq5LYwE&_nc_ht=scontent-ort2-2.xx&oh=e9db466921239dad5b5ae5b132f1f40f&oe=5E3DD369"})`,
+  backgroundSize: "cover",
+  minHeight: '800px'
+}
 
 class LoginForm extends Component {
   state = {
@@ -49,11 +48,11 @@ class LoginForm extends Component {
   render() {
     console.log(this.state);
     return (
-      <div className="login-form">
+      <div style={style} className="login-form">
           <Grid textAlign="center" verticalAlign="middle">
             <Form.Group>
               <Form style={styleForm} size="large" onSubmit={this.handleSubmit}>
-                <Header as="h2" style={{ color: "#03DAC6" }} textAlign="center">
+                <Header as="h1" style={{ color: "#03DAC6" }} textAlign="center">
                   Log-in
                 </Header>
                 <Segment>
@@ -75,25 +74,32 @@ class LoginForm extends Component {
                     type="password"
                   />
                   <Button
-                    style={{ backgroundColor: "#03DAC6", color: "white" }}
+                    style={{ backgroundColor: "#03DAC6", color: "white", marginBottom: '10px' }}
                     fluid
                     size="large"
                   >
                     Login
                   </Button>
                   <NavLink
-                    style={{marginTop: '20px'}}
+                    style={{color: '#43425D'}}
                     to="/signup"
                     activeClassName="hurray"
                   >
                     New User
+                  </NavLink>
+                  <br/>
+                  <NavLink
+                   style={{color: '#43425D'}}
+                    to="/"
+                    activeClassName="hurray"
+                  >
+                    Home
                   </NavLink>
                 </Segment>
               </Form>
             </Form.Group>
             {/* </Grid.Column> */}
           </Grid>
-        )}
       </div>
     );
   }

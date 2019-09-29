@@ -3,8 +3,8 @@ import { Route, withRouter, Switch } from "react-router-dom";
 import LeadListContainer from "../containers/LeadListContainer";
 import SearchContainer from "../containers/SearchContainer";
 import UserProfile from "./UserProfile";
-import SearchResults from "./SearchResults";
-import SearchResultsTest from "./SearchResultsTest";
+// import SearchResults from "./SearchResults";
+import SearchResultsTable from "./SearchResultsTable";
 import LoginForm from "./LoginForm";
 import NewUserForm from "./NewUserForm";
 import LandingPage from "./LandingPage";
@@ -33,14 +33,14 @@ class App extends React.Component {
         <Switch>
           <Route exact path="/" component={LandingPage} />
           <Route exact path="/login" component={LoginForm} />
-          <Route exact path="/results" component={SearchResults} />
+          {/* <Route exact path="/results" component={SearchResults} /> */}
           <Route exact path="/leadlists" component={LeadListContainer} />
           <Route exact path="/profile" component={UserProfile} />
           <Route exact path="/search" component={SearchContainer} />
           <Route exact path="/signup" component={NewUserForm} />
           <Route exact path="/leads" component={LeadList} />
           <Route exact path="/edit" component={EditUserForm} />
-          <Route exact path="/srtest" component={SearchResultsTest} />
+          <Route exact path="/results" component={SearchResultsTable} />
         </Switch>
         {/* <Route exact path="/logout" component={} /> */}
       </div>

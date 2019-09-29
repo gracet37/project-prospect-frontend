@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import SearchBar from "../components/SearchBar";
 import SearchResults from "../components/SearchResults";
-import SearchResultsTest from "../components/SearchResultsTest";
+import SearchResultsTable from "../components/SearchResultsTable";
 import NavBar from "../components/Navbar";
 import DatatablePage from "../NOT USING/DatatablePage";
 import LoginForm from "../components/LoginForm";
@@ -21,7 +21,7 @@ class SearchContainer extends Component {
       <div>
         <NavBar />
           <div>
-            <SearchBar />
+            {/* <SearchBar /> */}
             {/* <LeadList /> */}
             {/* <SearchResultsTest /> */}
           </div>

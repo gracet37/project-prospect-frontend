@@ -19,8 +19,8 @@ class Dashboard extends Component {
   };
 
   componentDidMount() {
-    this.formattedListArray();
-     this.countTotalLeads()
+     this.formattedListArray();
+    //  this.countTotalLeads()
      this.countMeetingsBooked()
      this.countNotContacted()
   }
@@ -50,21 +50,21 @@ class Dashboard extends Component {
     // return array
   };
 
-  countTotalLeads = () => {
-    if (this.props.lists) {
-    let leadCountArray = []
-    let totalLeads
-    console.log(this.props.lists)
-    this.props.lists.forEach(list => {
-      let count = list.leads.length
-      leadCountArray.push(count)
-    })
-    totalLeads = leadCountArray.reduce((total, count) => total + count)
-    this.setState({totalLeadCount: totalLeads})
-    } else {
-      return null
-    }
-  }
+  // countTotalLeads = () => {
+  //   if (this.props.lists) {
+  //   let leadCountArray = []
+  //   let totalLeads
+  //   console.log(this.props.lists)
+  //   this.props.lists.forEach(list => {
+  //     let count = list.leads.length
+  //     leadCountArray.push(count)
+  //   })
+  //   totalLeads = leadCountArray.reduce((total, count) => total + count)
+  //   this.setState({totalLeadCount: totalLeads})
+  //   } else {
+  //     return null
+  //   }
+  // }
 
   countMeetingsBooked = () => {
     let meetingsBookedCount = 0
@@ -218,7 +218,7 @@ class Dashboard extends Component {
                     >
                       List Name
                     </Table.HeaderCell>
-                    <Table.HeaderCell
+                    {/* <Table.HeaderCell
                       sorted={column === "meetings" ? direction : null}
                       onClick={this.handleSort("meetings")}
                     >
@@ -229,7 +229,7 @@ class Dashboard extends Component {
                       onClick={this.handleSort("total")}
                     >
                       Total Leads
-                    </Table.HeaderCell>
+                    </Table.HeaderCell> */}
                     <Table.HeaderCell
                       sorted={column === "date" ? direction : null}
                       onClick={this.handleSort("date")}
@@ -248,12 +248,12 @@ class Dashboard extends Component {
                       <Table.Cell onClick={() => this.handleRowClick(id)}>
                         {name}
                       </Table.Cell>
-                      <Table.Cell
+                      {/* <Table.Cell
                         onClick={() => this.handleRowClick(id)}
                       ></Table.Cell>
                       <Table.Cell
                         onClick={() => this.handleRowClick(id)}
-                      ></Table.Cell>
+                      ></Table.Cell> */}
                       <Table.Cell onClick={() => this.handleRowClick(id)}>
                         {date}
                       </Table.Cell>

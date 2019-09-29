@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import SearchBar from "../components/SearchBar";
 import SearchResults from "../components/SearchResults";
-import SearchResultsTest from "../NOT USING/SearchResultsTest";
+import SearchResultsTest from "../components/SearchResultsTest";
 import NavBar from "../components/Navbar";
 import DatatablePage from "../NOT USING/DatatablePage";
 import LoginForm from "../components/LoginForm";

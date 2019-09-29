@@ -4,6 +4,7 @@ import LeadListContainer from "../containers/LeadListContainer";
 import SearchContainer from "../containers/SearchContainer";
 import UserProfile from "./UserProfile";
 import SearchResults from "./SearchResults";
+import SearchResultsTest from "./SearchResultsTest";
 import LoginForm from "./LoginForm";
 import NewUserForm from "./NewUserForm";
 import LandingPage from "./LandingPage";
@@ -39,6 +40,7 @@ class App extends React.Component {
           <Route exact path="/signup" component={NewUserForm} />
           <Route exact path="/leads" component={LeadList} />
           <Route exact path="/edit" component={EditUserForm} />
+          <Route exact path="/srtest" component={SearchResultsTest} />
         </Switch>
         {/* <Route exact path="/logout" component={} /> */}
       </div>

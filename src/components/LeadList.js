@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import _ from "lodash";
 import Navbar from "./Navbar";
+import MailForm from "./MailForm";
 import { deleteList, deleteListLead, addLeadNote } from "../actions";
 
 const statusArray = [
@@ -66,43 +67,44 @@ class Dashboard extends Component {
       // console.log("LISTARRAY??", listArray)
       let array = listArray.map(lead => {
         // const oneLead = lead.lead
-        let last = null
+        let last = null;
         if (lead.leadnotes.length) {
           last = lead.leadnotes[lead.leadnotes.length - 1];
         }
-        console.log("LAST", last)
+        console.log("LAST", last);
         if (lead.leadnotes.length > 0) {
-          let date = new Date(last.created_at)
-          let dateString = date.toDateString()
-        return {
-          id: lead.lead.id,
-          first_name: lead.lead.first_name,
-          last_name: lead.lead.last_name,
-          position: lead.lead.position,
-          company: lead.lead.company,
-          status: last.status,
-          next_steps: last.next_steps,
-          comments: last.comments,
-          comments_date: dateString,
-          last_date_contacted: lead.lead.contacted_date,
-          email: lead.lead.email,
-          phone_number: lead.lead.phone_number
+          let date = new Date(last.created_at);
+          let dateString = date.toDateString();
+          return {
+            id: lead.lead.id,
+            first_name: lead.lead.first_name,
+            last_name: lead.lead.last_name,
+            position: lead.lead.position,
+            company: lead.lead.company,
+            status: last.status,
+            next_steps: last.next_steps,
+            comments: last.comments,
+            comments_date: dateString,
+            last_date_contacted: lead.lead.contacted_date,
+            email: lead.lead.email,
+            phone_number: lead.lead.phone_number
+          };
+        } else {
+          return {
+            id: lead.lead.id,
+            first_name: lead.lead.first_name,
+            last_name: lead.lead.last_name,
+            position: lead.lead.position,
+            company: lead.lead.company,
+            status: null,
+            next_steps: null,
+            comments: null,
+            comments_date: null,
+            last_date_contacted: lead.lead.contacted_date,
+            email: lead.lead.email,
+            phone_number: lead.lead.phone_number
+          };
         }
-      } else {
-        return {
-          id: lead.lead.id,
-          first_name: lead.lead.first_name,
-          last_name: lead.lead.last_name,
-          position: lead.lead.position,
-          company: lead.lead.company,
-          status: null,
-          next_steps: null,
-          comments: null,
-          comments_date: null,
-          last_date_contacted: lead.lead.contacted_date,
-          email: lead.lead.email,
-          phone_number: lead.lead.phone_number
-        }}
       });
       console.log("LISTARRAY", listArray);
       this.setState({ data: array });
@@ -207,8 +209,16 @@ class Dashboard extends Component {
     return (
       <div>
         <Navbar />
-        <Grid style={{backgroundImage: `url(${"https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/s2048x2048/71093458_463527317706998_6857018496128122880_n.png?_nc_cat=101&_nc_oc=AQl2gDIEaIvqJ9nlneGMjfaDHtgfbFjLjkXKrF1ATz_lG8I8Qq2SYVjDCYwbysjSCwM&_nc_ht=scontent-ort2-2.xx&oh=644556da3c91d328452fcb67714c1c7d&oe=5E3A8CD8"})`}} divided="vertically">
-          <Grid.Row style={{marginTop:"40px", marginLeft: "70px"}} columns={3}>
+        <Grid
+          style={{
+            backgroundImage: `url(${"https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/s2048x2048/71093458_463527317706998_6857018496128122880_n.png?_nc_cat=101&_nc_oc=AQl2gDIEaIvqJ9nlneGMjfaDHtgfbFjLjkXKrF1ATz_lG8I8Qq2SYVjDCYwbysjSCwM&_nc_ht=scontent-ort2-2.xx&oh=644556da3c91d328452fcb67714c1c7d&oe=5E3A8CD8"})`
+          }}
+          divided="vertically"
+        >
+          <Grid.Row
+            style={{ marginTop: "40px", marginLeft: "70px" }}
+            columns={3}
+          >
             <Grid.Column>
               <Card>
                 <Card.Content>
@@ -250,7 +260,10 @@ class Dashboard extends Component {
             </Grid.Column>
           </Grid.Row>
           {this.props.listleads.leads ? (
-            <Grid.Row style={{margin:"40px", minHeight:'450px'}} columns={1}>
+            <Grid.Row
+              style={{ margin: "40px", minHeight: "450px" }}
+              columns={1}
+            >
               <Grid.Column>
                 <Table sortable selectable celled fixed>
                   <Table.Header>
@@ -345,7 +358,15 @@ class Dashboard extends Component {
                               <Modal.Header as="h3">
                                 {phone_number ? "Phone:" + phone_number : null}{" "}
                                 Email: {email}
-                                <Icon name={"envelope"}></Icon>
+                                {/* <Icon name={"envelope"}></Icon> */}
+                                <Modal
+                                  trigger={<Icon name={"envelope"}></Icon>}
+                                >
+                                  <Modal.Header>Send an email to {first_name}</Modal.Header>
+                                    <Modal.Content>
+                                    <MailForm email={email} myEmail={this.props.auth.user.email}/>
+                                  </Modal.Content>
+                                </Modal>
                               </Modal.Header>
                               {/* <Modal.Header as='h3'>{position}, {company}</Modal.Header> */}
 

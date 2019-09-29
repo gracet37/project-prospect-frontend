@@ -373,7 +373,9 @@ export function thunkFetchLeads(domainName, history) {
       .then(res => res.json())
       .then(result => {
         dispatch({ type: FETCH_LEADS, id: uuidv1(), leads: result.data });
-        history.push("/results");
+        // history.push("/results");
+        history.push("/srtest");
+
       });
   };
 }

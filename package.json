@@ -9,6 +9,7 @@
     "node-uuid": "^1.4.8",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-mail-form": "^2.0.2",
     "react-redux": "^6",
     "react-scripts": "3.1.1",
     "redux": "^4.0.4",

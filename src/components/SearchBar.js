@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { Form, Dropdown, Button } from "semantic-ui-react";
+import { Form, Loader, Button } from "semantic-ui-react";
 import { thunkFetchCategories, thunkFetchLeads } from "../actions";
 import { connect } from "react-redux";
-import { Link, withRouter } from 'react-router-dom';
-import Loading from './Loading'
+import { Link, withRouter } from "react-router-dom";
+import Loading from "./Loading";
+import "../App.css";
 /////////////////////// STYLING /////////////////////////
 const searchOptions = [
   { key: "industry", text: "Industry", value: "industry" },
@@ -11,8 +12,15 @@ const searchOptions = [
 ];
 
 const styleSearchBar = {
-
-}
+  marginLeft: '30px',
+  marginTop: '10px',
+  width: "490px",
+  borderRadius: "70px",
+  borderColor: "#6200EE",
+  borderWidth: "3px",
+  height: "60px",
+  fontSize: "large"
+};
 
 /////////////////////// STYLING /////////////////////////
 
@@ -38,30 +46,35 @@ class SearchBar extends Component {
   };
 
   handleSubmit = () => {
-    this.setState({searchClicked: true})
-    this.props.thunkFetchLeads(this.state.searchParam, this.props.history)
+    this.setState({ searchClicked: true });
+    this.props.thunkFetchLeads(this.state.searchParam, this.props.history);
   };
 
   render() {
-    console.log(this.state);
     return (
       <div>
         {/* {this.state.searchClicked ? <Loading /> : null} */}
         {/* <Form>  */}
-            <Form >
-              <Form.Group >
-              <Form.Input
-                onChange={this.handleChange}
-                name="searchParam"
-                placeholder="Enter domain name..."
-                loading={this.state.searchClicked ? true : false }
-                style={{fontSize:"large", marginLeft:"40px", marginTop:"20px", height:"50px", borderColor:"#6200EE", borderWidth:"medium", width:"490px"}}
-              />
-              <Button style={{fontSize:"large", backgroundColor:"#6200EE", marginTop:"20px",color: 'white', width:"120px"}} type="submit" onClick={this.handleSubmit}>
-                Search
-              </Button>
-            </Form.Group>
-            </Form>
+        <Form>
+          <Form.Group>
+            <Form.Input
+              onChange={this.handleChange}
+              name="searchParam"
+              placeholder="Enter domain name..."
+              // loading={this.state.searchClicked ? true : false}
+            >
+              <input style={styleSearchBar} />
+            </Form.Input>
+            <Button
+              type="submit"
+              loading={this.state.searchClicked ? true : false}
+              onClick={this.handleSubmit}
+              style={{borderRadius: "100px", marginLeft: '10px', backgroundColor: '#6200EE', color: 'white', marginTop: '10px', width: '130px',height: '60px', fontSize: 'large', textAlign: 'center' }}
+            >
+              Search
+            </Button>
+          </Form.Group>
+        </Form>
         {/* </Form> */}
       </div>
     );
@@ -74,7 +87,7 @@ const mapDispatchToProps = dispatch => {
       dispatch(thunkFetchCategories());
     },
     thunkFetchLeads: (domainName, history) => {
-      dispatch(thunkFetchLeads(domainName, history))
+      dispatch(thunkFetchLeads(domainName, history));
     }
   };
 };

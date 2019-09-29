@@ -108,7 +108,7 @@ export function login(formData, history) {
           console.log("fetch login", data);
           localStorage.token = data.token;
           dispatch(loginUser({ user: data.user }));
-          history.push("/search");
+          history.push("/");
         }
       })
       .catch(err => console.log(err));
@@ -132,7 +132,7 @@ export function registerUser(formData, history) {
         } else {
           localStorage.token = data.token;
           dispatch(loginUser(data.user));
-          history.push("/search");
+          history.push("/");
         }
       });
   };
@@ -162,7 +162,6 @@ export function thunkFetchLists(id) {
     fetch(`http://localhost:3000/api/v1/lists/show_lists/${id}`)
       .then(res => res.json())
       .then(data => {
-        console.log(data);
         dispatch({ type: FETCH_LISTS, lists: data });
       });
   };
@@ -176,7 +175,6 @@ export function thunkFetchListById(id, history) {
     fetch(`http://localhost:3000/api/v1/lists/show_special/${id}`)
       .then(res => res.json())
       .then(data => {
-        console.log(data);
         dispatch({
           type: FETCH_LIST_BY_ID,
           leads: data.leads,
@@ -192,7 +190,6 @@ export function thunkFetchAllListById(id) {
     fetch(`http://localhost:3000/api/v1/lists/show_special_all/${id}`)
       .then(res => res.json())
       .then(data => {
-        console.log("LIST WITH ALL LEADNOTES", data);
         dispatch({
           type: FETCH_LIST_WITH_LEADNOTES,
           leads: data.leads_with_notes,
@@ -314,7 +311,6 @@ export function addLead(
           })
             .then(res => res.json())
             .then(data => {
-              console.log(data);
               dispatch({ type: ADD_LIST, list: data });
               leadsData.forEach(lead => {
                 fetch("http://localhost:3000/api/v1/leadlists", {
@@ -342,26 +338,27 @@ export function addLead(
   };
 }
 
-// export function addList(listName, id) {
-//   return function(dispatch) {
+export function addList(newListName, userId) {
+  return function(dispatch) {
 
-//     fetch("http://localhost:3000/api/v1/lists", {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": 'application/json',
-//         "Accept": 'application/json'
-//       },
-//       body: JSON.stringify({
-//         name: listName
-//       })
-//     })
-//       .then(res => res.json())
-//       .then(data => {
-
-//       })
-//       .catch(err => console.log(err));
-//   };
-// }
+    fetch("http://localhost:3000/api/v1/lists", {
+      method: "POST",
+      headers: {
+        "Content-Type": 'application/json',
+        Accept: 'application/json'
+      },
+      body: JSON.stringify({
+        name: newListName,
+        user_id: userId
+      })
+    })
+      .then(res => res.json())
+      .then(data => {
+        dispatch({ type: ADD_LIST, list: data });
+      })
+      .catch(err => console.log(err));
+  };
+}
 
 export function thunkFetchLeads(domainName, history) {
   return function(dispatch) {
@@ -373,8 +370,8 @@ export function thunkFetchLeads(domainName, history) {
       .then(res => res.json())
       .then(result => {
         dispatch({ type: FETCH_LEADS, id: uuidv1(), leads: result.data });
-        // history.push("/results");
-        history.push("/srtest");
+        history.push("/results");
+        // history.push("/s");
 
       });
   };
@@ -452,6 +449,8 @@ export function addLeadNote(status, nextSteps, userId, leadId, comment) {
 //       leadnote_id: data.id,
 //       status: comment
 
+
+// ! I DONT THINK THIS FUNCTION IS FINISHED YET (29/SEP)
 export function updateUser(formData, history) {
   return dispatch => {
     const reqObj = {
@@ -469,7 +468,7 @@ export function updateUser(formData, history) {
         } else {
           localStorage.token = data.token;
           dispatch(loginUser(data.user));
-          history.push("/search");
+          history.push("/profile");
         }
       });
   };

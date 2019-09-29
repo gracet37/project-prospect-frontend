@@ -1,10 +1,22 @@
 import React, { Component } from "react";
-import { Grid, Image, Card, Table, Icon, Confirm } from "semantic-ui-react";
+import {
+  Grid,
+  Image,
+  Card,
+  Table,
+  Icon,
+  Confirm,
+  Button,
+  Modal,
+  Form
+} from "semantic-ui-react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import _ from "lodash";
 import Navbar from "./Navbar";
-import { deleteList, thunkFetchListById } from "../actions";
+import { deleteList, thunkFetchListById, addList } from "../actions";
+
+const uuidv1 = require("uuid/v1");
 
 class Dashboard extends Component {
   // UPDATE DATA WITH LISTS
@@ -14,15 +26,16 @@ class Dashboard extends Component {
     direction: null,
     deleteConfirmation: false,
     totalLeadCount: 0,
-    totalMeetingsBooked: 0, 
-    totalNotContacted: 0
+    totalMeetingsBooked: 0,
+    totalNotContacted: 0,
+    newListName: ""
   };
 
   componentDidMount() {
-     this.formattedListArray();
+    this.formattedListArray();
     //  this.countTotalLeads()
-     this.countMeetingsBooked()
-     this.countNotContacted()
+    this.countMeetingsBooked();
+    this.countNotContacted();
   }
 
   show = dimmer => this.setState({ dimmer, deleteConfirmation: true });
@@ -67,48 +80,44 @@ class Dashboard extends Component {
   // }
 
   countMeetingsBooked = () => {
-    let meetingsBookedCount = 0
+    let meetingsBookedCount = 0;
     if (this.props.listWithLeadNotes) {
       this.props.listWithLeadNotes.forEach(lead => {
         lead.leadnotes.forEach(leadnote => {
-          if(leadnote.status === "Meeting booked") {
-            meetingsBookedCount += 1
+          if (leadnote.status === "Meeting booked") {
+            meetingsBookedCount += 1;
           }
-        })
-      })
-      this.setState({totalMeetingsBooked: meetingsBookedCount})
-      } else {
-        return null
-      }
-  }
+        });
+      });
+      this.setState({ totalMeetingsBooked: meetingsBookedCount });
+    } else {
+      return null;
+    }
+  };
 
-    countNotContacted = () => {
-    let notContacted = 0
+  countNotContacted = () => {
+    let notContacted = 0;
     // let testArray = []
     if (this.props.listWithLeadNotes) {
       this.props.listWithLeadNotes.forEach(lead => {
         if (lead.leadnotes.length < 1) {
-          notContacted += 1
-          console.log(notContacted)
+          notContacted += 1;
         }
-      })
-      this.setState({totalNotContacted: notContacted})
-      } else {
-        return null
-      }
-  }
+      });
+      this.setState({ totalNotContacted: notContacted });
+    } else {
+      return null;
+    }
+  };
 
   handleConfirm = (event, id) => {
-    event.preventDefault()
-    console.log(id)
-    // console.log(this.state.data)
+    event.preventDefault();
     let newArray = this.state.data.filter(data => data.id !== id);
     this.setState({ data: newArray, deleteConfirmation: false });
-    this.countTotalLeads()
-    this.countMeetingsBooked()
-    this.countNotContacted()
+    // this.countTotalLeads();
+    this.countMeetingsBooked();
+    this.countNotContacted();
     this.props.deleteList(id);
-    // debugger
   };
 
   handleRowClick = id => {
@@ -135,22 +144,36 @@ class Dashboard extends Component {
     });
   };
 
+  handleChange = e => {
+    const targetValue = e.target.value;
+    const targetName = e.target.name;
+    this.setState({ [targetName]: targetValue });
+  };
+
+  handleSubmit = () => {
+    const { newListName } = this.state;
+    const userId = this.props.auth.user.id;
+    this.props.addList(newListName, userId);
+    this.formattedListArray()
+  };
+
   render() {
-    // let data = []
-    // if (this.props.lists.length) {
-    //   this.formattedListArray(this.props.lists)
-    //   // this.setState({data})
-    // }
-    const { column, data, direction, totalLeadCount, totalMeetingsBooked, totalNotContacted } = this.state;
+    const {
+      column,
+      data,
+      direction,
+      totalLeadCount,
+      totalMeetingsBooked,
+      totalNotContacted
+    } = this.state;
     // console.log(this.props.lists)
     console.log(this.state);
     return (
       <div>
-        {/* <Navbar /> */}
-        <Grid divided="vertically">
+        <Grid>
           <Grid.Row
             style={{
-              position: "fixed",
+              // position: "fixed",
               top: "40px",
               margin: "40px",
               marginLeft: "70px",
@@ -200,8 +223,39 @@ class Dashboard extends Component {
           </Grid.Row>
 
           <Grid.Row
+            style={{ marginTop: "40px", marginLeft: "70px" }}
+            columns={1}
+          >
+            <Grid.Column>
+              <Modal
+                centered
+                trigger={<Button>New List</Button>}
+                basic
+                size="small"
+              >
+                <div>
+                  <Modal.Header as="h2">Create a New List:</Modal.Header>
+                  <Form.Input
+                    placeholder="Create new list..."
+                    onChange={this.handleChange}
+                    name="newListName"
+                  />
+                  <Button
+                    onClick={this.handleSubmit}
+                    basic
+                    color="blue"
+                    inverted
+                  >
+                    <Icon name="add" /> Add Lead to List
+                  </Button>
+                </div>
+              </Modal>
+            </Grid.Column>
+          </Grid.Row>
+
+          <Grid.Row
             style={{
-              position: "fixed",
+              // position: "fixed",
               top: "250px",
               margin: "40px",
               minHeight: "600px"
@@ -218,46 +272,24 @@ class Dashboard extends Component {
                     >
                       List Name
                     </Table.HeaderCell>
-                    {/* <Table.HeaderCell
-                      sorted={column === "meetings" ? direction : null}
-                      onClick={this.handleSort("meetings")}
-                    >
-                      Meetings Booked
-                    </Table.HeaderCell>
-                    <Table.HeaderCell
-                      sorted={column === "total" ? direction : null}
-                      onClick={this.handleSort("total")}
-                    >
-                      Total Leads
-                    </Table.HeaderCell> */}
                     <Table.HeaderCell
                       sorted={column === "date" ? direction : null}
                       onClick={this.handleSort("date")}
                     >
                       Date Created
                     </Table.HeaderCell>
-                    <Table.HeaderCell
-                    >
-                      Delete List
-                    </Table.HeaderCell>
+                    <Table.HeaderCell>Delete List</Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
                   {_.map(data, ({ id, name, date }) => (
-                    <Table.Row key={id}>
+                    <Table.Row key={uuidv1()}>
                       <Table.Cell onClick={() => this.handleRowClick(id)}>
                         {name}
                       </Table.Cell>
-                      {/* <Table.Cell
-                        onClick={() => this.handleRowClick(id)}
-                      ></Table.Cell>
-                      <Table.Cell
-                        onClick={() => this.handleRowClick(id)}
-                      ></Table.Cell> */}
                       <Table.Cell onClick={() => this.handleRowClick(id)}>
                         {date}
                       </Table.Cell>
-                      {/* <Table.Cell><Icon name={'trash alternate outline'} onClick={(event) => this.handleDeleteClick(event, id)} name='trash alternate outline' size='large' /></Table.Cell> */}
                       <Table.Cell>
                         <Icon
                           name={"trash alternate outline"}
@@ -265,13 +297,13 @@ class Dashboard extends Component {
                           name="trash alternate outline"
                           size="large"
                         />
-                      <Confirm
-                        open={this.state.deleteConfirmation}
-                        cancelButton="Cancel"
-                        confirmButton="Confirm"
-                        onCancel={this.handleCancel}
-                        onConfirm={(event) => this.handleConfirm(event, id)}
-                      />
+                        <Confirm
+                          open={this.state.deleteConfirmation}
+                          cancelButton="Cancel"
+                          confirmButton="Confirm"
+                          onCancel={this.handleCancel}
+                          onConfirm={event => this.handleConfirm(event, id)}
+                        />
                       </Table.Cell>
                     </Table.Row>
                   ))}
@@ -287,23 +319,24 @@ class Dashboard extends Component {
 
 const mapStateToProps = state => {
   return {
+    auth: state.auth,
     lists: state.lists,
     listWithLeadNotes: state.listWithLeadNotes
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    deleteList: id => {
-      dispatch(deleteList(id));
-    },
-    thunkFetchListById: (id, history) => {
-      dispatch(thunkFetchListById(id, history));
-    }
-  };
-};
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     deleteList: id => {
+//       dispatch(deleteList(id));
+//     },
+//     thunkFetchListById: (id, history) => {
+//       dispatch(thunkFetchListById(id, history));
+//     }
+//   };
+// };
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  { deleteList, thunkFetchListById, addList }
 )(withRouter(Dashboard));

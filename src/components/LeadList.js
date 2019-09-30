@@ -2,14 +2,17 @@ import React, { Component } from "react";
 import {
   Grid,
   Image,
-  Card,
   Table,
   Icon,
   Button,
   Pagination,
   Header,
   Modal,
-  Form
+  Form,
+  Search,
+  Segment,
+  Label,
+  Popup
 } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
@@ -17,17 +20,19 @@ import _ from "lodash";
 import Navbar from "./Navbar";
 import MailForm from "./MailForm";
 import { deleteList, deleteListLead, addLeadNote } from "../actions";
+import PropTypes from "prop-types";
+import FilterLeads from "./FilterLeads";
 
 const styleMetrics = {
   borderWidth: "3px",
   borderRadius: "10px",
   borderColor: "#808495",
   borderStyle: "solid",
-  margin: "40px", 
+  margin: "40px",
   width: "10px",
   height: "180px",
   padding: "20px"
-}
+};
 
 const statusArray = [
   { key: "10", text: "Meeting booked", value: "Meeting booked" },
@@ -52,6 +57,16 @@ const statusArray = [
   }
 ];
 
+// ! Search bar
+
+const resultRenderer = ({ first_name }) => <Label content={first_name} />;
+
+resultRenderer.propTypes = {
+  first_name: PropTypes.string,
+  last_name: PropTypes.string,
+  position: PropTypes.string
+};
+
 class Dashboard extends Component {
   // UPDATE DATA WITH LISTS
   state = {
@@ -61,11 +76,20 @@ class Dashboard extends Component {
     activePage: 1,
     statusInput: "",
     nextStepsInput: "",
-    commentsInput: ""
+    commentsInput: "",
+    totalLeadCount: 0,
+    totalMeetingsBooked: 0,
+    totalNotContacted: 0,
+    filter: ""
   };
+
+  // ! ////////////////////////////////////// CLASS COMPONENT FUNCTIONS ////////////////////////////////////////////////////////////
 
   componentDidMount() {
     this.formattedListArray();
+    this.countTotalLeads();
+    this.countNotContacted();
+    this.countMeetingsBooked();
   }
 
   formattedListArray = () => {
@@ -119,12 +143,10 @@ class Dashboard extends Component {
     let newArray = this.state.data.filter(data => data.id !== lead_id);
     this.setState({ data: newArray });
     this.props.deleteListLead(this.props.listleads.list.id, lead_id);
-    // debugger
+    this.countTotalLeads();
+    this.countNotContacted();
+    this.countMeetingsBooked(); // debugger
   };
-
-  // handleRowClick = id => {
-  //   console.log("row clicked", id);
-  // };
 
   handleSort = clickedColumn => () => {
     const { column, data, direction } = this.state;
@@ -175,32 +197,106 @@ class Dashboard extends Component {
   //   this.props.thunkFetchLeadNote(this.props.auth.user.id, id)
   // }
 
-  render() {
-    const { column, data, direction, activePage } = this.state;
-    const leadnotesArray = this.props.leadnotes;
+  //? Function to count number of leads in this list
+  countTotalLeads = () => {
+    if (this.props.listleads) {
+      let totalLeads;
+      // console.log(this.props.lists);
+      totalLeads = this.props.listleads.leads.length;
+      this.setState({ totalLeadCount: totalLeads });
+    } else {
+      return null;
+    }
+  };
 
+  countMeetingsBooked = () => {
+    let meetingsBookedCount = 0;
+    if (this.props.listleads) {
+      this.props.listleads.leads.forEach(lead => {
+        lead.leadnotes.forEach(leadnote => {
+          if (leadnote.status === "Meeting booked") {
+            meetingsBookedCount += 1;
+          }
+        });
+      });
+      this.setState({ totalMeetingsBooked: meetingsBookedCount });
+    } else {
+      return null;
+    }
+  };
+
+  countNotContacted = () => {
+    let notContacted = 0;
+    // let testArray = []
+    if (this.props.listleads) {
+      this.props.listleads.leads.forEach(lead => {
+        if (lead.leadnotes.length < 1) {
+          notContacted += 1;
+        }
+      });
+      this.setState({ totalNotContacted: notContacted });
+    } else {
+      return null;
+    }
+  };
+
+  // ? Search Bar code
+
+  handleChange = (event, value) => {
+    this.setState({ filter: value });
+  };
+
+  filteredLeads = () => {
+    return this.state.data.filter(lead =>
+      lead.first_name.toUpperCase().includes(this.state.filter.toUpperCase())
+    );
+  };
+
+  // ! /////////////////////////////////////////////////////////// RENDER START ///////////////////////////////////////////////////////////////////////////////
+
+  render() {
+    const {
+      column,
+      data,
+      direction,
+      activePage,
+      totalLeadCount,
+      totalMeetingsBooked,
+      totalNotContacted,
+      filter
+    } = this.state;
+    const leadnotesArray = this.props.leadnotes;
+    console.log(this.state);
+    let renderData;
     let dataSlice;
-    if (data) {
+    if (filter) {
+      renderData = this.filteredLeads();
+    } else {
+      renderData = data;
+    }
+
+    // console.log(renderData)
+    if (renderData) {
       if (activePage === 1) {
-        dataSlice = data.slice(0, 9);
+        dataSlice = renderData.slice(0, 9);
       } else if (activePage === 2) {
-        dataSlice = data.slice(10, 19);
+        dataSlice = renderData.slice(10, 19);
       } else if (activePage === 3) {
-        dataSlice = data.slice(20, 29);
+        dataSlice = renderData.slice(20, 29);
       } else if (activePage === 4) {
-        dataSlice = data.slice(30, 39);
+        dataSlice = renderData.slice(30, 39);
       } else if (activePage === 5) {
-        dataSlice = data.slice(40, 49);
+        dataSlice = renderData.slice(40, 49);
       } else if (activePage === 6) {
-        dataSlice = data.slice(50, 59);
+        dataSlice = renderData.slice(50, 59);
       } else if (activePage === 7) {
-        dataSlice = data.slice(60, 69);
+        dataSlice = renderData.slice(60, 69);
       } else if (activePage === 8) {
-        dataSlice = data.slice(70, 79);
+        dataSlice = renderData.slice(70, 79);
       } else if (activePage === 9) {
-        dataSlice = data.slice(80, 89);
+        dataSlice = renderData.slice(80, 89);
       } else if (activePage === 10) {
-        dataSlice = data.slice(90, 99);
+        dataSlice = renderData.slice(90, 99);
       } else {
         dataSlice = [];
       }
@@ -212,13 +308,15 @@ class Dashboard extends Component {
         <Navbar />
         <Grid
           style={{
-            backgroundImage: `url(${"https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/s2048x2048/71093458_463527317706998_6857018496128122880_n.png?_nc_cat=101&_nc_oc=AQl2gDIEaIvqJ9nlneGMjfaDHtgfbFjLjkXKrF1ATz_lG8I8Qq2SYVjDCYwbysjSCwM&_nc_ht=scontent-ort2-2.xx&oh=644556da3c91d328452fcb67714c1c7d&oe=5E3A8CD8"})`
+            backgroundImage: `url(${"https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/s2048x2048/70590332_836756946718765_3473765009224368128_n.png?_nc_cat=111&_nc_oc=AQnI8TKKO2F4LqO-fZDRyZuRDWWLWhMONIpEB2mHf1QEmAP04HdNNIq8JU0QUq5LYwE&_nc_ht=scontent-ort2-2.xx&oh=e9db466921239dad5b5ae5b132f1f40f&oe=5E3DD369"})`
           }}
           divided="vertically"
         >
+          {/* METRIC CARDS */}
           <Grid.Row
             columns="equal"
             style={{
+              position: 'fixed',
               top: "70px",
               paddingRight: "70px",
               paddingLeft: "70px",
@@ -229,7 +327,7 @@ class Dashboard extends Component {
           >
             <Grid.Column style={styleMetrics}>
               <Header as="h2">Total Leads</Header>
-              <Header as="h3"></Header>
+              <Header as="h3">{totalLeadCount}</Header>
               <Image
                 size="small"
                 floated="right"
@@ -238,7 +336,7 @@ class Dashboard extends Component {
             </Grid.Column>
             <Grid.Column style={styleMetrics}>
               <Header as="h2">Meetings Booked</Header>
-              <Header as="h3"></Header>
+              <Header as="h3">{totalMeetingsBooked}</Header>
               <Image
                 size="small"
                 floated="right"
@@ -247,7 +345,7 @@ class Dashboard extends Component {
             </Grid.Column>
             <Grid.Column style={styleMetrics}>
               <Header as="h2">Not Yet Contacted</Header>
-              <Header as="h3"></Header>
+              <Header as="h3">{totalNotContacted}</Header>
               <Image
                 size="small"
                 floated="right"
@@ -260,10 +358,23 @@ class Dashboard extends Component {
               style={{ margin: "40px", minHeight: "450px" }}
               columns={1}
             >
+              {/* TABLE OF CONTENTS */}
               <Grid.Column>
                 <Table sortable selectable celled fixed>
                   <Table.Header>
-                    <Table.Row>
+                    <Popup content="First name search" trigger={
+                    <Search
+                      style={{ margin: "15px" }}
+                      onSearchChange={_.debounce(
+                        (event, { value }) => this.handleChange(event, value),
+                        300
+                      )}
+                      noResultsMessage="No results found"
+                      showNoResults={false}
+                    />} />
+                  </Table.Header>
+                  <Table.Header>
+                    <Table.Row textAlign="center">
                       <Table.HeaderCell
                         sorted={column === "first_name" ? direction : null}
                         onClick={this.handleSort("first_name")}
@@ -330,6 +441,7 @@ class Dashboard extends Component {
                         comments_date
                       }) => (
                         <Table.Row
+                          textAlign="center"
                           key={id}
                           // onClick={() => this.handleRowClick(id)}
                         >

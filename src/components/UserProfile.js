@@ -39,7 +39,7 @@ class UserProfile extends Component {
       condRender = <div> LOADING </div>;
     } else if (this.state.success == true) {
       condRender = (
-        <div style={{textAlign: 'center', backgroundImage: `url(${"https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/s2048x2048/70590332_836756946718765_3473765009224368128_n.png?_nc_cat=111&_nc_oc=AQnI8TKKO2F4LqO-fZDRyZuRDWWLWhMONIpEB2mHf1QEmAP04HdNNIq8JU0QUq5LYwE&_nc_ht=scontent-ort2-2.xx&oh=e9db466921239dad5b5ae5b132f1f40f&oe=5E3DD369"})`}}>
+        <div style={{textAlign: 'center',  backgroundImage: `url(${"https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/s2048x2048/70590332_836756946718765_3473765009224368128_n.png?_nc_cat=111&_nc_oc=AQnI8TKKO2F4LqO-fZDRyZuRDWWLWhMONIpEB2mHf1QEmAP04HdNNIq8JU0QUq5LYwE&_nc_ht=scontent-ort2-2.xx&oh=e9db466921239dad5b5ae5b132f1f40f&oe=5E3DD369"})`}}>
           {" "}
           
           <Navbar />
@@ -49,7 +49,7 @@ class UserProfile extends Component {
             content="Text Container"
             textAlign="center"
           > */}
-          <Container style={{display: 'inline-block', minHeight: '830px', width: '50%', backgroundImage: `url(${"https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/s2048x2048/70590332_836756946718765_3473765009224368128_n.png?_nc_cat=111&_nc_oc=AQnI8TKKO2F4LqO-fZDRyZuRDWWLWhMONIpEB2mHf1QEmAP04HdNNIq8JU0QUq5LYwE&_nc_ht=scontent-ort2-2.xx&oh=e9db466921239dad5b5ae5b132f1f40f&oe=5E3DD369"})`, backgroundSize: 'cover'}}>
+          <Container style={{display: 'inline-block', minHeight: '830px', width: '50%'}}>
             <Grid>
               <Grid.Column style={{ positon: "absolute", top: '70px', verticalAlign: 'center'}}>
                 <Grid.Row columns={1} centered doubling>

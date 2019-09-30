@@ -11,7 +11,10 @@ import {
   // FETCH_LEADNOTES,
   // ADD_LEAD_NOTE,
   ACTION_SUCCESS,
-  FETCH_LIST_WITH_LEADNOTES
+  FETCH_ERROR,
+  FETCH_LIST_WITH_LEADNOTES,
+  SUCCESS_MESSAGE,
+  CLEAR_MESSAGE
 } from "../actions";
 
 export default combineReducers({
@@ -21,7 +24,8 @@ export default combineReducers({
   auth: auth,
   listleads: listleads,
   // leadnotes: leadnotes,
-  listWithLeadNotes: listWithLeadNotes
+  listWithLeadNotes: listWithLeadNotes,
+  message: message
 });
 
 function categories(state = [], action) {
@@ -35,7 +39,7 @@ function categories(state = [], action) {
 
 function listWithLeadNotes(state = [], action) {
   switch (action.type) {
-    case  FETCH_LIST_WITH_LEADNOTES:
+    case FETCH_LIST_WITH_LEADNOTES:
       return action.leads;
     default:
       return state;
@@ -68,7 +72,7 @@ function lists(state = [], action) {
 function auth(state = {}, action) {
   switch (action.type) {
     case "ACTION_SUCESS":
-        return action.user;
+      return action.user;
     case "LOGIN_USER":
       return action.user;
     case "LOGOUT_USER":
@@ -80,25 +84,29 @@ function auth(state = {}, action) {
 
 // ? Updates state with the lead-> leadnote association data for LeadList.js
 
-function listleads(state = {leads: [], list: []}, action) {
+function listleads(state = { leads: [], list: [] }, action) {
   switch (action.type) {
     case "FETCH_LIST_BY_ID":
-      return {leads: action.leads, list: action.list};
+      return { leads: action.leads, list: action.list };
     case "DELETE_LISTLEAD":
-        return {...state, leads: state.leads.filter(lead => lead.id !== action.id)};
+      return {
+        ...state,
+        leads: state.leads.filter(lead => lead.id !== action.id)
+      };
     default:
       return state;
   }
 }
 
-// function leadnotes(state = [], action) {
-//   switch (action.type) {
-//     case "FETCH_LEADNOTES":
-//       return action.leadnotes;
-//     case "ADD_LEAD_NOTE":
-//       return action.leadnote
-//     default:
-//       return state;
-//   }
-// }
-
+function message(state = [], action) {
+  switch (action.type) {
+    case "FETCH_ERROR":
+      return action.error;
+    case "SUCCESS_MESSAGE":
+      return action.message;
+    case "CLEAR_MESSAGE":
+      return [];
+    default:
+      return state;
+  }
+}

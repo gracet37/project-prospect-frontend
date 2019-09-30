@@ -4,7 +4,6 @@ import React, { Component } from "react";
 import {
   Button,
   Container,
-
   Header,
   Icon,
   Loader,
@@ -12,12 +11,11 @@ import {
   Responsive,
   Segment,
   Sidebar,
-  Visibility,
-
+  Visibility
 } from "semantic-ui-react";
 import SearchBar from "./SearchBar";
 import { connect } from "react-redux";
-import { logoutUser } from "../actions";
+import { logoutUser, currentUser } from "../actions";
 
 // Heads up!
 // We using React Static to prerender our docs with server side rendering, this is a quite simple solution.
@@ -52,6 +50,10 @@ class DesktopContainer extends Component {
     logoutChange: false
   };
 
+  componentDidMount = () => {
+    this.props.currentUser(this.props.history)
+  }
+
   hideFixedMenu = () => this.setState({ fixed: false });
   showFixedMenu = () => this.setState({ fixed: true });
 
@@ -82,7 +84,7 @@ class DesktopContainer extends Component {
             style={{
               backgroundImage: `url(${"https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/s2048x2048/71093458_463527317706998_6857018496128122880_n.png?_nc_cat=101&_nc_oc=AQl2gDIEaIvqJ9nlneGMjfaDHtgfbFjLjkXKrF1ATz_lG8I8Qq2SYVjDCYwbysjSCwM&_nc_ht=scontent-ort2-2.xx&oh=644556da3c91d328452fcb67714c1c7d&oe=5E3A8CD8"})`,
               backgroundSize: "cover",
-              minHeight: '1000px',
+              minHeight: "1000px",
               padding: "1em 0em"
             }}
           >
@@ -105,14 +107,14 @@ class DesktopContainer extends Component {
                 <Menu.Item
                   style={{ fontSize: "large", color: "#43425D" }}
                   as={Link}
-                  to="/leadlists"
+                  to={this.props.auth.user ? "/leadlists" : "/login" }
                 >
                   Dashboard
                 </Menu.Item>
                 <Menu.Item
                   style={{ fontSize: "large", color: "#43425D" }}
                   as={Link}
-                  to="/profile"
+                  to={this.props.auth.user ? "/profile" : '/login' }
                 >
                   My Account
                 </Menu.Item>
@@ -197,14 +199,24 @@ class MobileContainer extends Component {
           vertical
           visible={sidebarOpened}
         >
-          <Menu.Item as="a" active>
+          <Menu.Item as={Link} to="/" active>
             Home
           </Menu.Item>
-          <Menu.Item as="a">Dashboard</Menu.Item>
-          <Menu.Item as="a">My Profile</Menu.Item>
-          <Menu.Item as="a">Careers</Menu.Item>
-          <Menu.Item as="a">Log in</Menu.Item>
-          <Menu.Item as="a">Sign Up</Menu.Item>
+          <Menu.Item as={Link} to="/leadlists">
+            Dashboard
+          </Menu.Item>
+          <Menu.Item as={Link} to="/profile">
+            My Account
+          </Menu.Item>
+          {this.props.auth.user ? (
+            <Menu.Item onClick={() => this.handleLogout()}
+            >Log out</Menu.Item>
+          ) : (
+            <div>
+              <Menu.Item as={Link} to="/login">Log in</Menu.Item>{" "}
+              <Menu.Item as={Link} to="/signup">Sign Up</Menu.Item>
+            </div>
+          )}
         </Sidebar>
 
         <Sidebar.Pusher dimmed={sidebarOpened}>
@@ -266,7 +278,7 @@ const mapStateToProps = state => {
 };
 export default connect(
   mapStateToProps,
-  { logoutUser }
+  { logoutUser, currentUser }
 )(withRouter(DesktopContainer));
 
 // const HomepageLayout = () => (

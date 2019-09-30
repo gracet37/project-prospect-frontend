@@ -1,5 +1,5 @@
 import React from "react";
-import { userEffect, useState } from "react"
+import { userEffect, useState } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { lighten, makeStyles } from "@material-ui/core/styles";
@@ -21,6 +21,8 @@ import Switch from "@material-ui/core/Switch";
 import DeleteIcon from "@material-ui/icons/Delete";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import { Modal, Button, Dropdown, Form, Icon } from "semantic-ui-react";
+import Favorite from "@material-ui/icons/Favorite";
+import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
 
 const uuidv1 = require("uuid/v1");
 
@@ -88,6 +90,11 @@ function EnhancedTableHead(props) {
       <TableRow style={{ fontSize: "12px" }}>
         <TableCell style={{ fontSize: "12px" }} padding="checkbox">
           <Checkbox
+             style={{
+              marginLeft: "20px", marginRight: "20px"
+            }}
+            icon={<FavoriteBorder />}
+            checkedIcon={<Favorite />}
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={numSelected === rowCount}
             onChange={onSelectAllClick}
@@ -135,7 +142,7 @@ EnhancedTableHead.propTypes = {
 const useToolbarStyles = makeStyles(theme => ({
   root: {
     paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(1),
+    paddingRight: theme.spacing(1)
   },
   highlight:
     theme.palette.type === "light"
@@ -200,7 +207,8 @@ class EnhancedTableToolbar extends React.Component {
     newListName: "",
     activePage: 1,
     leadsPagination: [],
-    classes: ""
+    classes: "",
+    submitted: false
   };
 
   componentDidMount() {
@@ -234,6 +242,11 @@ class EnhancedTableToolbar extends React.Component {
     );
   };
 
+  handleClearMessage = () => {
+    this.props.clearMessage()
+  }
+
+
   render() {
     const classes = getClasses();
     const { numSelected } = this.props;
@@ -256,18 +269,34 @@ class EnhancedTableToolbar extends React.Component {
           )}
         </div>
         <div className={classes.spacer} />
-        <div style={{margin:'20px'}}>
+        <div style={{ margin: "20px" }}>
           {numSelected > 0 ? (
-            <Tooltip title="Save">
-              {/* <IconButton aria-label="delete"> */}
+    
               <Modal
+              closeIcon
+                onClose={this.handleClearMessage}
                 centered
-                trigger={<Button style={{borderRadius: "20px", backgroundColor: '#6200EE', color: 'white', width: '150px',fontSize: 'medium', verticalAlign: 'middle', textAlign: 'center'}}>Save Leads</Button>}
+                trigger={
+                  <Button
+                    style={{
+                      borderRadius: "20px",
+                      backgroundColor: "#6200EE",
+                      color: "white",
+                      width: "150px",
+                      fontSize: "medium",
+                      verticalAlign: "middle",
+                      textAlign: "center"
+                    }}
+                  >
+                    Save Leads
+                  </Button>
+                }
                 basic
                 size="small"
               >
                 {this.props.listArray.length ? (
-                  <div style={{verticalAlign:'center', textAlign:'center'}}>
+                  <div style={{ verticalAlign: "center", textAlign: "center" }}>
+                    {this.props.message ? <Modal.Header style={{color: "#71EFE0"}} as='h2'>{this.props.message}</Modal.Header> : null }
                     <Modal.Header as="h2">
                       Select an Existing List:
                     </Modal.Header>
@@ -275,7 +304,7 @@ class EnhancedTableToolbar extends React.Component {
                       <Dropdown
                         onChange={this.handleDropdown}
                         name="listId"
-                        style={{ width: "40%", borderRadius: '20px' }}
+                        style={{ width: "40%", borderRadius: "20px" }}
                         placeholder="Select list..."
                         // fluid
                         disabled={this.state.newListName ? true : false}
@@ -284,49 +313,53 @@ class EnhancedTableToolbar extends React.Component {
                       />
                       <Modal.Header as="h2">Create a New List:</Modal.Header>
                       <Form.Input
-                      placeholder="Create new list..."
-                      onChange={this.handleChange}
-                      name="newListName"
-                    >
-                    <input style={{borderRadius: '20px' , width: '200px'}}></input>
-                    </Form.Input>
+                        placeholder="Create new list..."
+                        onChange={this.handleChange}
+                        name="newListName"
+                      >
+                        <input
+                          style={{ borderRadius: "20px", width: "200px" }}
+                        ></input>
+                      </Form.Input>
                       <Modal.Header as="h2"></Modal.Header>
                       <Form.Button
-                      onClick={this.handleSubmit}
-                      basic
-                      color="violet"
-                      inverted
-                      style={{ borderRadius: '20px' }}
-                    >
+                        onClick={this.handleSubmit}
+                        basic
+                        color="violet"
+                        inverted
+                        style={{ borderRadius: "20px" }}
+                      >
                         <Icon name="add" /> Add Lead to List
-                    </Form.Button>
+                      </Form.Button>
                     </Modal.Actions>
                   </div>
                 ) : (
                   <div>
                     <Modal.Header as="h2">Create A New List</Modal.Header>
                     <Modal.Actions>
-                    <Form.Input
-                      placeholder="Create new list..."
-                      onChange={this.handleChange}
-                      name="newListName"
-                    >
-                    <input style={{borderRadius: '30px' , width: '200px'}}></input>
-                    </Form.Input>
-                    <Form.Button
-                      onClick={this.handleSubmit}
-                      basic
-                      color="violet"
-                      inverted
-                      style={{ borderRadius: '30px' }}
-                    >
+                      <Form.Input
+                        placeholder="Create new list..."
+                        onChange={this.handleChange}
+                        name="newListName"
+                      >
+                        <input
+                          style={{ borderRadius: "30px", width: "200px" }}
+                        ></input>
+                      </Form.Input>
+                      <Form.Button
+                        onClick={this.handleSubmit}
+                        basic
+                        color="violet"
+                        inverted
+                        style={{ borderRadius: "30px" }}
+                      >
                         <Icon name="add" /> Add Lead to List
-                    </Form.Button>
+                      </Form.Button>
                     </Modal.Actions>
                   </div>
                 )}
               </Modal>
-            </Tooltip>
+            // </Tooltip>
           ) : (
             <Tooltip title="Filter list">
               <IconButton aria-label="filter list">
@@ -405,7 +438,7 @@ export default function EnhancedTable(props) {
 
   const handleSelectAllClick = event => {
     if (event.target.checked) {
-      const newSelecteds = props.rows.map(n => n.name);
+      const newSelecteds = props.rows.map(n => n.email);
       setSelected(newSelecteds);
       return;
     }
@@ -454,6 +487,7 @@ export default function EnhancedTable(props) {
       <div className={classes.root}>
         <Paper className={classes.paper}>
           <EnhancedTableToolbar
+          clearMessage={props.clearMessage}
             addLead={props.addLead}
             leadsArray={leadsArray}
             company={props.company}
@@ -461,6 +495,7 @@ export default function EnhancedTable(props) {
             listArray={listArray}
             userId={props.userId}
             numSelected={selected.length}
+            message={props.message}
           />
           <div className={classes.tableWrapper}>
             <Table
@@ -496,6 +531,11 @@ export default function EnhancedTable(props) {
                       >
                         <TableCell padding="checkbox">
                           <Checkbox
+                            style={{
+                              marginLeft: "20px", marginRight: "20px"
+                            }}
+                            icon={<FavoriteBorder />}
+                            checkedIcon={<Favorite />}
                             onChange={event => {
                               handleLeadClick(row, event);
                             }}
@@ -503,7 +543,12 @@ export default function EnhancedTable(props) {
                             inputProps={{ "aria-labelledby": labelId }}
                           />
                         </TableCell>
-                        <TableCell component="th" scope="row" padding="none">
+                        <TableCell
+                          // style={{ paddingRight: "30px"}
+                          component="th"
+                          scope="row"
+                          padding="none"
+                        >
                           {row.name}
                         </TableCell>
                         <TableCell align="left">{row.last_name}</TableCell>

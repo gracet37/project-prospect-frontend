@@ -24,14 +24,23 @@ import PropTypes from "prop-types";
 import FilterLeads from "./FilterLeads";
 
 const styleMetrics = {
-  borderWidth: "3px",
+  borderWidth: "2px",
+  // marginRight: '30px',
   borderRadius: "10px",
-  borderColor: "#808495",
+  borderColor: "#CECFD0",
   borderStyle: "solid",
-  margin: "40px",
-  width: "10px",
-  height: "180px",
-  padding: "20px"
+  margin: "20px",
+  padding: "20px",
+  // width: "10px",
+  height: "150px",
+  boxShadow: "10px 10px 15px -6px rgba(67,66,93,0.68)"
+  // padding: "20px"
+};
+
+const styleImage = {
+  position: "relative",
+  top: "-40px",
+  opacity: 0.8
 };
 
 const statusArray = [
@@ -310,13 +319,13 @@ class Dashboard extends Component {
           style={{
             backgroundImage: `url(${"https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/s2048x2048/70590332_836756946718765_3473765009224368128_n.png?_nc_cat=111&_nc_oc=AQnI8TKKO2F4LqO-fZDRyZuRDWWLWhMONIpEB2mHf1QEmAP04HdNNIq8JU0QUq5LYwE&_nc_ht=scontent-ort2-2.xx&oh=e9db466921239dad5b5ae5b132f1f40f&oe=5E3DD369"})`
           }}
-          divided="vertically"
+          // divided="vertically"
         >
           {/* METRIC CARDS */}
           <Grid.Row
             columns="equal"
             style={{
-              position: 'fixed',
+              position: "fixed",
               top: "70px",
               paddingRight: "70px",
               paddingLeft: "70px",
@@ -331,6 +340,7 @@ class Dashboard extends Component {
               <Image
                 size="small"
                 floated="right"
+                style={styleImage}
                 src="https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/71338480_839476829779627_88982982114672640_n.png?_nc_cat=103&_nc_oc=AQk-PoFytrGO-egRH0bNhdK77YgmvNvozJbUsZvn9xAPPpjioM-SRk6hyr3rXfVVq2Y&_nc_ht=scontent-ort2-2.xx&oh=c1bc858aa386c365cae63c3eea610b9e&oe=5DF88CFF"
               />
             </Grid.Column>
@@ -340,6 +350,7 @@ class Dashboard extends Component {
               <Image
                 size="small"
                 floated="right"
+                style={styleImage}
                 src="https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/71382639_511374239440274_5689414491201077248_n.png?_nc_cat=102&_nc_oc=AQkSRgZv9fHBIZ5lFzTKwmraacs6QUA5uRFBuJR4EydKHSVwwZgfGIlTbZ1xT9ZobnU&_nc_ht=scontent-ort2-2.xx&oh=22d18caf4e251af44eb4b5b5807195cc&oe=5DF1636E"
               />
             </Grid.Column>
@@ -349,29 +360,64 @@ class Dashboard extends Component {
               <Image
                 size="small"
                 floated="right"
+                style={styleImage}
                 src="https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/70880021_751349978649592_7265954774900539392_n.png?_nc_cat=101&_nc_oc=AQk5RRMoC9mgfA61QWoq_mT8y4SylOWJWzRclLynSDsznJetifnuN5Ks-YcHFkuFiMs&_nc_ht=scontent-ort2-2.xx&oh=51a411e11a9181923a23d3a7d1e05c21&oe=5E35AB9A"
               />
             </Grid.Column>
           </Grid.Row>
+
+          {/*  BACK TO DASHBOARD BUTTON  */}
+          <Grid.Row
+            style={{
+              margin: "20px",
+              position: "relative",
+              top: "20px",
+              left: "70px"
+            }}
+          >
+            <Button
+              as={Link}
+              to="/leadlists"
+              style={{
+                borderRadius: "30px",
+                color: "white",
+                backgroundColor: "#6200EE"
+              }}
+            >
+              <Icon name="arrow alternate circle left outline" /> Back to
+              Dashboard
+            </Button>
+          </Grid.Row>
+
           {this.props.listleads.leads ? (
             <Grid.Row
-              style={{ margin: "40px", minHeight: "450px" }}
+              style={{
+                margin: "20px",
+                marginRight: "60px",
+                marginLeft: "60px",
+                minHeight: "450px"
+              }}
               columns={1}
             >
               {/* TABLE OF CONTENTS */}
               <Grid.Column>
                 <Table sortable selectable celled fixed>
                   <Table.Header>
-                    <Popup content="First name search" trigger={
-                    <Search
-                      style={{ margin: "15px" }}
-                      onSearchChange={_.debounce(
-                        (event, { value }) => this.handleChange(event, value),
-                        300
-                      )}
-                      noResultsMessage="No results found"
-                      showNoResults={false}
-                    />} />
+                    <Popup
+                      content="Search First Name"
+                      trigger={
+                        <Search
+                          style={{ margin: "15px" }}
+                          onSearchChange={_.debounce(
+                            (event, { value }) =>
+                              this.handleChange(event, value),
+                            300
+                          )}
+                          noResultsMessage="No results found"
+                          showNoResults={false}
+                        />
+                      }
+                    />
                   </Table.Header>
                   <Table.Header>
                     <Table.Row textAlign="center">
@@ -455,11 +501,12 @@ class Dashboard extends Component {
                           <Table.Cell>
                             {/* {leadnotesArray.find(lead => )} */}
                             <Modal
+                            closeIcon
                               trigger={
                                 <Icon name={"edit outline"} size="large" />
                               }
                             >
-                              <Modal.Header as="h2">
+                              <Modal.Header as="h1">
                                 {first_name} {last_name} <br />{" "}
                                 {position ? position + "," : null} {company}
                               </Modal.Header>
@@ -468,7 +515,7 @@ class Dashboard extends Component {
                                 Email: {email}
                                 {/* <Icon name={"envelope"}></Icon> */}
                                 <Modal
-                                  trigger={<Icon name={"envelope"}></Icon>}
+                                  trigger={<Icon style={{color: "#6200EE"}} name={"envelope"}></Icon>}
                                 >
                                   <Modal.Header>
                                     Send an email to {first_name}
@@ -517,6 +564,7 @@ class Dashboard extends Component {
                                     }
                                   />
                                   <Button
+                                  style={{borderRadius: '50px', backgroundColor: '#03DAC6', color: 'white'}}
                                     onClick={() => this.handleAddLeadNote(id)}
                                   >
                                     Save

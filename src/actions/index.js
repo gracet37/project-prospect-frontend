@@ -19,8 +19,10 @@ export const ADD_LEAD_NOTE = "ADD_LEAD_NOTE";
 export const ACTION_SUCCESS = "ACTION_SUCCESS";
 export const FETCH_LIST_WITH_LEADNOTES = "FETCH_LIST_WITH_LEADNOTES";
 export const COMPLETE_FETCH_LEADS_AND_LIST = "COMPLETE_FETCH_LEADS_AND_LIST";
+export const FETCH_ERROR = "FETCH_ERROR";
+export const SUCCESS_MESSAGE = "SUCCESS_MESSAGE";
+export const CLEAR_MESSAGE = "CLEAR_MESSAGE";
 // export const START_DELETE_LEADLIST = "START_DELETE_LEADLIST";
-
 
 const uuidv1 = require("uuid/v1");
 
@@ -79,8 +81,6 @@ export function loadUser(loadingCb, successCb, failCb) {
       }
     };
 
-    // dispatch with "loading" current user
-
     return fetch("http://localhost:3000/api/v1/current_user", reqObj)
       .then(resp => resp.json())
       .then(data => {
@@ -106,11 +106,12 @@ export function login(formData, history) {
       .then(data => {
         if (data.message) {
           //handle error case
-          console.log("login error", data.message);
+          dispatch({ type: "FETCH_ERROR", error: data.message });
         } else {
           console.log("fetch login", data);
           localStorage.token = data.token;
           dispatch(loginUser({ user: data.user }));
+          dispatch({ type: "CLEAR_MESSAGE" });
           history.push("/");
         }
       })
@@ -141,19 +142,6 @@ export function registerUser(formData, history) {
   };
 }
 
-////LOGIN
-
-export function thunkFetchCategories() {
-  return function(dispatch) {
-    dispatch({ type: START_FETCH_CATEGORIES });
-
-    fetch("http://localhost:3000/api/v1/categories")
-      .then(res => res.json())
-      .then(data => {
-        dispatch({ type: FETCH_CATEGORIES, categories: data });
-      });
-  };
-}
 
 // ? Invoked on App.js and fetches all lists in array format with leads data
 // ? Used to populate the Dashboard.js
@@ -165,8 +153,9 @@ export function thunkFetchLists(id) {
     fetch(`http://localhost:3000/api/v1/lists/show_lists/${id}`)
       .then(res => res.json())
       .then(data => {
-        dispatch({ type: FETCH_LISTS, lists: data });
-      });
+        dispatch({ type: FETCH_LISTS, lists: data})
+      })
+      .catch(err => console.log(err))
   };
 }
 
@@ -184,7 +173,8 @@ export function thunkFetchListById(id, history) {
           list: data.list
         });
         history.push("/leads");
-      });
+      })
+      .catch(err => console.log(err));
   };
 }
 
@@ -195,70 +185,14 @@ export function thunkFetchAllListById(id) {
       .then(data => {
         dispatch({
           type: FETCH_LIST_WITH_LEADNOTES,
-          leads: data.leads_with_notes,
+          leads: data.leads_with_notes
         });
-      });
+      })
+      .catch(err => console.log(err));;
   };
 }
 
-//! FETCHES ONE LEADNOTE (DONT THINK I NEED THIS ANYMORE)
-// export function thunkFetchLeadNote(user_id, lead_id) {
-//   return function(dispatch) {
-//     dispatch({ type: START_FETCH_LEADNOTE });
-
-//     fetch("http://localhost:3000/leadnotes/show", {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": 'application/json',
-//         "Accept": 'application/json'
-//       },
-//       body: JSON.stringify({
-//         user_id: user_id,
-//         lead_id: lead_id
-//       })
-//     })
-//     .then(res => res.json())
-//     .then(data => {
-//       console.log("leadnote", data)
-//       // dispatch({ type: FETCH_LEADNOTE, leadnote: data});
-//       // history.push('/leads')
-//     })
-//   }
-// }
-
-// ! FETCHES ALL LEADNOTES
-
-// export function thunkFetchLeadNotes(user_id) {
-//   return function(dispatch) {
-//     dispatch({ type: START_FETCH_LEADNOTES });
-
-//     fetch(`http://localhost:3000/leadnotes/${user_id}`)
-//     .then(res => res.json())
-//     .then(data => {
-//       console.log("leadnotes", data)
-//       dispatch({ type: FETCH_LEADNOTES, leadnotes: data});
-//       // history.push('/leads')
-//     })
-//   }
-// }
-
-/////////////////// FETCHING LEADLIST /////////////////////////
-
-// export function thunkFetchListById(id, history) {
-//   return function(dispatch) {
-//     // dispatch({ type: START_FETCH_LISTS });
-
-//     fetch(`http://localhost:3000/api/v1/lists/show/${id}`)
-//       .then(res => res.json())
-//       .then(data => {
-//         console.log(data.leads)
-//         dispatch({ type: FETCH_LIST_BY_ID, listlead: data.leads, listid: data.id});
-//         history.push('/leads')
-//       });
-//   };
-// }
-
-// creating a new lead instance of the one the user saved and creating the association between list and lead
+// ? creating a new lead instance of the one the user saved and creating the association between list and lead
 export function addLead(
   leadsArray,
   company,
@@ -298,7 +232,12 @@ export function addLead(
                 list_id: listId,
                 lead_id: lead.id
               })
-            }).catch(err => console.log(err));
+            })
+              .then(res => res.json())
+              .then(data => {
+                dispatch({ type: SUCCESS_MESSAGE, message: data.message });
+              })
+              .catch(err => console.log(err))
           });
         } else {
           fetch("http://localhost:3000/api/v1/lists", {
@@ -326,29 +265,28 @@ export function addLead(
                     list_id: data.id,
                     lead_id: lead.id
                   })
-                })
+                }) // end of the fetch
                   .then(res => res.json())
-                  .then(data =>{
-                    dispatch({ type: COMPLETE_FETCH_LEADS_AND_LIST })
+                  .then(data => {
+                    dispatch({ type: SUCCESS_MESSAGE, message: data.message });
                   })
-                  .catch(err => console.log(err));
-              });
+                  .catch(err => console.log(err))
+              }); 
             })
-            .catch(err => console.log(err));
+            .catch(err => console.log(err))
         }
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log(err))
   };
 }
 
 export function addList(newListName, userId) {
   return function(dispatch) {
-
     fetch("http://localhost:3000/api/v1/lists", {
       method: "POST",
       headers: {
-        "Content-Type": 'application/json',
-        Accept: 'application/json'
+        "Content-Type": "application/json",
+        Accept: "application/json"
       },
       body: JSON.stringify({
         name: newListName,
@@ -357,9 +295,10 @@ export function addList(newListName, userId) {
     })
       .then(res => res.json())
       .then(data => {
-        dispatch({ type: ADD_LIST, list: data });
+        dispatch({ type: ADD_LIST, list: data })
+        dispatch({ type: SUCCESS_MESSAGE, message: "🎉 List Created!" });
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log(err))
   };
 }
 
@@ -374,8 +313,6 @@ export function thunkFetchLeads(domainName, history) {
       .then(result => {
         dispatch({ type: FETCH_LEADS, id: uuidv1(), leads: result.data });
         history.push("/results");
-        // history.push("/s");
-
       });
   };
 }
@@ -388,7 +325,9 @@ export function deleteList(id) {
       method: "DELETE"
     })
       .then(res => res.json())
-      .then(dispatch({ type: DELETE_LIST, id }))
+      .then(data => {
+        dispatch({ type: DELETE_LIST, id })
+        dispatch({ type: SUCCESS_MESSAGE, message: data.message })})
       .catch(err => console.log(err));
   };
 }
@@ -409,7 +348,6 @@ export function deleteListLead(list_id, lead_id) {
     })
       .then(res => res.json())
       .then(data => dispatch({ type: DELETE_LISTLEAD, id: lead_id }))
-      // dispatch({type: DELETE_LISTLEAD, lead_id: lead_id, list: list_id})})
       .catch(err => console.log(err));
   };
 }
@@ -432,11 +370,11 @@ export function addLeadNote(status, nextSteps, userId, leadId, comment) {
     })
       .then(res => res.json())
       .then(data => {
-      dispatch({type: ADD_LEAD_NOTE})})
+        dispatch({ type: ADD_LEAD_NOTE });
+      })
       .catch(err => console.log(err));
   };
 }
-
 
 // ! I DONT THINK THIS FUNCTION IS FINISHED YET (29/SEP)
 export function updateUser(formData, history) {
@@ -461,3 +399,91 @@ export function updateUser(formData, history) {
       });
   };
 }
+
+export function fetchError(error) {
+  return function(dispatch) {
+    dispatch({ type: FETCH_ERROR, error });
+  };
+}
+
+export function clearMessage() {
+  return function(dispatch) {
+    dispatch({ type: CLEAR_MESSAGE });
+  };
+}
+
+
+
+// ! Fetch categories (Not in use)
+
+// export function thunkFetchCategories() {
+//   return function(dispatch) {
+//     dispatch({ type: START_FETCH_CATEGORIES });
+
+//     fetch("http://localhost:3000/api/v1/categories")
+//       .then(res => res.json())
+//       .then(data => {
+//         dispatch({ type: FETCH_CATEGORIES, categories: data });
+//       });
+//   };
+// }
+
+
+//! FETCHES ONE LEADNOTE (DONT THINK I NEED THIS ANYMORE)
+// export function thunkFetchLeadNote(user_id, lead_id) {
+//   return function(dispatch) {
+//     dispatch({ type: START_FETCH_LEADNOTE });
+
+//     fetch("http://localhost:3000/leadnotes/show", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": 'application/json',
+//         "Accept": 'application/json'
+//       },
+//       body: JSON.stringify({
+//         user_id: user_id,
+//         lead_id: lead_id
+//       })
+//     })
+//     .then(res => res.json())
+//     .then(data => {
+//       console.log("leadnote", data)
+//       // dispatch({ type: FETCH_LEADNOTE, leadnote: data});
+//       // history.push('/leads')
+//     })
+//   }
+// }
+
+
+
+// ! FETCHES ALL LEADNOTES
+
+// export function thunkFetchLeadNotes(user_id) {
+//   return function(dispatch) {
+//     dispatch({ type: START_FETCH_LEADNOTES });
+
+//     fetch(`http://localhost:3000/leadnotes/${user_id}`)
+//     .then(res => res.json())
+//     .then(data => {
+//       console.log("leadnotes", data)
+//       dispatch({ type: FETCH_LEADNOTES, leadnotes: data});
+//       // history.push('/leads')
+//     })
+//   }
+// }
+
+/////////////////// FETCHING LEADLIST /////////////////////////
+
+// export function thunkFetchListById(id, history) {
+//   return function(dispatch) {
+//     // dispatch({ type: START_FETCH_LISTS });
+
+//     fetch(`http://localhost:3000/api/v1/lists/show/${id}`)
+//       .then(res => res.json())
+//       .then(data => {
+//         console.log(data.leads)
+//         dispatch({ type: FETCH_LIST_BY_ID, listlead: data.leads, listid: data.id});
+//         history.push('/leads')
+//       });
+//   };
+// }

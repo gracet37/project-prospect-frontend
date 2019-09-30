@@ -52,6 +52,10 @@ class LoginForm extends Component {
           <Grid textAlign="center" verticalAlign="middle">
             <Form.Group>
               <Form style={styleForm} size="large" onSubmit={this.handleSubmit}>
+                {this.props.message ?  <Header as="h3" style={{ color: "#E57373" }} textAlign="center">
+                  {this.props.message}
+                  </Header> : null}
+             
                 <Header as="h1" style={{ color: "#03DAC6" }} textAlign="center">
                   Log-in
                 </Header>
@@ -107,7 +111,8 @@ class LoginForm extends Component {
 
 const mapStateToProps = state => {
   return {
-    auth: state.auth
+    auth: state.auth,
+    message: state.message
   };
 };
 

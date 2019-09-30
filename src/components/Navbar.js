@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { NavLink, Redirect, Link, withRouter } from "react-router-dom";
-import { logoutUser } from "../actions";
+import { logoutUser, clearMessage } from "../actions";
 import { connect } from "react-redux";
 import {
   Button,
@@ -26,6 +26,8 @@ const styleBar = {
   textAlign: 'center',
   verticalAlign: 'middle',
   position: 'fixed',
+  opacity: '1',
+  zIndex: '1',
   top: '0',
   width: '100%'
 }
@@ -49,6 +51,10 @@ class Navbar extends React.Component {
     // redirect to landing page
   }
 
+  handleClearMessage = () => {
+    this.props.clearMessage()
+  }
+
   render() {
     return (
       <div style={styleBar}>
@@ -56,16 +62,13 @@ class Navbar extends React.Component {
         <NavLink style={styleLink} onClick={() => this.handleLogout()}>
           Logout
         </NavLink>
-        <NavLink style={styleLink} to="/leadlists">
+        <NavLink onClick={this.handleClearMessage} style={styleLink} to="/leadlists">
           Dashboard
         </NavLink>
-        {/* <NavLink style={styleLink} to="/results">
-          Results
-        </NavLink> */}
-        <NavLink style={styleLink} to="/profile">
+        <NavLink onClick={this.handleClearMessage} style={styleLink} to="/profile">
           My Profile
         </NavLink>
-        <NavLink style={styleLink} to="/">
+        <NavLink onClick={this.handleClearMessage} style={styleLink} to="/">
           Home
         </NavLink>
         </div>
@@ -74,13 +77,13 @@ class Navbar extends React.Component {
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    logoutUser: () => dispatch(logoutUser())
-  };
-};
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     logoutUser: () => dispatch(logoutUser())
+//   };
+// };
 
 export default connect(
   null,
-  mapDispatchToProps
+  {logoutUser, clearMessage}
 )(withRouter(Navbar));

@@ -21,7 +21,7 @@ export default class MailForm extends Component {
           </Form.Field>
           <Form.Input rows="10" style={{height:'200px'}}>
           </Form.Input>
-          <Button type="send">Send</Button>
+          <Button style={{borderRadius: '50px', backgroundColor: '#03DAC6', color: 'white'}} type="send">Send</Button>
         </Form>
       </div>
     );

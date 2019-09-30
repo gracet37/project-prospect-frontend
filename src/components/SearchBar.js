@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Form, Loader, Button } from "semantic-ui-react";
-import { thunkFetchCategories, thunkFetchLeads } from "../actions";
+import { thunkFetchLeads, fetchError } from "../actions";
 import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
 import Loading from "./Loading";
@@ -46,8 +46,13 @@ class SearchBar extends Component {
   };
 
   handleSubmit = () => {
+    if (this.props.auth.user) {
     this.setState({ searchClicked: true });
-    this.props.thunkFetchLeads(this.state.searchParam, this.props.history);
+    this.props.thunkFetchLeads(this.state.searchParam, this.props.history)
+    } else {
+      this.props.fetchError("Oops! You need to be logged in to do that.")
+      this.props.history.push('/login')
+    }
   };
 
   render() {
@@ -83,17 +88,18 @@ class SearchBar extends Component {
 
 const mapDispatchToProps = dispatch => {
   return {
-    thunkFetchCategories: () => {
-      dispatch(thunkFetchCategories());
-    },
     thunkFetchLeads: (domainName, history) => {
       dispatch(thunkFetchLeads(domainName, history));
+    },
+    fetchError: (error) => {
+      dispatch(fetchError(error))
     }
   };
 };
 
 const mapStateToProps = state => {
   return {
+    auth: state.auth, 
     categories: state.categories,
     leads: state.leads
   };

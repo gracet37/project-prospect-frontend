@@ -22,6 +22,10 @@ export const COMPLETE_FETCH_LEADS_AND_LIST = "COMPLETE_FETCH_LEADS_AND_LIST";
 export const FETCH_ERROR = "FETCH_ERROR";
 export const SUCCESS_MESSAGE = "SUCCESS_MESSAGE";
 export const CLEAR_MESSAGE = "CLEAR_MESSAGE";
+export const DELETE_LIST_WITH_LEADNOTE = "DELETE_LIST_WITH_LEADNOTE";
+export const UPDATE_SEARCH = "UPDATE_SEARCH";
+export const CLEAR_SEARCH = "CLEAR_SEARCH";
+
 // export const START_DELETE_LEADLIST = "START_DELETE_LEADLIST";
 
 const uuidv1 = require("uuid/v1");
@@ -132,7 +136,8 @@ export function registerUser(formData, history) {
       .then(data => {
         if (data.error) {
           //handle error case
-          console.log(data.error);
+          console.log(data.error)
+          dispatch({type: FETCH_ERROR, error: data.error})
         } else {
           localStorage.token = data.token;
           dispatch(loginUser(data.user));
@@ -141,7 +146,6 @@ export function registerUser(formData, history) {
       });
   };
 }
-
 
 // ? Invoked on App.js and fetches all lists in array format with leads data
 // ? Used to populate the Dashboard.js
@@ -153,9 +157,9 @@ export function thunkFetchLists(id) {
     fetch(`http://localhost:3000/api/v1/lists/show_lists/${id}`)
       .then(res => res.json())
       .then(data => {
-        dispatch({ type: FETCH_LISTS, lists: data})
+        dispatch({ type: FETCH_LISTS, lists: data });
       })
-      .catch(err => console.log(err))
+      .catch(err => console.log(err));
   };
 }
 
@@ -188,7 +192,7 @@ export function thunkFetchAllListById(id) {
           leads: data.leads_with_notes
         });
       })
-      .catch(err => console.log(err));;
+      .catch(err => console.log(err));
   };
 }
 
@@ -237,7 +241,7 @@ export function addLead(
               .then(data => {
                 dispatch({ type: SUCCESS_MESSAGE, message: data.message });
               })
-              .catch(err => console.log(err))
+              .catch(err => console.log(err));
           });
         } else {
           fetch("http://localhost:3000/api/v1/lists", {
@@ -270,13 +274,13 @@ export function addLead(
                   .then(data => {
                     dispatch({ type: SUCCESS_MESSAGE, message: data.message });
                   })
-                  .catch(err => console.log(err))
-              }); 
+                  .catch(err => console.log(err));
+              });
             })
-            .catch(err => console.log(err))
+            .catch(err => console.log(err));
         }
       })
-      .catch(err => console.log(err))
+      .catch(err => console.log(err));
   };
 }
 
@@ -295,10 +299,10 @@ export function addList(newListName, userId) {
     })
       .then(res => res.json())
       .then(data => {
-        dispatch({ type: ADD_LIST, list: data })
+        dispatch({ type: ADD_LIST, list: data });
         dispatch({ type: SUCCESS_MESSAGE, message: "🎉 List Created!" });
       })
-      .catch(err => console.log(err))
+      .catch(err => console.log(err));
   };
 }
 
@@ -326,8 +330,10 @@ export function deleteList(id) {
     })
       .then(res => res.json())
       .then(data => {
-        dispatch({ type: DELETE_LIST, id })
-        dispatch({ type: SUCCESS_MESSAGE, message: data.message })})
+        dispatch({ type: DELETE_LIST, id });
+        dispatch({ type: DELETE_LIST_WITH_LEADNOTE, id });
+        dispatch({ type: SUCCESS_MESSAGE, message: data.message });
+      })
       .catch(err => console.log(err));
   };
 }
@@ -370,7 +376,9 @@ export function addLeadNote(status, nextSteps, userId, leadId, comment) {
     })
       .then(res => res.json())
       .then(data => {
-        dispatch({ type: ADD_LEAD_NOTE });
+        console.log("lead note", data);
+        dispatch({ type: ADD_LEAD_NOTE, leadnote: data, id: leadId });
+        // dispatch(thunkFetchAllListById(userId))
       })
       .catch(err => console.log(err));
   };
@@ -412,7 +420,17 @@ export function clearMessage() {
   };
 }
 
+export function updateSearch(search) {
+  return function(dispatch) {
+    dispatch({type: UPDATE_SEARCH, search })
+  }
+}
 
+export function clearSearch() {
+  return function(dispatch) {
+    dispatch({type: CLEAR_SEARCH})
+  }
+}
 
 // ! Fetch categories (Not in use)
 
@@ -427,7 +445,6 @@ export function clearMessage() {
 //       });
 //   };
 // }
-
 
 //! FETCHES ONE LEADNOTE (DONT THINK I NEED THIS ANYMORE)
 // export function thunkFetchLeadNote(user_id, lead_id) {
@@ -453,8 +470,6 @@ export function clearMessage() {
 //     })
 //   }
 // }
-
-
 
 // ! FETCHES ALL LEADNOTES
 

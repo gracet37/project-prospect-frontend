@@ -1,3 +1,18 @@
+// var action = { id: 2, newName: "malisa" };
+// var foo = [{ id: 1, name: "raza" }, { id: 2, name: "grace" }];
+// var newFoo = foo.map(obj => {
+//   if (obj.id === action.id) {
+//     return {
+//       id: obj.id,
+//       name: action.newName
+//     };
+//   } else {
+//     return obj;
+//   }
+// });
+
+// newFoo => [{id: 1, name: 'raza'}, {id: 2, name: 'malissa'}]
+
 import { combineReducers } from "redux";
 import {
   FETCH_CATEGORIES,
@@ -9,12 +24,15 @@ import {
   DELETE_LIST,
   DELETE_LISTLEAD,
   // FETCH_LEADNOTES,
-  // ADD_LEAD_NOTE,
+  ADD_LEAD_NOTE,
   ACTION_SUCCESS,
   FETCH_ERROR,
   FETCH_LIST_WITH_LEADNOTES,
   SUCCESS_MESSAGE,
-  CLEAR_MESSAGE
+  CLEAR_MESSAGE,
+  DELETE_LIST_WITH_LEADNOTE,
+  UPDATE_SEARCH,
+  CLEAR_SEARCH
 } from "../actions";
 
 export default combineReducers({
@@ -25,7 +43,8 @@ export default combineReducers({
   listleads: listleads,
   // leadnotes: leadnotes,
   listWithLeadNotes: listWithLeadNotes,
-  message: message
+  message: message,
+  search: search
 });
 
 function categories(state = [], action) {
@@ -41,6 +60,8 @@ function listWithLeadNotes(state = [], action) {
   switch (action.type) {
     case FETCH_LIST_WITH_LEADNOTES:
       return action.leads;
+    case DELETE_LIST_WITH_LEADNOTE:
+      return [...state.filter(lead => lead.list_id !== action.id)];
     default:
       return state;
   }
@@ -88,11 +109,28 @@ function listleads(state = { leads: [], list: [] }, action) {
   switch (action.type) {
     case "FETCH_LIST_BY_ID":
       return { leads: action.leads, list: action.list };
-    case "DELETE_LISTLEAD":
+    case DELETE_LISTLEAD:
       return {
         ...state,
-        leads: state.leads.filter(lead => lead.id !== action.id)
+        leads: state.leads.filter(lead => lead.lead.id !== action.id)
       };
+      case ADD_LEAD_NOTE:
+          const newLeadWithNote = state.leads.map(leadObj => {
+            if (action.id === leadObj.lead.id) {
+              return {
+                lead: leadObj.lead,
+                leadnotes: [...leadObj.leadnotes, action.leadnote]
+
+                // lead: leadObj.lead,
+                // list_id: leadObj.list_id,
+                // leadnotes: [...leadObj.leadnotes, action.leadnote]
+              };
+              // swap out
+            } else {
+              return leadObj;
+            }
+          });
+          return {...state, leads: newLeadWithNote}
     default:
       return state;
   }
@@ -100,12 +138,23 @@ function listleads(state = { leads: [], list: [] }, action) {
 
 function message(state = [], action) {
   switch (action.type) {
-    case "FETCH_ERROR":
+    case FETCH_ERROR:
       return action.error;
-    case "SUCCESS_MESSAGE":
+    case SUCCESS_MESSAGE:
       return action.message;
-    case "CLEAR_MESSAGE":
+    case CLEAR_MESSAGE:
       return [];
+    default:
+      return state;
+  }
+}
+
+function search(state = "", action) {
+  switch (action.type) {
+    case UPDATE_SEARCH:
+      return action.search;
+      case CLEAR_SEARCH:
+        return ""
     default:
       return state;
   }

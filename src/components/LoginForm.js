@@ -8,7 +8,7 @@ import {
 } from "semantic-ui-react";
 import { NavLink, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { login } from "../actions";
+import { login, clearMessage } from "../actions";
 import "../App.css";
 
 const styleForm = {
@@ -25,7 +25,7 @@ const styleForm = {
 const style = {
   backgroundImage: `url(${"https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/s2048x2048/70590332_836756946718765_3473765009224368128_n.png?_nc_cat=111&_nc_oc=AQnI8TKKO2F4LqO-fZDRyZuRDWWLWhMONIpEB2mHf1QEmAP04HdNNIq8JU0QUq5LYwE&_nc_ht=scontent-ort2-2.xx&oh=e9db466921239dad5b5ae5b132f1f40f&oe=5E3DD369"})`,
   backgroundSize: "cover",
-  minHeight: '800px'
+  minHeight: '1000px'
 }
 
 class LoginForm extends Component {
@@ -44,6 +44,10 @@ class LoginForm extends Component {
     event.preventDefault();
     this.props.login(this.state, this.props.history);
   };
+
+  handleClearMessage() {
+    this.props.clearMessage()
+  }
 
   render() {
     console.log(this.state);
@@ -88,6 +92,7 @@ class LoginForm extends Component {
                     style={{color: '#43425D'}}
                     to="/signup"
                     activeClassName="hurray"
+                    onClick={() => this.handleClearMessage()}
                   >
                     New User
                   </NavLink>
@@ -96,6 +101,7 @@ class LoginForm extends Component {
                    style={{color: '#43425D'}}
                     to="/"
                     activeClassName="hurray"
+                    onClick={() => this.handleClearMessage()}
                   >
                     Home
                   </NavLink>
@@ -116,15 +122,15 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
-  return {
-    login: (formData, history) => {
-      dispatch(login(formData, history));
-    }
-  };
-};
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     login: (formData, history) => {
+//       dispatch(login(formData, history));
+//     }
+//   };
+// };
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  {login, clearMessage}
 )(withRouter(LoginForm));

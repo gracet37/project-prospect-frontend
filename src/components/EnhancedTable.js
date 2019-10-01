@@ -23,6 +23,7 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 import { Modal, Button, Dropdown, Form, Icon } from "semantic-ui-react";
 import Favorite from "@material-ui/icons/Favorite";
 import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
+import {Link} from 'react-router-dom'
 
 const uuidv1 = require("uuid/v1");
 
@@ -240,7 +241,12 @@ class EnhancedTableToolbar extends React.Component {
       newListName,
       userId
     );
+    this.handleClearListName()
   };
+
+  handleClearListName() {
+    this.setState({newListName: ""})
+  }
 
   handleClearMessage = () => {
     this.props.clearMessage()
@@ -263,9 +269,23 @@ class EnhancedTableToolbar extends React.Component {
               {numSelected} selected
             </Typography>
           ) : (
+            <div>
             <Typography variant="h4" id="tableTitle">
               Search Results
             </Typography>
+               <Button
+               as={Link}
+               to="/"
+               style={{
+                 borderRadius: "30px",
+                 color: "white",
+                 backgroundColor: "#03DAC6", position: 'absolute', left: '1430px', top: '20px'
+               }}
+             >
+               <Icon name="arrow alternate circle left outline" /> Back to
+               Search
+             </Button>
+             </div>
           )}
         </div>
         <div className={classes.spacer} />
@@ -304,7 +324,7 @@ class EnhancedTableToolbar extends React.Component {
                       <Dropdown
                         onChange={this.handleDropdown}
                         name="listId"
-                        style={{ width: "40%", borderRadius: "20px" }}
+                        style={{ width: "40%", borderRadius: "50px" }}
                         placeholder="Select list..."
                         // fluid
                         disabled={this.state.newListName ? true : false}
@@ -318,16 +338,16 @@ class EnhancedTableToolbar extends React.Component {
                         name="newListName"
                       >
                         <input
-                          style={{ borderRadius: "20px", width: "200px" }}
+                          style={{ borderRadius: "50px", width: "300px" }}
                         ></input>
                       </Form.Input>
                       <Modal.Header as="h2"></Modal.Header>
                       <Form.Button
                         onClick={this.handleSubmit}
-                        basic
-                        color="violet"
-                        inverted
-                        style={{ borderRadius: "20px" }}
+                        // basic
+                        // color="violet"
+                        // inverted
+                        style={{ borderRadius: "70px", backgroundColor: "#6200EE", color: "white", width: "150px", padding: "10px"}}
                       >
                         <Icon name="add" /> Add Lead to List
                       </Form.Button>
@@ -380,8 +400,10 @@ EnhancedTableToolbar.propTypes = {
 const useStyles = makeStyles(theme => ({
   root: {
     width: "85%",
-    margin: "20px",
-    marginTop: 80,
+    margin: "50px",
+    marginTop: 100,
+    // verticalAlign: "middle",
+    textAlign: 'center',
     display: "inline-block"
   },
   paper: {
@@ -418,7 +440,7 @@ export default function EnhancedTable(props) {
   const [selected, setSelected] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(15);
   const [leadsArray, setLeadsArray] = React.useState([]);
 
   const handleLeadClick = (lead, event) => {
@@ -521,6 +543,7 @@ export default function EnhancedTable(props) {
 
                     return (
                       <TableRow
+                      // style={{fontSize: '20px' }}
                         hover
                         onClick={event => handleClick(event, row.email)}
                         role="checkbox"
@@ -570,7 +593,7 @@ export default function EnhancedTable(props) {
             </Table>
           </div>
           <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
+            rowsPerPageOptions={[5, 10, 15, 25, 50, 100]}
             component="div"
             count={props.rows.length}
             rowsPerPage={rowsPerPage}

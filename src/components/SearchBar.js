@@ -6,14 +6,10 @@ import { Link, withRouter } from "react-router-dom";
 import Loading from "./Loading";
 import "../App.css";
 /////////////////////// STYLING /////////////////////////
-const searchOptions = [
-  { key: "industry", text: "Industry", value: "industry" },
-  { key: "domain", text: "Company Domain", value: "domain" }
-];
 
 const styleSearchBar = {
-  marginLeft: '30px',
-  marginTop: '10px',
+  marginLeft: "30px",
+  marginTop: "10px",
   width: "500px",
   borderRadius: "50px",
   borderColor: "#6200EE",
@@ -26,17 +22,9 @@ const styleSearchBar = {
 
 class SearchBar extends Component {
   state = {
-    selectionParam: "",
     searchParam: "",
-    locationParam: "",
     leadsResults: [],
     searchClicked: false
-  };
-
-  handleDropdown = (e, data) => {
-    const targetValue = data.value;
-    const targetName = data.name;
-    this.setState({ [targetName]: targetValue });
   };
 
   handleChange = e => {
@@ -46,18 +34,20 @@ class SearchBar extends Component {
   };
 
   handleSubmit = () => {
-    if (this.props.auth.user) {
-    this.setState({ searchClicked: true });
-    this.props.thunkFetchLeads(this.state.searchParam, this.props.history)
-    } else {
-      this.props.fetchError("Oops! You need to be logged in to do that.")
-      this.props.history.push('/login')
+    if (this.state.searchParam) {
+      if (this.props.auth.user) {
+        this.setState({ searchClicked: true });
+        this.props.thunkFetchLeads(this.state.searchParam, this.props.history);
+      } else {
+        this.props.fetchError("Oops! You need to be logged in to do that.");
+        this.props.history.push("/login");
+      }
     }
   };
 
   render() {
     return (
-      <div style={{verticalAlign:'center', textAlign:'center'}}>
+      <div style={{ verticalAlign: "center", textAlign: "center" }}>
         {/* {this.state.searchClicked ? <Loading /> : null} */}
         {/* <Form>  */}
         <Form>
@@ -68,13 +58,23 @@ class SearchBar extends Component {
               placeholder="Enter domain name..."
               // loading={this.state.searchClicked ? true : false}
             >
-              <input style={styleSearchBar} />
+              <input style={styleSearchBar} required />
             </Form.Input>
             <Button
               type="submit"
               loading={this.state.searchClicked ? true : false}
               onClick={this.handleSubmit}
-              style={{borderRadius: "50px", marginLeft: '10px', backgroundColor: '#6200EE', color: 'white', marginTop: '10px', width: '130px',height: '60px', fontSize: 'large', textAlign: 'center' }}
+              style={{
+                borderRadius: "50px",
+                marginLeft: "10px",
+                backgroundColor: "#6200EE",
+                color: "white",
+                marginTop: "10px",
+                width: "130px",
+                height: "60px",
+                fontSize: "large",
+                textAlign: "center"
+              }}
             >
               Search
             </Button>
@@ -91,15 +91,15 @@ const mapDispatchToProps = dispatch => {
     thunkFetchLeads: (domainName, history) => {
       dispatch(thunkFetchLeads(domainName, history));
     },
-    fetchError: (error) => {
-      dispatch(fetchError(error))
+    fetchError: error => {
+      dispatch(fetchError(error));
     }
   };
 };
 
 const mapStateToProps = state => {
   return {
-    auth: state.auth, 
+    auth: state.auth,
     categories: state.categories,
     leads: state.leads
   };

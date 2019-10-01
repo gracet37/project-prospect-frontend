@@ -39,7 +39,7 @@ class UserProfile extends Component {
       condRender = <div> LOADING </div>;
     } else if (this.state.success == true) {
       condRender = (
-        <div style={{textAlign: 'center',  backgroundImage: `url(${"https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/s2048x2048/70590332_836756946718765_3473765009224368128_n.png?_nc_cat=111&_nc_oc=AQnI8TKKO2F4LqO-fZDRyZuRDWWLWhMONIpEB2mHf1QEmAP04HdNNIq8JU0QUq5LYwE&_nc_ht=scontent-ort2-2.xx&oh=e9db466921239dad5b5ae5b132f1f40f&oe=5E3DD369"})`}}>
+        <div style={{textAlign: 'center',  minHeight: '1000px', backgroundImage: `url(${"https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/s2048x2048/70590332_836756946718765_3473765009224368128_n.png?_nc_cat=111&_nc_oc=AQnI8TKKO2F4LqO-fZDRyZuRDWWLWhMONIpEB2mHf1QEmAP04HdNNIq8JU0QUq5LYwE&_nc_ht=scontent-ort2-2.xx&oh=e9db466921239dad5b5ae5b132f1f40f&oe=5E3DD369"})`}}>
           {" "}
           
           <Navbar />
@@ -51,20 +51,30 @@ class UserProfile extends Component {
           > */}
           <Container style={{display: 'inline-block', minHeight: '830px', width: '50%'}}>
             <Grid>
-              <Grid.Column style={{ positon: "absolute", top: '70px', verticalAlign: 'center'}}>
-                <Grid.Row columns={1} centered doubling>
-                  <Grid.Column centered>
-                    <Segment textAlign='center'>
-                      <Header as="h1">
+              <Grid.Column style={{ positon: "absolute", top: '90px', verticalAlign: 'center'}}>
+                <Grid.Row columns={1} centered>
+                  <Grid.Column style={{display: 'inline-block', textAlign: 'center'}}>
+                    <Segment style={{paddingRight: "100px", paddingLeft: "100px"}}>
+                      <Header as="h1" style={{margin: '10px'}}>
                         {" "}
                         {this.props.auth.user.first_name}{" "}
                         {this.props.auth.user.last_name}
                       </Header>
-                      <Image circular src={this.props.auth.user.img_url} />
-                    <Segment style={{ marginBottom: "20px", marginTop: "20px" }} as={Link} to='/edit'>Edit Account</Segment>
-                    <Segment style={{ marginBottom: "20px", marginTop: "20px" }} as={Link} to='/leadlists'>View Lead Lists</Segment>
-                    <Segment style={{ marginBottom: "20px", marginTop: "20px" }} onClick={this.handleDeleteClick} >Delete Account</Segment>
+                      <Image style={{display: 'inline-block', textAlign: 'center', margin: '10px'}} circular src={this.props.auth.user.img_url} />
+                    {/* <Segment style={{ position: 'absolute', margin: '20px', marginBottom: "20px", marginTop: "20px" }} as={Link} to='/edit'>Edit Account</Segment>
+                    <Segment style={{ position: 'absolute', margin: '20px', marginBottom: "20px", marginTop: "20px" }} as={Link} to='/leadlists'>View Lead Lists</Segment> */}
+                    <Grid.Row style={{ margin: "40px"}}>
+                    <Segment style={{ borderRadius: '50px', minWidth: '200px', height: '30px', backgroundColor: "#6200EE", color: 'white' }} as={Link} to='/edit' >Edit Account</Segment>
+                    </Grid.Row>
+                    <Grid.Row style={{ margin: "20px", marginBottom: "30px"}}>                    
+                    <Segment style={{ borderRadius: '50px', backgroundColor: "#03DAC6", color: 'white' }} as={Link} to='/leadlists'>View Lead Lists Account</Segment>
+                    </Grid.Row>
+                    <Grid.Row style={{ margin: "20px"}}>                    
+                    <Segment style={{ borderRadius: '50px', backgroundColor: "#43425D", color: 'white'}} onClick={this.handleDeleteClick} >Delete Account</Segment>
+                    </Grid.Row>
+                    {/* <Segment style={{ marginBottom: "20px", marginTop: "20px" }} as={Link} to='/edit'>Edit Account</Segment> */}
                     </Segment>
+
                   </Grid.Column>
                 </Grid.Row>
               </Grid.Column>

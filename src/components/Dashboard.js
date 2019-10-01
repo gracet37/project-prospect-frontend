@@ -19,7 +19,8 @@ import {
   deleteList,
   thunkFetchListById,
   addList,
-  clearMessage
+  clearMessage,
+  clearSearch
 } from "../actions";
 
 const uuidv1 = require("uuid/v1");
@@ -60,7 +61,7 @@ class Dashboard extends Component {
     column: null,
     data: [],
     direction: null,
-    deleteConfirmation: false,
+    modalShow: false,
     totalLeadCount: 0,
     totalMeetingsBooked: 0,
     totalNotContacted: 0,
@@ -68,89 +69,19 @@ class Dashboard extends Component {
   };
 
   componentDidMount() {
-    // this.formattedListArray();
-    // this.countTotalLeads();
-    this.countMeetingsBooked();
-    this.countNotContacted();
+    this.props.clearSearch()
+    this.props.clearMessage()
   }
 
-  show = dimmer => this.setState({ dimmer, deleteConfirmation: true });
-  handleConfirm = () => this.setState({ deleteConfirmation: false });
-  handleCancel = () => {
-    this.setState({ deleteConfirmation: false });
-    // let newArray = this.state.data.filter(data => data.id !== id);
-    // this.setState({ data: newArray });
-    // this.props.deleteList(id);
-  };
-
-  // formattedListArray = () => {
-  //   // if (this.props.lists.length) {
-  //   let array = [];
-  //   this.props.lists.forEach(list => {
-  //     let date = new Date(list.created_at);
-  //     let dateString = date.toDateString();
-  //     array.push({
-  //       id: list.id,
-  //       name: list.name,
-  //       date: dateString,
-  //       leadCount: list.leads.length
-  //     });
-  //   });
-  //   this.setState({ data: array });
-  //   // return array
-  // };
-
-  // countTotalLeads = () => {
-  //   if (this.props.lists) {
-  //     let leadCountArray = [];
-  //     let totalLeads;
-  //     console.log(this.props.lists);
-  //     this.props.lists.forEach(list => {
-  //       let count = list.leads.length;
-  //       leadCountArray.push(count);
-  //     });
-  //     totalLeads = leadCountArray.reduce((total, count) => total + count);
-  //     this.setState({ totalLeadCount: totalLeads });
-  //   } else {
-  //     return null;
-  //   }
-  // };
-
-  countMeetingsBooked = () => {
-    let meetingsBookedCount = 0;
-    if (this.props.listWithLeadNotes) {
-      this.props.listWithLeadNotes.forEach(lead => {
-        lead.leadnotes.forEach(leadnote => {
-          if (leadnote.status === "Meeting booked") {
-            meetingsBookedCount += 1;
-          }
-        });
-      });
-      this.setState({ totalMeetingsBooked: meetingsBookedCount });
-    } else {
-      return null;
-    }
-  };
-
-  countNotContacted = () => {
-    let notContacted = 0;
-    // let testArray = []
-    if (this.props.listWithLeadNotes) {
-      this.props.listWithLeadNotes.forEach(lead => {
-        if (lead.leadnotes.length < 1) {
-          notContacted += 1;
-        }
-      });
-      this.setState({ totalNotContacted: notContacted });
-    } else {
-      return null;
-    }
+  show = dimmer => this.setState({ dimmer, modalShow: true });
+  handleConfirmModal = () => this.setState({ modalShow: false });
+  handleCancelModal = () => {
+    this.setState({ modalShow: false });
   };
 
   handleConfirm = (event, id) => {
-    event.preventDefault();
-    let newArray = this.state.data.filter(data => data.id !== id);
-    this.setState({ data: newArray, deleteConfirmation: false });
+    // let newArray = this.props.lists.filter(list => list.id !== id);
+    this.setState({ modalShow: false });
     this.props.deleteList(id);
   };
 
@@ -161,7 +92,7 @@ class Dashboard extends Component {
 
   handleSort = clickedColumn => () => {
     const { column, direction } = this.state;
-    const data = this.props.lists
+    const data = this.props.lists;
 
     if (column !== clickedColumn) {
       this.setState({
@@ -188,6 +119,8 @@ class Dashboard extends Component {
   handleSubmit = () => {
     const { newListName } = this.state;
     const userId = this.props.auth.user.id;
+    this.handleCancelModal();
+    this.props.clearMessage();
     this.props.addList(newListName, userId);
   };
 
@@ -196,7 +129,6 @@ class Dashboard extends Component {
   };
 
   renderListBody() {
-    console.log("asfd", this.props.lists);
     return (
       <Table.Body>
         {_.map(this.props.lists, ({ id, name, created_at, leads }) => {
@@ -221,7 +153,6 @@ class Dashboard extends Component {
                   trigger={
                     <Icon
                       name={"trash alternate outline"}
-                      // onClick={() => this.show("inverted")}
                       name="trash alternate outline"
                       size="large"
                     />
@@ -238,7 +169,7 @@ class Dashboard extends Component {
                         color: "white",
                         backgroundColor: "#6200EE"
                       }}
-                      onClick={this.handleCancel}
+                      onClick={this.handleCancelModal}
                       basic
                       color="violet"
                     >
@@ -268,15 +199,13 @@ class Dashboard extends Component {
   renderLeadCount() {
     if (this.props.lists.length > 0) {
       let leadCountArray = [];
-      let totalLeads;
+      let totalLeads = 0
       console.log(this.props.lists);
       this.props.lists.forEach(list => {
-        console.log("ist", list);
         let count = list.leads.length;
         leadCountArray.push(count);
       });
       totalLeads = leadCountArray.reduce((total, count) => total + count);
-      // this.setState({ totalLeadCount: totalLeads });
       return (
         <Grid.Column style={styleMetrics}>
           <Header as="h2">Total Leads</Header>
@@ -293,53 +222,78 @@ class Dashboard extends Component {
       return null;
     }
   }
+
+  renderMeetingsBooked() {
+    let meetingsBookedCount = 0;
+    if (this.props.listWithLeadNotes.length) {
+      this.props.listWithLeadNotes.forEach(lead => {
+        lead.leadnotes.forEach(leadnote => {
+          if (leadnote.status === "Meeting booked") {
+            meetingsBookedCount += 1;
+          }
+        });
+      });
+      return (
+        <Grid.Column style={styleMetrics}>
+          <Header as="h2">Meetings Booked</Header>
+          <Header as="h2">{meetingsBookedCount}</Header>
+          <Image
+            style={styleImage}
+            size="small"
+            floated="right"
+            src="https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/71382639_511374239440274_5689414491201077248_n.png?_nc_cat=102&_nc_oc=AQkSRgZv9fHBIZ5lFzTKwmraacs6QUA5uRFBuJR4EydKHSVwwZgfGIlTbZ1xT9ZobnU&_nc_ht=scontent-ort2-2.xx&oh=22d18caf4e251af44eb4b5b5807195cc&oe=5DF1636E"
+          />
+        </Grid.Column>
+      );
+    } else {
+      return null;
+    }
+  }
+
+  renderNotContacted() {
+    let notContacted = 0;
+    if (this.props.listWithLeadNotes.length) {
+      this.props.listWithLeadNotes.forEach(lead => {
+        if (lead.leadnotes.length < 1) {
+          notContacted += 1;
+        }
+      });
+      return (
+        <Grid.Column style={styleMetrics}>
+          <Header as="h2">Not Yet Contacted</Header>
+          <Header as="h2">{notContacted}</Header>
+          <Image
+            style={styleImage}
+            size="small"
+            floated="right"
+            src="https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/70880021_751349978649592_7265954774900539392_n.png?_nc_cat=101&_nc_oc=AQk5RRMoC9mgfA61QWoq_mT8y4SylOWJWzRclLynSDsznJetifnuN5Ks-YcHFkuFiMs&_nc_ht=scontent-ort2-2.xx&oh=51a411e11a9181923a23d3a7d1e05c21&oe=5E35AB9A"
+          />
+        </Grid.Column>
+      );
+    } else {
+      return null;
+    }
+  }
+
   render() {
-    const {
-      column,
-      data,
-      direction,
-      totalLeadCount,
-      totalMeetingsBooked,
-      totalNotContacted
-    } = this.state;
-    // console.log(this.props.lists)
+    const { column, direction } = this.state;
     console.log(this.state);
     return (
       <div>
+        {this.renderMetricCards}
         {/* METRIC CARDS */}
         <Grid>
           <Grid.Row columns="equal" style={styleRow}>
             {this.renderLeadCount()}
-
-            <Grid.Column style={styleMetrics}>
-              <Header as="h2">Meetings Booked</Header>
-              <Header as="h2">{totalMeetingsBooked}</Header>
-              <Image
-                style={styleImage}
-                size="small"
-                floated="right"
-                src="https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/71382639_511374239440274_5689414491201077248_n.png?_nc_cat=102&_nc_oc=AQkSRgZv9fHBIZ5lFzTKwmraacs6QUA5uRFBuJR4EydKHSVwwZgfGIlTbZ1xT9ZobnU&_nc_ht=scontent-ort2-2.xx&oh=22d18caf4e251af44eb4b5b5807195cc&oe=5DF1636E"
-              />
-            </Grid.Column>
-            <Grid.Column style={styleMetrics}>
-              <Header as="h2">Not Yet Contacted</Header>
-              <Header as="h2">{totalNotContacted}</Header>
-              <Image
-                style={styleImage}
-                size="small"
-                floated="right"
-                src="https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/70880021_751349978649592_7265954774900539392_n.png?_nc_cat=101&_nc_oc=AQk5RRMoC9mgfA61QWoq_mT8y4SylOWJWzRclLynSDsznJetifnuN5Ks-YcHFkuFiMs&_nc_ht=scontent-ort2-2.xx&oh=51a411e11a9181923a23d3a7d1e05c21&oe=5E35AB9A"
-              />
-            </Grid.Column>
+            {this.renderMeetingsBooked()}
+            {this.renderNotContacted()}
           </Grid.Row>
 
           {/* STYLING FOR THE BUTTON */}
           <Grid.Row columns={1}>
             <Grid.Column style={{ margin: "20px" }}>
               <Modal
-              closeIcon
-                onClose={this.handleClearMessage}
-                centered
+              style={{width: '300px'}}
                 trigger={
                   <Button
                     style={{
@@ -351,37 +305,34 @@ class Dashboard extends Component {
                     <Icon name="add" /> Create New List
                   </Button>
                 }
-                basic
-                size="small"
               >
-                <div style={{ verticalAlign: "center", textAlign: "center" }}>
-                  {this.props.message ? (
-                    <Modal.Header style={{ color: "#71EFE0" }} as="h2">
-                      {this.props.message}
-                    </Modal.Header>
-                  ) : null}
-                  <Modal.Header as="h2">Create a New List:</Modal.Header>
-                  <Form.Group>
-                    <Form.Input
-                      placeholder="Create new list..."
-                      onChange={this.handleChange}
-                      name="newListName"
-                    >
-                      <input
-                        style={{ borderRadius: "30px", width: "200px" }}
-                      ></input>
-                    </Form.Input>
-                    <Form.Button
-                      onClick={this.handleSubmit}
-                      basic
-                      color="violet"
-                      inverted
-                      style={{ margin: "20px", borderRadius: "30px" }}
-                    >
-                      <Icon name="add" /> Add Lead to List
-                    </Form.Button>
-                  </Form.Group>
-                </div>
+                <Modal.Header>New List</Modal.Header>
+                <Modal.Content>
+                  <Form.Input
+                    placeholder="List Name..."
+                    onChange={this.handleChange}
+                    name="newListName"
+                  >
+                    <input
+                      style={{ borderRadius: "30px", width: "200px" }}
+                    ></input>
+                  </Form.Input>
+                </Modal.Content>
+                <Modal.Actions>
+                  <Button
+                    onClick={this.handleSubmit}
+                    style={{
+                      // margin: "20px",
+                      borderRadius: "30px",
+                      color: "white",
+                      backgroundColor: "#03DAC6",
+                      position: "relative",
+                      textAlign: "left"
+                    }}
+                  >
+                    Create New List
+                  </Button>
+                </Modal.Actions>
               </Modal>
             </Grid.Column>
           </Grid.Row>
@@ -450,5 +401,52 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { deleteList, thunkFetchListById, addList, clearMessage }
+  { deleteList, thunkFetchListById, addList, clearMessage, clearSearch }
 )(withRouter(Dashboard));
+
+// <Modal
+//   closeOnDimmerClick={this.state.modalShow}
+//   closeIcon
+//   open={this.state.modalShow}
+//   centered
+//   trigger={
+//     <Button
+//       onClick={this.show}
+//       style={{
+//         borderRadius: "30px",
+//         color: "white",
+//         backgroundColor: "#6200EE"
+//       }}
+//     >
+//       <Icon name="add" /> Create New List
+//     </Button>
+//   }
+//   basic
+//   size="small"
+// >
+//   <div style={{ verticalAlign: "center", textAlign: "center" }}>
+//     <Modal.Header as="h2">Create a New List:</Modal.Header>
+//     <Form.Group>
+//       <Form.Input
+//         placeholder="Create new list..."
+//         onChange={this.handleChange}
+//         name="newListName"
+//       >
+//         <input
+//           style={{ borderRadius: "30px", width: "200px" }}
+//         ></input>
+//       </Form.Input>
+//       <Button
+//         onClick={this.handleSubmit}
+//         style={{
+//           margin: "20px",
+//           borderRadius: "30px",
+//           color: "white",
+//           backgroundColor: "#03DAC6"
+//         }}
+//       >
+//         <Icon name="add" /> Add Lead to List
+//       </Button>
+//     </Form.Group>
+//   </div>
+// </Modal>

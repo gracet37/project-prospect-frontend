@@ -10,7 +10,7 @@ import {
 } from "semantic-ui-react";
 import { Link, withRouter, NavLink } from "react-router-dom";
 import { connect } from "react-redux";
-import { registerUser } from "../actions";
+import { registerUser, clearMessage } from "../actions";
 
 const styleColumn = {
   float: "left",
@@ -51,17 +51,44 @@ class NewUserForm extends Component {
   };
 
   handleSubmit = event => {
+    const {firstName, lastName, email, password} = this.state
     event.preventDefault();
     this.props.registerUser(this.state, this.props.history);
   };
 
+  handleError = () => {
+    console.log(this.props.message)
+    if (this.props.message) {
+        return <Header as="h3" style={{ color: "#F44336" }} textAlign="center">
+        {this.props.message[0]}
+        </Header>
+      } 
+    }
+
+    handleClearMessage() {
+      this.props.clearMessage()
+    }
+  
+
   render() {
     console.log("new user form", this.state);
+    console.log(this.props.message)
     return (
       <div className="new-user-form" style={style}>
         <Grid textAlign="center" verticalAlign="middle">
           <Form.Group>
             <Form style={styleForm} size="large" onSubmit={this.handleSubmit}>
+              {this.handleError()}
+            {/* {this.props.message ? this.props.message.forEach(error => {
+            return <Header as="h5" style={{ color: "#03DAC6" }} textAlign="center">
+                {error}
+            </Header>  }) : null } */}
+{/* 
+{this.props.message ?  <Header as="h3" style={{ color: "#E57373" }} textAlign="center">
+                  {this.props.message}
+                  </Header> : null} */}
+
+
               <Header as="h1" style={{ color: "#03DAC6" }} textAlign="center">
                 Create A New Account
               </Header>
@@ -106,7 +133,7 @@ class NewUserForm extends Component {
                 >
                   Create Account
                 </Button>
-                <NavLink to="/login" activeClassName="hurray"  style={{color: '#43425D'}}>
+                <NavLink to="/login" activeClassName="hurray" onClick={() => this.handleClearMessage()} style={{color: '#43425D'}}>
                   Back to Login
                 </NavLink>
                 <br/>
@@ -114,6 +141,7 @@ class NewUserForm extends Component {
                     style={{color: '#43425D'}}
                     to="/"
                     activeClassName="hurray"
+                    onClick={() => this.handleClearMessage()}
                   >
                     Home
                   </NavLink>
@@ -126,14 +154,22 @@ class NewUserForm extends Component {
   }
 }
 
-function mapDispatchToProps(dispatch) {
+// function mapDispatchToProps(dispatch) {
+//   return {
+//     registerUser: (formData, history) =>
+//       dispatch(registerUser(formData, history))
+//   }, 
+//     clearMessage: () => 
+//     dispatch(clearUser())
+// }
+
+function mapStateToProps(state) {
   return {
-    registerUser: (formData, history) =>
-      dispatch(registerUser(formData, history))
-  };
+    message: state.message
+  }
 }
 
 export default connect(
-  null,
-  mapDispatchToProps
+  mapStateToProps,
+  {registerUser, clearMessage}
 )(withRouter(NewUserForm));

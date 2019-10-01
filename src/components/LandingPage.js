@@ -11,7 +11,8 @@ import {
   Responsive,
   Segment,
   Sidebar,
-  Visibility
+  Visibility,
+  Grid
 } from "semantic-ui-react";
 import SearchBar from "./SearchBar";
 import { connect } from "react-redux";
@@ -206,7 +207,7 @@ class MobileContainer extends Component {
             Dashboard
           </Menu.Item>
           <Menu.Item as={Link} to="/profile">
-            My Account
+            My Profile
           </Menu.Item>
           {this.props.auth.user ? (
             <Menu.Item onClick={() => this.handleLogout()}

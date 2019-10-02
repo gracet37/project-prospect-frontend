@@ -67,33 +67,11 @@ class SearchResults extends Component {
     );
   };
 
-  // handleLeadClick = (lead, checked) => {
-  //   console.log(lead);
-  //   console.log(checked);
-  //   if (checked) {
-  //     this.setState({ leadsArray: [...this.state.leadsArray, lead] });
-  //   } else {
-  //     const newArray = this.state.leadsArray.filter(
-  //       l => l.value !== lead.value
-  //     );
-  //     this.setState({ leadsArray: newArray });
-  //   }
-  // };
-
   handleLeadClick = (lead, checked) => {
+    console.log(lead);
+    console.log(checked);
     if (checked) {
-      this.props.listWithLeadNotes.forEach(l => {
-        console.log("what is l", l)
-        if (l.lead.email !== lead.value) {
-          this.setState({ leadsArray: [...this.state.leadsArray, lead] });
-        } else {
-          return (
-            <Message>
-              <Message.Header>Heads up! You have already added this lead</Message.Header>
-            </Message>
-          )
-        }
-      })
+      this.setState({ leadsArray: [...this.state.leadsArray, lead] });
     } else {
       const newArray = this.state.leadsArray.filter(
         l => l.value !== lead.value
@@ -101,6 +79,28 @@ class SearchResults extends Component {
       this.setState({ leadsArray: newArray });
     }
   };
+
+  // handleLeadClick = (lead, checked) => {
+  //   if (checked) {
+  //     this.props.listWithLeadNotes.forEach(l => {
+  //       console.log("what is l", l)
+  //       if (l.lead.email !== lead.value) {
+  //         this.setState({ leadsArray: [...this.state.leadsArray, lead] });
+  //       } else {
+  //         return (
+  //           <Message>
+  //             <Message.Header>Heads up! You have already added this lead</Message.Header>
+  //           </Message>
+  //         )
+  //       }
+  //     })
+  //   } else {
+  //     const newArray = this.state.leadsArray.filter(
+  //       l => l.value !== lead.value
+  //     );
+  //     this.setState({ leadsArray: newArray });
+  //   }
+  // };
 
   handlePageChange = activePage => {
     this.setState({ activePage });
@@ -292,8 +292,7 @@ const mapStateToProps = state => {
   return {
     leads: state.leads,
     lists: state.lists,
-    auth: state.auth,
-    listWithLeadNotes: state.listWithLeadNotes
+    auth: state.auth
   };
 };
 

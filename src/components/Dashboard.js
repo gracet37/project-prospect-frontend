@@ -23,7 +23,8 @@ import {
   addList,
   clearMessage,
   clearSearch,
-  updateSearch
+  updateSearch,
+  sortLists
 } from "../actions";
 
 const uuidv1 = require("uuid/v1");
@@ -32,14 +33,15 @@ const styleMetrics = {
   borderWidth: "2px",
   // marginRight: '30px',
   borderRadius: "10px",
-  borderColor: "#CECFD0",
+  borderColor: "rgba(98, 0, 238, 0.2)",
   borderStyle: "solid",
-  margin: "20px",
+  margin: "0 30px 30px 30px",
   padding: "20px",
   // width: "10px",
   height: "150px",
   boxShadow: "10px 10px 15px -6px rgba(67,66,93,0.68)"
-  // padding: "20px"
+  // opacity: 0.2
+    // padding: "20px"
 };
 
 const styleImage = {
@@ -68,7 +70,12 @@ class Dashboard extends Component {
     totalLeadCount: 0,
     totalMeetingsBooked: 0,
     totalNotContacted: 0,
-    newListName: ""
+    newListName: "",
+    showModal: false
+  };
+
+  closeModal = () => {
+    this.setState({ showModal: false });
   };
 
   componentDidMount() {
@@ -76,11 +83,11 @@ class Dashboard extends Component {
     this.props.clearMessage();
   }
 
-  show = dimmer => this.setState({ dimmer, modalShow: true });
-  handleConfirmModal = () => this.setState({ modalShow: false });
-  handleCancelModal = () => {
-    this.setState({ modalShow: false });
-  };
+  // show = dimmer => this.setState({ dimmer, modalShow: true });
+  // handleConfirmModal = () => this.setState({ modalShow: false });
+  // handleCancelModal = () => {
+  //   this.setState({ modalShow: false });
+  // };
 
   handleConfirm = (event, id) => {
     // let newArray = this.props.lists.filter(list => list.id !== id);
@@ -94,23 +101,27 @@ class Dashboard extends Component {
   };
 
   handleSort = clickedColumn => () => {
+    console.log(this.state)
+    console.log(clickedColumn)
     const { column, direction } = this.state;
-    const data = this.props.lists;
+    const dataArray = this.props.lists;
+
+    const dataSorted = _.sortBy(dataArray, [clickedColumn])
+    console.log(dataSorted)
 
     if (column !== clickedColumn) {
       this.setState({
         column: clickedColumn,
-        data: _.sortBy(data, [clickedColumn]),
         direction: "ascending"
       });
-
+      this.props.sortLists(_.sortBy(dataArray, [clickedColumn]))
       return;
     }
 
     this.setState({
-      data: this.props.lists.reverse(),
       direction: direction === "ascending" ? "descending" : "ascending"
-    });
+    })
+    this.props.sortLists(dataArray.reverse())
   };
 
   handleChange = e => {
@@ -121,10 +132,11 @@ class Dashboard extends Component {
 
   handleSubmit = () => {
     const { newListName } = this.state;
+    const capitalizedName = newListName.charAt(0).toUpperCase() + newListName.substring(1);
     const userId = this.props.auth.user.id;
-    this.handleCancelModal();
+    this.closeModal();
     this.props.clearMessage();
-    this.props.addList(newListName, userId);
+    this.props.addList(capitalizedName, userId);
   };
 
   handleClearMessage = () => {
@@ -132,12 +144,14 @@ class Dashboard extends Component {
   };
 
   renderListBody() {
-    let listArr = this.props.lists
+    let listArr = this.props.lists;
     if (this.props.search === "") {
       listArr = this.props.lists;
     } else {
       listArr = this.props.lists.filter(list => {
-        return list.name.toUpperCase().includes(this.props.search.toUpperCase());
+        return list.name
+          .toUpperCase()
+          .includes(this.props.search.toUpperCase());
       });
     }
     return (
@@ -308,11 +322,14 @@ class Dashboard extends Component {
           <Grid.Row columns={1}>
             <Grid.Column style={{ margin: "20px" }}>
               <Modal
-                basic
+                // basic
                 closeIcon
+                onClose={this.closeModal}
+                open={this.state.showModal}
                 style={{ width: "300px" }}
                 trigger={
                   <Button
+                    onClick={() => this.setState({ showModal: true })}
                     style={{
                       borderRadius: "30px",
                       color: "white",
@@ -362,14 +379,15 @@ class Dashboard extends Component {
             columns={1}
           >
             <Grid.Column>
-              <Table sortable selectable celled>
-                <Table.Header>
-                  <Table.Row>
+              <Table sortable selectable celled style={{borderColor: "rgba(98, 0, 238, 0.2)", boxShadow: "0px 1px 36px -16px rgba(0,0,0,0.75)", borderWidth: '2px'}}>
+                <Table.Header >
+                  <Table.Row >
                     {" "}
                     <Popup
                       content="Search List Name"
                       trigger={
                         <Search
+                        style={{margin: "10px 20px 10px 20px"}}
                           // style={{ margin: "15px", position: 'fixed', top: 0 }}
                           onSearchChange={_.debounce(
                             (event, { value }) =>
@@ -439,7 +457,15 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { deleteList, thunkFetchListById, addList, clearMessage, clearSearch, updateSearch }
+  {
+    deleteList,
+    thunkFetchListById,
+    addList,
+    clearMessage,
+    clearSearch,
+    updateSearch,
+    sortLists
+  }
 )(withRouter(Dashboard));
 
 // <Modal

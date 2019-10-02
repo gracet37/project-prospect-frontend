@@ -32,7 +32,10 @@ import {
   CLEAR_MESSAGE,
   DELETE_LIST_WITH_LEADNOTE,
   UPDATE_SEARCH,
-  CLEAR_SEARCH
+  CLEAR_SEARCH,
+  SORT_LISTS,
+  FETCH_LIST_BY_ID,
+  SORT_LEADLISTS
 } from "../actions";
 
 export default combineReducers({
@@ -81,6 +84,8 @@ function lists(state = [], action) {
   switch (action.type) {
     case FETCH_LISTS:
       return action.lists;
+      case SORT_LISTS: 
+      return action.lists
     case ADD_LIST:
       return [...state, action.list];
     case DELETE_LIST:
@@ -92,11 +97,11 @@ function lists(state = [], action) {
 
 function auth(state = {}, action) {
   switch (action.type) {
-    case "ACTION_SUCESS":
+    case ACTION_SUCCESS:
       return action.user;
-    case "LOGIN_USER":
+    case LOGIN_USER:
       return action.user;
-    case "LOGOUT_USER":
+    case LOGOUT_USER:
       return {};
     default:
       return state;
@@ -107,8 +112,10 @@ function auth(state = {}, action) {
 
 function listleads(state = { leads: [], list: [] }, action) {
   switch (action.type) {
-    case "FETCH_LIST_BY_ID":
+    case FETCH_LIST_BY_ID:
       return { leads: action.leads, list: action.list };
+      case SORT_LEADLISTS:
+        return {...state, leads: action.leads}
     case DELETE_LISTLEAD:
       return {
         ...state,

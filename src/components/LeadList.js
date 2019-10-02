@@ -14,7 +14,8 @@ import {
   Label,
   Popup,
   Sticky,
-  Visibility
+  Visibility,
+  Dropdown
 } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
@@ -31,18 +32,36 @@ import PropTypes from "prop-types";
 import FilterLeads from "./FilterLeads";
 import { GridList } from "@material-ui/core";
 
+const filterOptions = [
+  {
+    key: "name",
+    text: "First Name",
+    value: "first_name"
+  },
+  {
+    key: "last_name",
+    text: "Last Name",
+    value: "last_name"
+  },
+  {
+    key: "position",
+    text: "Position",
+    value: "position"
+  }
+];
+
 const styleMetrics = {
-  // borderWidth: "2px",
-  // // marginRight: '30px',
-  // borderRadius: "10px",
-  // borderColor: "#CECFD0",
-  // borderStyle: "solid",
-  // margin: "20px",
-  // padding: "20px",
-  // // width: "10px",
-  // height: "150px",
-  // boxShadow: "10px 10px 15px -6px rgba(67,66,93,0.68)"
-  // // padding: "20px"
+  borderWidth: "2px",
+  // marginRight: '30px',
+  borderRadius: "10px",
+  borderColor: "#CECFD0",
+  borderStyle: "solid",
+  margin: "20px",
+  padding: "20px",
+  // width: "10px",
+  height: "150px",
+  boxShadow: "10px 10px 15px -6px rgba(67,66,93,0.68)"
+  // padding: "20px"
 };
 
 const styleImage = {
@@ -103,65 +122,23 @@ class Dashboard extends Component {
     statusInput: "",
     nextStepsInput: "",
     commentsInput: "",
-    totalLeadCount: 0,
-    totalMeetingsBooked: 0,
-    totalNotContacted: 0,
-    filter: ""
+    selectedLead: {},
+    // totalLeadCount: 0,
+    // totalMeetingsBooked: 0,
+    // totalNotContacted: 0,
+    filter: "",
+    searchSelection: "",
+    showModal: false,
+    selectedLeadNotes: {},
+    dateString: ""
+  };
+
+  closeModal = () => {
+    this.setState({ showModal: false });
   };
 
   // ! ////////////////////////////////////// CLASS COMPONENT FUNCTIONS ////////////////////////////////////////////////////////////
 
-  componentDidMount() {
-    this.formattedListArray();
-  }
-
-  formattedListArray = () => {
-    let listArray = this.props.listleads.leads;
-    if (listArray) {
-      let array = listArray.map(lead => {
-        let last = null;
-        if (lead.leadnotes.length) {
-          last = lead.leadnotes[lead.leadnotes.length - 1];
-        }
-        if (lead.leadnotes.length > 0) {
-          let date = new Date(last.created_at);
-          let dateString = date.toDateString();
-          return {
-            id: lead.lead.id,
-            first_name: lead.lead.first_name,
-            last_name: lead.lead.last_name,
-            position: lead.lead.position,
-            company: lead.lead.company,
-            status: last.status,
-            next_steps: last.next_steps,
-            comments: last.comments,
-            comments_date: dateString,
-            last_date_contacted: lead.lead.contacted_date,
-            email: lead.lead.email,
-            phone_number: lead.lead.phone_number
-          };
-        } else {
-          return {
-            id: lead.lead.id,
-            first_name: lead.lead.first_name,
-            last_name: lead.lead.last_name,
-            position: lead.lead.position,
-            company: lead.lead.company,
-            status: null,
-            next_steps: null,
-            comments: null,
-            comments_date: null,
-            last_date_contacted: lead.lead.contacted_date,
-            email: lead.lead.email,
-            phone_number: lead.lead.phone_number
-          };
-        }
-      });
-      this.setState({ data: array });
-    }
-  };
-
-  // ! need to refactor out " data "
   handleDeleteClick = (event, lead_id) => {
     event.preventDefault();
     // let newArray = this.state.data.filter(data => data.id !== lead_id);
@@ -199,11 +176,20 @@ class Dashboard extends Component {
   };
 
   handleDropdown = (e, data) => {
+    console.log(e);
     const targetValue = data.value;
     this.setState({ statusInput: targetValue });
   };
 
+  handleSearchDropdown = (e, data) => {
+    console.log(e);
+    const targetValue = data.value;
+    this.setState({ searchSelection: targetValue });
+  };
+
   handleAddLeadNote = leadId => {
+    // debugger;
+    this.closeModal();
     const { statusInput, nextStepsInput, commentsInput } = this.state;
     this.props.addLeadNote(
       statusInput,
@@ -295,16 +281,28 @@ class Dashboard extends Component {
 
   renderTableBody() {
     // Set original list array to the full array in store
+    const searchSelection = this.state.searchSelection;
     let listArr = this.props.listleads.leads;
     if (this.props.search === "") {
       listArr = this.props.listleads.leads;
     } else {
       listArr = this.props.listleads.leads.filter(lead => {
-        return lead.lead.first_name
-          .toUpperCase()
-          .includes(this.props.search.toUpperCase());
+        if (searchSelection === "first_name") {
+          return lead.lead.first_name
+            .toUpperCase()
+            .includes(this.props.search.toUpperCase());
+        } else if (searchSelection === "last_name") {
+          return lead.lead.last_name
+            .toUpperCase()
+            .includes(this.props.search.toUpperCase());
+        } else if (searchSelection === "position") {
+          return lead.lead.position
+            .toUpperCase()
+            .includes(this.props.search.toUpperCase());
+        }
       });
     }
+
     return (
       <Table.Body onScroll={() => console.log("scroll")}>
         {_.map(listArr, ({ lead, leadnotes }) => {
@@ -330,80 +328,14 @@ class Dashboard extends Component {
               <Table.Cell>{last ? last.next_steps : null}</Table.Cell>
               <Table.Cell>{last ? dateString : null}</Table.Cell>
               <Table.Cell>
-                {/* {leadnotesArray.find(lead => )} */}
-                <Modal
-                  closeIcon
-                  trigger={<Icon name={"edit outline"} size="large" />}
-                >
-                  <Modal.Header as="h1">
-                    {lead.first_name} {lead.last_name} <br />{" "}
-                    {lead.position ? lead.position + "," : null} {lead.company}
-                  </Modal.Header>
-                  <Modal.Header as="h3">
-                    Email: {lead.email}
-                    {/* <Icon name={"envelope"}></Icon> */}
-                    <Modal
-                      trigger={
-                        <Icon
-                          style={{ color: "#6200EE" }}
-                          name={"envelope"}
-                        ></Icon>
-                      }
-                    >
-                      <Modal.Header>
-                        Send an email to {lead.first_name}
-                      </Modal.Header>
-                      <Modal.Content>
-                        <MailForm
-                          email={lead.email}
-                          myEmail={this.props.auth.user.email}
-                        />
-                      </Modal.Content>
-                    </Modal>
-                  </Modal.Header>
-                  {/* <Modal.Header as='h3'>{position}, {company}</Modal.Header> */}
-
-                  <Modal.Content>
-                    <Form>
-                      <Form.Group>
-                        <Form.Select
-                          // fluid
-                          onChange={this.handleDropdown}
-                          name="statusInput"
-                          label="Status"
-                          options={statusArray}
-                          placeholder={last ? last.status : "Select status"}
-                        />
-                        {/* <Form.Header>Next Steps</Form.Header> */}
-                        <Form.Input
-                          onChange={this.handleChange}
-                          name="nextStepsInput"
-                          label="Next Steps"
-                          placeholder={last ? last.next_steps : "Next steps"}
-                        ></Form.Input>
-                      </Form.Group>
-                      <Form.Input
-                        onChange={this.handleChange}
-                        name="commentsInput"
-                        control="textarea"
-                        rows="3"
-                        label="Notes"
-                        value={last ? dateString + last.comments : null}
-                      />
-                      <Button
-                        style={{
-                          borderRadius: "50px",
-                          backgroundColor: "#03DAC6",
-                          color: "white"
-                        }}
-                        onClick={() => this.handleAddLeadNote(lead.id)}
-                      >
-                        Save
-                      </Button>
-                      {/* <Form.Description></Form.Description> */}
-                    </Form>
-                  </Modal.Content>
-                </Modal>
+                {" "}
+                <Icon
+                  onClick={() =>
+                    this.setState({ showModal: true, selectedLead: lead, selectedLeadNotes: last, dateString: dateString})
+                  }
+                  name={"edit outline"}
+                  size="large"
+                />
               </Table.Cell>
               <Table.Cell>
                 <Icon
@@ -418,11 +350,96 @@ class Dashboard extends Component {
       </Table.Body>
     );
   }
+  renderModal() {
+    const {selectedLead, selectedLeadNotes, dateString} = this.state
+    const lead = selectedLead;
+    const last = selectedLeadNotes;
+    // const dateString = dateString;
+    return (
+      <Modal closeIcon onClose={this.closeModal} open={this.state.showModal}>
+        <Modal.Header as="h1">
+          {selectedLead.first_name +
+            " " +
+            selectedLead.last_name}{" "}
+          <br /> {lead.position ? lead.position + "," : null} {lead.company}
+        </Modal.Header>
+        <Modal.Header as="h3">
+          Email: {lead.email}
+          {/* <Icon name={"envelope"}></Icon> */}
+          <Modal
+            trigger={
+              <Icon size='large' style={{ color: "#03DAC6", float: 'right' }} name={"envelope"}></Icon>
+            }
+          >
+            <Modal.Header>Send an email to {lead.first_name}</Modal.Header>
+            <Modal.Content>
+              <MailForm
+                email={lead.email}
+                myEmail={this.props.auth.user.email}
+              />
+            </Modal.Content>
+          </Modal>
+        </Modal.Header>
+        {/* <Modal.Header as='h3'>{position}, {company}</Modal.Header> */}
+
+        <Modal.Content>
+          <Form>
+            <Form.Group>
+              <Form.Select
+                // fluid
+                onChange={this.handleDropdown}
+                name="statusInput"
+                label="Status"
+                options={statusArray}
+                placeholder={last ? last.status : "Select status"}
+              />
+              {/* <Form.Header>Next Steps</Form.Header> */}
+              <Form.Input
+                onChange={this.handleChange}
+                name="nextStepsInput"
+                label="Next Steps"
+                placeholder={last ? last.next_steps : "Next steps"}
+              ></Form.Input>
+            </Form.Group>
+            <Form.Input
+              onChange={this.handleChange}
+              name="commentsInput"
+              control="textarea"
+              rows="3"
+              label="Notes"
+              value={last ? dateString + last.comments : null}
+            />
+            <Button
+              style={{
+                borderRadius: "50px",
+                backgroundColor: "#03DAC6",
+                color: "white"
+              }}
+              onClick={() => this.handleAddLeadNote(lead.id)}
+            >
+              Save
+            </Button>
+            {/* <Form.Description></Form.Description> */}
+          </Form>
+        </Modal.Content>
+      </Modal>
+    );
+  }
   // ! /////////////////////////////////////////////////////////// RENDER START ///////////////////////////////////////////////////////////////////////////////
 
   render() {
-    const { column, data, direction, activePage, filter } = this.state;
+    const {
+      column,
+      data,
+      direction,
+      activePage,
+      filter,
+      open,
+      closeOnEscape,
+      closeOnDimmerClick
+    } = this.state;
     const leadnotesArray = this.props.leadnotes;
+    console.log(this.state);
     // console.log(this.state);
     // let renderData;
     // let dataSlice;
@@ -463,7 +480,6 @@ class Dashboard extends Component {
 
     return (
       <div>
-      
         <Grid
           style={{
             backgroundImage: `url(${"https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/s2048x2048/70590332_836756946718765_3473765009224368128_n.png?_nc_cat=111&_nc_oc=AQnI8TKKO2F4LqO-fZDRyZuRDWWLWhMONIpEB2mHf1QEmAP04HdNNIq8JU0QUq5LYwE&_nc_ht=scontent-ort2-2.xx&oh=e9db466921239dad5b5ae5b132f1f40f&oe=5E3DD369"})`,
@@ -472,25 +488,30 @@ class Dashboard extends Component {
         >
           <Grid.Row columns={1}>
             <Grid.Column>
-            <Navbar />
+              <Navbar />
             </Grid.Column>
           </Grid.Row>
 
           <Grid.Row columns={1}>
-            <Grid.Column><Header as='h1'>HI</Header></Grid.Column></Grid.Row>
+            <Grid.Column>
+              <Header as="h1">HI</Header>
+            </Grid.Column>
+          </Grid.Row>
           {/* METRIC CARDS */}
           <Grid.Row
             columns={3}
-            style={{
-              // top: "70px",
-              // margin: "10px",
-              // marginTop: '10px',
-              // paddingRight: "120px",
-              // paddingLeft: "120px",
-              // // marginBottom: "10px",
-              // // position: "fixed",
-              // textAlign: "left"
-            }}
+            style={
+              {
+                // top: "70px",
+                // margin: "10px",
+                // marginTop: '10px',
+                // paddingRight: "120px",
+                // paddingLeft: "120px",
+                // // marginBottom: "10px",
+                // // position: "fixed",
+                // textAlign: "left"
+              }
+            }
           >
             {this.renderLeadCount()}
             {this.renderMeetingsBooked()}
@@ -498,7 +519,8 @@ class Dashboard extends Component {
           </Grid.Row>
 
           {/*  BACK TO DASHBOARD BUTTON  */}
-          <Grid.Row columns={1}
+          <Grid.Row
+            columns={1}
             style={{
               margin: "1px",
               // position: "fixed",
@@ -506,11 +528,11 @@ class Dashboard extends Component {
               display: "inline-block"
             }}
           >
-          <Grid.Column style={{margin: '20px'}}>
-            <Button as={Link} to="/leadlists" style={styleButton}>
-              <Icon name="arrow alternate circle left outline" /> Back to
-              Dashboard
-            </Button>
+            <Grid.Column style={{ margin: "20px" }}>
+              <Button as={Link} to="/leadlists" style={styleButton}>
+                <Icon name="arrow alternate circle left outline" /> Back to
+                Dashboard
+              </Button>
             </Grid.Column>
           </Grid.Row>
 
@@ -532,86 +554,93 @@ class Dashboard extends Component {
                 margin: "60px",
                 height: "500px",
                 // marginTop: '20px',
-                display: 'inline-block'
-
+                display: "inline-block"
               }}
               columns={1}
             >
               {/* TABLE OF CONTENTS */}
               <Grid.Column>
-                  <Table sortable selectable celled fixed >
-                    <Table.Header>
-                      <Popup
-                        content="Search First Name"
-                        trigger={
-                          <Search
-                            // style={{ margin: "15px", position: 'fixed', top: 0 }}
-                            onSearchChange={_.debounce(
-                              (event, { value }) =>
-                                this.handleFilterChange(event, value),
-                              300
-                            )}
-                            noResultsMessage="No results found"
-                            showNoResults={false}
-                          />
-                        }
+                <Table sortable selectable celled fixed>
+                  <Table.Header>
+                    <Table.Row>
+                      <span>
+                        Search leads by{" "}
+                        <Dropdown
+                          inline
+                          onChange={this.handleSearchDropdown}
+                          name="searchSelection"
+                          options={filterOptions}
+                          defaultValue={filterOptions[0].text}
+                        />
+                      </span>
+                      <Search
+                        // style={{ margin: "15px", position: 'fixed', top: 0 }}
+                        onSearchChange={_.debounce(
+                          (event, { value }) =>
+                            this.handleFilterChange(event, value),
+                          300
+                        )}
+                        noResultsMessage="No results found"
+                        showNoResults={false}
                       />
-                    </Table.Header>
-                    <Table.Header >
-                      <Table.Row
-                        style={{ position: "sticky" }}
-                        textAlign="center"
+                    </Table.Row>
+                  </Table.Header>
+                  <Table.Header>
+                    <Table.Row
+                      style={{ position: "sticky" }}
+                      textAlign="center"
+                    >
+                      <Table.HeaderCell
+                        sorted={column === "first_name" ? direction : null}
+                        onClick={this.handleSort("first_name")}
                       >
-                        <Table.HeaderCell
-                          sorted={column === "first_name" ? direction : null}
-                          onClick={this.handleSort("first_name")}
-                        >
-                          First Name
-                        </Table.HeaderCell>
-                        <Table.HeaderCell
-                          sorted={column === "last_name" ? direction : null}
-                          onClick={this.handleSort("last_name")}
-                        >
-                          Last Name
-                        </Table.HeaderCell>
-                        <Table.HeaderCell
-                          sorted={column === "position" ? direction : null}
-                          onClick={this.handleSort("position")}
-                        >
-                          Position
-                        </Table.HeaderCell>
-                        <Table.HeaderCell
-                          sorted={column === "company" ? direction : null}
-                          onClick={this.handleSort("company")}
-                        >
-                          Company
-                        </Table.HeaderCell>
-                        <Table.HeaderCell
-                          sorted={column === "status" ? direction : null}
-                          onClick={this.handleSort("status")}
-                        >
-                          Status
-                        </Table.HeaderCell>
-                        <Table.HeaderCell
-                          sorted={column === "next_steps" ? direction : null}
-                          onClick={this.handleSort("next_steps")}
-                        >
-                          Next Steps
-                        </Table.HeaderCell>
-                        <Table.HeaderCell
-                          sorted={
-                            column === "last_date_contacted" ? direction : null
-                          }
-                          onClick={this.handleSort("last_date_contacted")}
-                        >
-                          Last Date Contacted
-                        </Table.HeaderCell>
-                        <Table.HeaderCell>Edit Lead</Table.HeaderCell>
-                        <Table.HeaderCell>Delete Lead</Table.HeaderCell>
-                      </Table.Row>
-                    </Table.Header>
-                    {this.renderTableBody()}
-                  </Table>
+                        First Name
+                      </Table.HeaderCell>
+                      <Table.HeaderCell
+                        sorted={column === "last_name" ? direction : null}
+                        onClick={this.handleSort("last_name")}
+                      >
+                        Last Name
+                      </Table.HeaderCell>
+                      <Table.HeaderCell
+                        sorted={column === "position" ? direction : null}
+                        onClick={this.handleSort("position")}
+                      >
+                        Position
+                      </Table.HeaderCell>
+                      <Table.HeaderCell
+                        sorted={column === "company" ? direction : null}
+                        onClick={this.handleSort("company")}
+                      >
+                        Company
+                      </Table.HeaderCell>
+                      <Table.HeaderCell
+                        sorted={column === "status" ? direction : null}
+                        onClick={this.handleSort("status")}
+                      >
+                        Status
+                      </Table.HeaderCell>
+                      <Table.HeaderCell
+                        sorted={column === "next_steps" ? direction : null}
+                        onClick={this.handleSort("next_steps")}
+                      >
+                        Next Steps
+                      </Table.HeaderCell>
+                      <Table.HeaderCell
+                        sorted={
+                          column === "last_date_contacted" ? direction : null
+                        }
+                        onClick={this.handleSort("last_date_contacted")}
+                      >
+                        Last Date Contacted
+                      </Table.HeaderCell>
+                      <Table.HeaderCell>Edit Lead</Table.HeaderCell>
+                      <Table.HeaderCell>Delete Lead</Table.HeaderCell>
+                    </Table.Row>
+                  </Table.Header>
+                  {this.renderModal()}
+                  {this.renderTableBody()}
+                </Table>
               </Grid.Column>
             </Grid.Row>
           ) : (
@@ -626,23 +655,25 @@ class Dashboard extends Component {
               column={1}
             >
               <Grid.Column>
-                <Header>Oops! You do not have any leads saved under this list.</Header>
+                <Header>
+                  Oops! You do not have any leads saved under this list.
+                </Header>
 
-              <Button
-                as={Link}
-                to="/"
-                style={{
-                  borderRadius: "30px",
-                  color: "#43425D",
-                  backgroundColor: "#FFF176",
-                  padding: "14px",
-                  paddingRight: "20px",
-                  paddingLeft: "20px"
-                }}
-              >
-                <Icon name="arrow alternate circle left outline" /> Search For
-                Leads
-              </Button>
+                <Button
+                  as={Link}
+                  to="/"
+                  style={{
+                    borderRadius: "30px",
+                    color: "#43425D",
+                    backgroundColor: "#FFF176",
+                    padding: "14px",
+                    paddingRight: "20px",
+                    paddingLeft: "20px"
+                  }}
+                >
+                  <Icon name="arrow alternate circle left outline" /> Search For
+                  Leads
+                </Button>
               </Grid.Column>
             </Grid.Row>
           )}
@@ -745,7 +776,8 @@ export default connect(
 // comments,
 // comments_date
 
-          {/* <Table.Footer>
+{
+  /* <Table.Footer>
                     {data.length > 10 ? (
                       <Table.Row>
                         <Table.HeaderCell colSpan="3">
@@ -778,4 +810,5 @@ export default connect(
                         </Table.HeaderCell>
                       </Table.Row>
                     ) : null}
-                  </Table.Footer> */}
+                  </Table.Footer> */
+}

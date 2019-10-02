@@ -4,19 +4,8 @@ import { NavLink, Redirect, Link, withRouter } from "react-router-dom";
 import { logoutUser, clearMessage } from "../actions";
 import { connect } from "react-redux";
 import {
-  Button,
-  Container,
-  Divider,
-  Grid,
   Header,
-  Icon,
-  Image,
-  List,
-  Menu,
-  Responsive,
-  Segment,
-  Sidebar,
-  Visibility
+  Image
 } from "semantic-ui-react";
 
 const styleBar = {
@@ -42,6 +31,16 @@ const styleLink = {
   textDecoration: 'none'
 }
 
+const styleLinkLeft = {
+  float: 'left',
+  display: 'block',
+  color: '#f2f2f2',
+  textAlign: 'center',
+  padding: '14px 16px',
+  fontSize: '17px',
+  textDecoration: 'none'
+}
+
 class Navbar extends React.Component {
 
   handleLogout = () => {
@@ -59,10 +58,14 @@ class Navbar extends React.Component {
     return (
       <div style={styleBar}>
         <div className='style-links' style={{marginRight:'60px'}}>
+          <Image style={{display: 'inline-block', float: 'left', margin: '10px', marginLeft: '70px'}} circular size='mini' src={this.props.auth.user.img_url}></Image>
+          <NavLink style={styleLinkLeft} onClick={() => this.handleLogout()}>
+          {this.props.auth.user.first_name}
+        </NavLink>
         <NavLink style={styleLink} onClick={() => this.handleLogout()}>
           Logout
         </NavLink>
-        <NavLink onClick={this.handleClearMessage} style={styleLink} to="/leadlists">
+        <NavLink onClick={this.handleClearMessage} style={styleLink} to="/dashboard">
           Dashboard
         </NavLink>
         <NavLink onClick={this.handleClearMessage} style={styleLink} to="/profile">
@@ -77,13 +80,13 @@ class Navbar extends React.Component {
   }
 }
 
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     logoutUser: () => dispatch(logoutUser())
-//   };
-// };
+const mapStateToProps = state => {
+  return {
+    auth: state.auth
+  };
+};
 
 export default connect(
-  null,
+  mapStateToProps,
   {logoutUser, clearMessage}
 )(withRouter(Navbar));

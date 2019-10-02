@@ -67,7 +67,7 @@ class UserProfile extends Component {
                     <Segment style={{ borderRadius: '50px', minWidth: '200px', height: '30px', backgroundColor: "#6200EE", color: 'white' }} as={Link} to='/edit' >Edit Account</Segment>
                     </Grid.Row>
                     <Grid.Row style={{ margin: "20px", marginBottom: "30px"}}>                    
-                    <Segment style={{ borderRadius: '50px', backgroundColor: "#03DAC6", color: 'white' }} as={Link} to='/leadlists'>View Lead Lists Account</Segment>
+                    <Segment style={{ borderRadius: '50px', backgroundColor: "#03DAC6", color: 'white' }} as={Link} to='/dashboard'>View Lead Lists Account</Segment>
                     </Grid.Row>
                     <Grid.Row style={{ margin: "20px"}}>                    
                     <Segment style={{ borderRadius: '50px', backgroundColor: "#43425D", color: 'white'}} onClick={this.handleDeleteClick} >Delete Account</Segment>

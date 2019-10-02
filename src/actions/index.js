@@ -25,6 +25,10 @@ export const CLEAR_MESSAGE = "CLEAR_MESSAGE";
 export const DELETE_LIST_WITH_LEADNOTE = "DELETE_LIST_WITH_LEADNOTE";
 export const UPDATE_SEARCH = "UPDATE_SEARCH";
 export const CLEAR_SEARCH = "CLEAR_SEARCH";
+export const SORT_LISTS = "SORT_LISTS"
+export const SORT_LEADLISTS = "SORT_LEADLISTS"
+
+
 
 // export const START_DELETE_LEADLIST = "START_DELETE_LEADLIST";
 
@@ -429,6 +433,18 @@ export function updateSearch(search) {
 export function clearSearch() {
   return function(dispatch) {
     dispatch({type: CLEAR_SEARCH})
+  }
+}
+
+export function sortLists(lists) {
+  return function(dispatch) {
+    dispatch({type: SORT_LISTS, lists})
+  }
+}
+
+export function sortLeadLists(leads) {
+  return function(dispatch) {
+    dispatch({type: SORT_LEADLISTS, leads})
   }
 }
 

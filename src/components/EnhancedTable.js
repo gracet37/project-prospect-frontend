@@ -226,6 +226,7 @@ class EnhancedTableToolbar extends React.Component {
 
   handleSubmit = () => {
     const { listId, newListName } = this.state;
+    const capitalizedName = newListName.charAt(0).toUpperCase() + newListName.substring(1);
     const { leadsArray, company, website } = this.props;
     console.log("SUBMIT", this.state);
     const userId = this.props.userId;
@@ -234,7 +235,7 @@ class EnhancedTableToolbar extends React.Component {
       company,
       website,
       listId,
-      newListName,
+      capitalizedName,
       userId
     );
     this.handleClearListName()
@@ -329,7 +330,7 @@ class EnhancedTableToolbar extends React.Component {
                       <Dropdown
                         onChange={this.handleDropdown}
                         name="listId"
-                        style={{ width: "40%", borderRadius: "50px" }}
+                        style={{ width: "40%"}}
                         placeholder="Select list..."
                         // fluid
                         disabled={this.state.newListName ? true : false}
@@ -343,7 +344,7 @@ class EnhancedTableToolbar extends React.Component {
                         name="newListName"
                       >
                         <input
-                          style={{ borderRadius: "50px", width: "300px" }}
+                          style={{ width: "272px", height: "38px"}}
                         ></input>
                       </Form.Input>
                       <Modal.Header as="h2"></Modal.Header>

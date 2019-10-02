@@ -35,7 +35,7 @@ const HomepageHeading = ({ mobile }) => (
         fontSize: mobile ? "2em" : "3.2em",
         fontWeight: "bold",
         marginBottom: "10px",
-        marginTop: mobile ? "1.5em" : "4.5em"
+        marginTop: mobile ? "1.5em" : "3.0em"
       }}
     />
     <SearchBar />
@@ -85,7 +85,7 @@ class DesktopContainer extends Component {
             style={{
               backgroundImage: `url(${"https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/s2048x2048/71093458_463527317706998_6857018496128122880_n.png?_nc_cat=101&_nc_oc=AQl2gDIEaIvqJ9nlneGMjfaDHtgfbFjLjkXKrF1ATz_lG8I8Qq2SYVjDCYwbysjSCwM&_nc_ht=scontent-ort2-2.xx&oh=644556da3c91d328452fcb67714c1c7d&oe=5E3A8CD8"})`,
               backgroundSize: "cover",
-              minHeight: "1000px",
+              minHeight: "700px",
               padding: "1em 0em"
             }}
           >
@@ -108,7 +108,7 @@ class DesktopContainer extends Component {
                 <Menu.Item
                   style={{ fontSize: "large", color: "#43425D" }}
                   as={Link}
-                  to={this.props.auth.user ? "/leadlists" : "/login" }
+                  to={this.props.auth.user ? "/dashboard" : "/login" }
                 >
                   Dashboard
                 </Menu.Item>
@@ -203,7 +203,7 @@ class MobileContainer extends Component {
           <Menu.Item as={Link} to="/" active>
             Home
           </Menu.Item>
-          <Menu.Item as={Link} to="/leadlists">
+          <Menu.Item as={Link} to="/dashboard">
             Dashboard
           </Menu.Item>
           <Menu.Item as={Link} to="/profile">

@@ -26,7 +26,9 @@ import {
   deleteList,
   deleteListLead,
   addLeadNote,
-  updateSearch
+  updateSearch,
+  sortLists,
+  sortLeadLists
 } from "../actions";
 import PropTypes from "prop-types";
 import FilterLeads from "./FilterLeads";
@@ -112,7 +114,7 @@ resultRenderer.propTypes = {
   position: PropTypes.string
 };
 
-class Dashboard extends Component {
+class LeadList extends Component {
   // UPDATE DATA WITH LISTS
   state = {
     column: null,
@@ -146,24 +148,32 @@ class Dashboard extends Component {
     this.props.deleteListLead(this.props.listleads.list.id, lead_id);
   };
 
-  handleSort = clickedColumn => () => {
-    const { column, data, direction } = this.state;
+  //! turned off sort function
+  // handleSort = clickedColumn => () => {
+  //   console.log(this.state)
+  //   console.log(clickedColumn)
+  //   const { column, direction } = this.state;
+  //   const dataArray = this.props.listleads.leads;
 
-    if (column !== clickedColumn) {
-      this.setState({
-        column: clickedColumn,
-        data: _.sortBy(data, [clickedColumn]),
-        direction: "ascending"
-      });
+  //   const dataSorted = _.sortBy(dataArray, [clickedColumn])
+  //   console.log(dataSorted)
 
-      return;
-    }
+  //   if (column !== clickedColumn) {
+  //     this.setState({
+  //       column: clickedColumn,
+  //       // data: _.sortBy(dataArray, [clickedColumn]),
+  //       direction: "ascending"
+  //     });
+  //     this.props.sortLeadLists(_.sortBy(dataArray, [clickedColumn]))
+  //     return;
+  //   }
 
-    this.setState({
-      data: data.reverse(),
-      direction: direction === "ascending" ? "descending" : "ascending"
-    });
-  };
+  //   this.setState({
+  //     // data: dataArray.reverse(),
+  //     direction: direction === "ascending" ? "descending" : "ascending"
+  //   })
+  //   this.props.sortLeadLists(dataArray.reverse())
+  // };
 
   handlePageChange = activePage => {
     this.setState({ activePage });
@@ -407,7 +417,7 @@ class Dashboard extends Component {
               control="textarea"
               rows="3"
               label="Notes"
-              value={last ? dateString + last.comments : null}
+              placeholder={last ? dateString + last.comments : null}
             />
             <Button
               style={{
@@ -529,7 +539,7 @@ class Dashboard extends Component {
             }}
           >
             <Grid.Column style={{ margin: "20px" }}>
-              <Button as={Link} to="/leadlists" style={styleButton}>
+              <Button as={Link} to="/dashboard" style={styleButton}>
                 <Icon name="arrow alternate circle left outline" /> Back to
                 Dashboard
               </Button>
@@ -591,46 +601,46 @@ class Dashboard extends Component {
                       textAlign="center"
                     >
                       <Table.HeaderCell
-                        sorted={column === "first_name" ? direction : null}
-                        onClick={this.handleSort("first_name")}
+                        // sorted={column === "first_name" ? direction : null}
+                        // onClick={this.handleSort("first_name")}
                       >
                         First Name
                       </Table.HeaderCell>
                       <Table.HeaderCell
-                        sorted={column === "last_name" ? direction : null}
-                        onClick={this.handleSort("last_name")}
+                        // sorted={column === "last_name" ? direction : null}
+                        // onClick={this.handleSort("last_name")}
                       >
                         Last Name
                       </Table.HeaderCell>
                       <Table.HeaderCell
-                        sorted={column === "position" ? direction : null}
-                        onClick={this.handleSort("position")}
+                        // sorted={column === "position" ? direction : null}
+                        // onClick={this.handleSort("position")}
                       >
                         Position
                       </Table.HeaderCell>
                       <Table.HeaderCell
-                        sorted={column === "company" ? direction : null}
-                        onClick={this.handleSort("company")}
+                        // sorted={column === "company" ? direction : null}
+                        // onClick={this.handleSort("company")}
                       >
                         Company
                       </Table.HeaderCell>
                       <Table.HeaderCell
-                        sorted={column === "status" ? direction : null}
-                        onClick={this.handleSort("status")}
+                        // sorted={column === "status" ? direction : null}
+                        // onClick={this.handleSort("status")}
                       >
                         Status
                       </Table.HeaderCell>
                       <Table.HeaderCell
-                        sorted={column === "next_steps" ? direction : null}
-                        onClick={this.handleSort("next_steps")}
+                        // sorted={column === "next_steps" ? direction : null}
+                        // onClick={this.handleSort("next_steps")}
                       >
                         Next Steps
                       </Table.HeaderCell>
                       <Table.HeaderCell
-                        sorted={
-                          column === "last_date_contacted" ? direction : null
-                        }
-                        onClick={this.handleSort("last_date_contacted")}
+                        // sorted={
+                        //   column === "last_date_contacted" ? direction : null
+                        // }
+                        // onClick={this.handleSort("last_date_contacted")}
                       >
                         Last Date Contacted
                       </Table.HeaderCell>
@@ -714,8 +724,8 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { deleteList, deleteListLead, addLeadNote, updateSearch }
-)(Dashboard);
+  { deleteList, deleteListLead, addLeadNote, updateSearch, sortLists, sortLeadLists }
+)(LeadList);
 
 // handleFetchClick = (id) => {
 //   this.props.thunkFetchLeadNote(this.props.auth.user.id, id)

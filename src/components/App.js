@@ -34,7 +34,7 @@ class App extends React.Component {
           <Route exact path="/" component={LandingPage} />
           <Route exact path="/login" component={LoginForm} />
           {/* <Route exact path="/results" component={SearchResults} /> */}
-          <Route exact path="/leadlists" component={LeadListContainer} />
+          <Route exact path="/dashboard" component={LeadListContainer} />
           <Route exact path="/profile" component={UserProfile} />
           <Route exact path="/search" component={SearchContainer} />
           <Route exact path="/signup" component={NewUserForm} />

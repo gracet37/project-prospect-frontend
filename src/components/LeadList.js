@@ -29,19 +29,20 @@ import {
 } from "../actions";
 import PropTypes from "prop-types";
 import FilterLeads from "./FilterLeads";
+import { GridList } from "@material-ui/core";
 
 const styleMetrics = {
-  borderWidth: "2px",
-  // marginRight: '30px',
-  borderRadius: "10px",
-  borderColor: "#CECFD0",
-  borderStyle: "solid",
-  margin: "20px",
-  padding: "20px",
-  // width: "10px",
-  height: "150px",
-  boxShadow: "10px 10px 15px -6px rgba(67,66,93,0.68)"
-  // padding: "20px"
+  // borderWidth: "2px",
+  // // marginRight: '30px',
+  // borderRadius: "10px",
+  // borderColor: "#CECFD0",
+  // borderStyle: "solid",
+  // margin: "20px",
+  // padding: "20px",
+  // // width: "10px",
+  // height: "150px",
+  // boxShadow: "10px 10px 15px -6px rgba(67,66,93,0.68)"
+  // // padding: "20px"
 };
 
 const styleImage = {
@@ -304,18 +305,6 @@ class Dashboard extends Component {
           .includes(this.props.search.toUpperCase());
       });
     }
-
-    // if (this.props.searchEntry === '') {
-    //    return entire array
-    //
-    //}
-    // else {
-    // filter ba
-    //sed on this.props.searchEntry then call map= on the result like below
-    //}
-
-    // if t
-    // let renderArray = listArr.slice((this.state.activePage * 10) - 10, (this.state.activePage * 10) - 1)
     return (
       <Table.Body onScroll={() => console.log("scroll")}>
         {_.map(listArr, ({ lead, leadnotes }) => {
@@ -474,24 +463,33 @@ class Dashboard extends Component {
 
     return (
       <div>
-        <Navbar />
+      
         <Grid
           style={{
             backgroundImage: `url(${"https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/s2048x2048/70590332_836756946718765_3473765009224368128_n.png?_nc_cat=111&_nc_oc=AQnI8TKKO2F4LqO-fZDRyZuRDWWLWhMONIpEB2mHf1QEmAP04HdNNIq8JU0QUq5LYwE&_nc_ht=scontent-ort2-2.xx&oh=e9db466921239dad5b5ae5b132f1f40f&oe=5E3DD369"})`,
             minHeight: "1000px"
           }}
         >
+          <Grid.Row columns={1}>
+            <Grid.Column>
+            <Navbar />
+            </Grid.Column>
+          </Grid.Row>
+
+          <Grid.Row columns={1}>
+            <Grid.Column><Header as='h1'>HI</Header></Grid.Column></Grid.Row>
           {/* METRIC CARDS */}
           <Grid.Row
-            columns="equal"
+            columns={3}
             style={{
-              top: "70px",
-              margin: "20px",
-              paddingRight: "120px",
-              paddingLeft: "120px",
-              marginBottom: "40px",
-              position: "fixed",
-              textAlign: "left"
+              // top: "70px",
+              // margin: "10px",
+              // marginTop: '10px',
+              // paddingRight: "120px",
+              // paddingLeft: "120px",
+              // // marginBottom: "10px",
+              // // position: "fixed",
+              // textAlign: "left"
             }}
           >
             {this.renderLeadCount()}
@@ -500,44 +498,47 @@ class Dashboard extends Component {
           </Grid.Row>
 
           {/*  BACK TO DASHBOARD BUTTON  */}
-          <Grid.Row
+          <Grid.Row columns={1}
             style={{
               margin: "1px",
-              position: "fixed",
-              top: "300px",
+              // position: "fixed",
+              top: "50px",
               display: "inline-block"
             }}
           >
+          <Grid.Column style={{margin: '20px'}}>
             <Button as={Link} to="/leadlists" style={styleButton}>
               <Icon name="arrow alternate circle left outline" /> Back to
               Dashboard
             </Button>
+            </Grid.Column>
           </Grid.Row>
 
           {this.props.listleads.leads.length ? (
             <Grid.Row
               style={{
-                margin: "20px",
-                marginRight: "60px",
-                marginLeft: "60px",
-                minHeight: "450px"
+                // margin: "20px",
+                // marginRight: "60px",
+                // marginLeft: "60px",
+                // minHeight: "450px"
+                // margin: "20px",
+                // marginRight: "60px",
+                // marginLeft: "60px"
+                // position: 'absolute',
+                // top: '430px',
+                // marginLeft: "150px",
+                // marginRight: "150px"
+                width: "400px",
+                margin: "60px",
+                height: "500px",
+                // marginTop: '20px',
+                display: 'inline-block'
+
               }}
               columns={1}
             >
               {/* TABLE OF CONTENTS */}
               <Grid.Column>
-                <div
-                  style={{
-                    position: 'fixed',
-                    top: '400px',
-                    right: '400px',
-                    height: "550px",
-                    width: "1100px",
-                    overflowX: "scroll",
-                    textAlign: "center",
-                    display: "inline-block"
-                  }}
-                >
                   <Table sortable selectable celled fixed >
                     <Table.Header>
                       <Popup
@@ -556,7 +557,7 @@ class Dashboard extends Component {
                         }
                       />
                     </Table.Header>
-                    <Table.Header style={{ position: "sticky", top: 0 }}>
+                    <Table.Header >
                       <Table.Row
                         style={{ position: "sticky" }}
                         textAlign="center"
@@ -610,42 +611,7 @@ class Dashboard extends Component {
                       </Table.Row>
                     </Table.Header>
                     {this.renderTableBody()}
-                    {/* <Table.Footer>
-                    {data.length > 10 ? (
-                      <Table.Row>
-                        <Table.HeaderCell colSpan="3">
-                          <Pagination
-                            boundaryRange={0}
-                            defaultActivePage={1}
-                            ellipsisItem={"..."}
-                            firstItem={{
-                              content: <Icon name="angle double left" />,
-                              icon: true
-                            }}
-                            lastItem={{
-                              content: <Icon name="angle double right" />,
-                              icon: true
-                            }}
-                            prevItem={{
-                              content: <Icon name="angle left" />,
-                              icon: true
-                            }}
-                            nextItem={{
-                              content: <Icon name="angle right" />,
-                              icon: true
-                            }}
-                            siblingRange={1}
-                            totalPages={10}
-                            onPageChange={(event, { activePage }) =>
-                              this.handlePageChange(activePage)
-                            }
-                          />
-                        </Table.HeaderCell>
-                      </Table.Row>
-                    ) : null}
-                  </Table.Footer> */}
                   </Table>
-                </div>
               </Grid.Column>
             </Grid.Row>
           ) : (
@@ -657,8 +623,10 @@ class Dashboard extends Component {
                 display: "inline-block",
                 left: "-30px"
               }}
+              column={1}
             >
-              <Header>Oops! You do not have any leads saved under this list</Header>
+              <Grid.Column>
+                <Header>Oops! You do not have any leads saved under this list.</Header>
 
               <Button
                 as={Link}
@@ -675,6 +643,7 @@ class Dashboard extends Component {
                 <Icon name="arrow alternate circle left outline" /> Search For
                 Leads
               </Button>
+              </Grid.Column>
             </Grid.Row>
           )}
         </Grid>
@@ -775,3 +744,38 @@ export default connect(
 // email,
 // comments,
 // comments_date
+
+          {/* <Table.Footer>
+                    {data.length > 10 ? (
+                      <Table.Row>
+                        <Table.HeaderCell colSpan="3">
+                          <Pagination
+                            boundaryRange={0}
+                            defaultActivePage={1}
+                            ellipsisItem={"..."}
+                            firstItem={{
+                              content: <Icon name="angle double left" />,
+                              icon: true
+                            }}
+                            lastItem={{
+                              content: <Icon name="angle double right" />,
+                              icon: true
+                            }}
+                            prevItem={{
+                              content: <Icon name="angle left" />,
+                              icon: true
+                            }}
+                            nextItem={{
+                              content: <Icon name="angle right" />,
+                              icon: true
+                            }}
+                            siblingRange={1}
+                            totalPages={10}
+                            onPageChange={(event, { activePage }) =>
+                              this.handlePageChange(activePage)
+                            }
+                          />
+                        </Table.HeaderCell>
+                      </Table.Row>
+                    ) : null}
+                  </Table.Footer> */}

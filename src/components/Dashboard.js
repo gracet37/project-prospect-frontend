@@ -293,6 +293,8 @@ class Dashboard extends Component {
           <Grid.Row columns={1}>
             <Grid.Column style={{ margin: "20px" }}>
               <Modal
+              basic
+              closeIcon
               style={{width: '300px'}}
                 trigger={
                   <Button

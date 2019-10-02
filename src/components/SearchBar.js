@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Form, Loader, Button } from "semantic-ui-react";
-import { thunkFetchLeads, fetchError } from "../actions";
+import { thunkFetchLeads, fetchError, clearMessage } from "../actions";
 import { connect } from "react-redux";
 import { Link, withRouter } from "react-router-dom";
 import Loading from "./Loading";
@@ -31,10 +31,13 @@ class SearchBar extends Component {
     const targetValue = e.target.value;
     const targetName = e.target.name;
     this.setState({ [targetName]: targetValue });
+    this.props.clearMessage()
   };
 
   handleSubmit = () => {
-    if (this.state.searchParam) {
+    const period = this.state.searchParam.indexOf('.') !== -1
+    console.log(period)
+    if (this.state.searchParam && period) {
       if (this.props.auth.user) {
         this.setState({ searchClicked: true });
         this.props.thunkFetchLeads(this.state.searchParam, this.props.history);
@@ -42,11 +45,16 @@ class SearchBar extends Component {
         this.props.fetchError("Oops! You need to be logged in to do that.");
         this.props.history.push("/login");
       }
+    } else if (this.state.searchParam === "") {
+      this.props.fetchError("Search Field Empty")
+    } else {
+      this.props.fetchError("Please Enter a Valid Domain")
     }
   };
 
   render() {
     return (
+      <div>
       <div style={{ verticalAlign: "center", textAlign: "center" }}>
         {/* {this.state.searchClicked ? <Loading /> : null} */}
         {/* <Form>  */}
@@ -58,7 +66,7 @@ class SearchBar extends Component {
               placeholder="Enter domain name..."
               // loading={this.state.searchClicked ? true : false}
             >
-              <input style={styleSearchBar} required />
+              <input style={styleSearchBar}/>
             </Form.Input>
             <Button
               type="submit"
@@ -82,30 +90,33 @@ class SearchBar extends Component {
         </Form>
         {/* </Form> */}
       </div>
+      <div><p style={{color: "#EF5350"}}>{ this.props.message ? this.props.message : null }</p></div>
+      </div>
     );
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    thunkFetchLeads: (domainName, history) => {
-      dispatch(thunkFetchLeads(domainName, history));
-    },
-    fetchError: error => {
-      dispatch(fetchError(error));
-    }
-  };
-};
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     thunkFetchLeads: (domainName, history) => {
+//       dispatch(thunkFetchLeads(domainName, history));
+//     },
+//     fetchError: error => {
+//       dispatch(fetchError(error));
+//     }
+//   };
+// };
 
 const mapStateToProps = state => {
   return {
     auth: state.auth,
     categories: state.categories,
-    leads: state.leads
+    leads: state.leads,
+    message: state.message
   };
 };
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  {thunkFetchLeads, fetchError, clearMessage}
 )(withRouter(SearchBar));

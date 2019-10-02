@@ -209,13 +209,9 @@ class EnhancedTableToolbar extends React.Component {
     activePage: 1,
     leadsPagination: [],
     classes: "",
-    submitted: false
+    submitted: false,
+    showModal: false
   };
-
-  componentDidMount() {
-    // let classes = useToolbarStyles()
-    // this.setState({classes})
-  }
 
   handleDropdown = (e, data) => {
     const targetValue = data.value;
@@ -242,19 +238,26 @@ class EnhancedTableToolbar extends React.Component {
       userId
     );
     this.handleClearListName()
+    this.closeModal()
   };
 
   handleClearListName() {
     this.setState({newListName: ""})
   }
 
-  handleClearMessage = () => {
+  // handleClearMessage = () => {
+    
+  // }
+
+  closeModal = () => {
+    this.setState({ showModal: false })
     this.props.clearMessage()
   }
 
-
   render() {
+    console.log("search results", this.state)
     const classes = getClasses();
+    const {showModal} = this.state
     const { numSelected } = this.props;
     return (
       <Toolbar
@@ -294,10 +297,12 @@ class EnhancedTableToolbar extends React.Component {
     
               <Modal
               closeIcon
-                onClose={this.handleClearMessage}
+                onClose={this.closeModal} 
+                open={showModal}
                 centered
                 trigger={
                   <Button
+                  onClick={() => this.setState({showModal: true})}
                     style={{
                       borderRadius: "20px",
                       backgroundColor: "#6200EE",
@@ -344,6 +349,7 @@ class EnhancedTableToolbar extends React.Component {
                       <Modal.Header as="h2"></Modal.Header>
                       <Form.Button
                         onClick={this.handleSubmit}
+                        
                         // basic
                         // color="violet"
                         // inverted
@@ -354,7 +360,8 @@ class EnhancedTableToolbar extends React.Component {
                     </Modal.Actions>
                   </div>
                 ) : (
-                  <div>
+                  <div style={{ verticalAlign: "center", textAlign: "center" }}>
+                    {this.props.message ? <Modal.Header style={{color: "#71EFE0"}} as='h2'>{this.props.message}</Modal.Header> : null }
                     <Modal.Header as="h2">Create A New List</Modal.Header>
                     <Modal.Actions>
                       <Form.Input
@@ -362,16 +369,16 @@ class EnhancedTableToolbar extends React.Component {
                         onChange={this.handleChange}
                         name="newListName"
                       >
-                        <input
-                          style={{ borderRadius: "30px", width: "200px" }}
+                       <input
+                          style={{ borderRadius: "50px", width: "300px" }}
                         ></input>
                       </Form.Input>
                       <Form.Button
                         onClick={this.handleSubmit}
-                        basic
-                        color="violet"
-                        inverted
-                        style={{ borderRadius: "30px" }}
+                        // basic
+                        // color="violet"
+                        // inverted
+                        style={{ borderRadius: "70px", backgroundColor: "#6200EE", color: "white", width: "150px", padding: "10px", margin: "20px"}}
                       >
                         <Icon name="add" /> Add Lead to List
                       </Form.Button>

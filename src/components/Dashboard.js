@@ -9,7 +9,9 @@ import {
   Button,
   Modal,
   Form,
-  Header
+  Header,
+  Popup,
+  Search
 } from "semantic-ui-react";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
@@ -20,7 +22,8 @@ import {
   thunkFetchListById,
   addList,
   clearMessage,
-  clearSearch
+  clearSearch,
+  updateSearch
 } from "../actions";
 
 const uuidv1 = require("uuid/v1");
@@ -69,8 +72,8 @@ class Dashboard extends Component {
   };
 
   componentDidMount() {
-    this.props.clearSearch()
-    this.props.clearMessage()
+    this.props.clearSearch();
+    this.props.clearMessage();
   }
 
   show = dimmer => this.setState({ dimmer, modalShow: true });
@@ -129,9 +132,17 @@ class Dashboard extends Component {
   };
 
   renderListBody() {
+    let listArr = this.props.lists
+    if (this.props.search === "") {
+      listArr = this.props.lists;
+    } else {
+      listArr = this.props.lists.filter(list => {
+        return list.name.toUpperCase().includes(this.props.search.toUpperCase());
+      });
+    }
     return (
       <Table.Body>
-        {_.map(this.props.lists, ({ id, name, created_at, leads }) => {
+        {_.map(listArr, ({ id, name, created_at, leads }) => {
           let dateString = new Date(created_at).toDateString();
           let leadCount = leads.length;
           // let dateString = date
@@ -199,7 +210,7 @@ class Dashboard extends Component {
   renderLeadCount() {
     if (this.props.lists.length > 0) {
       let leadCountArray = [];
-      let totalLeads = 0
+      let totalLeads = 0;
       console.log(this.props.lists);
       this.props.lists.forEach(list => {
         let count = list.leads.length;
@@ -275,6 +286,10 @@ class Dashboard extends Component {
     }
   }
 
+  handleFilterChange = (event, value) => {
+    this.props.updateSearch(value);
+  };
+
   render() {
     const { column, direction } = this.state;
     console.log(this.state);
@@ -293,9 +308,9 @@ class Dashboard extends Component {
           <Grid.Row columns={1}>
             <Grid.Column style={{ margin: "20px" }}>
               <Modal
-              basic
-              closeIcon
-              style={{width: '300px'}}
+                basic
+                closeIcon
+                style={{ width: "300px" }}
                 trigger={
                   <Button
                     style={{
@@ -349,6 +364,26 @@ class Dashboard extends Component {
             <Grid.Column>
               <Table sortable selectable celled>
                 <Table.Header>
+                  <Table.Row>
+                    {" "}
+                    <Popup
+                      content="Search List Name"
+                      trigger={
+                        <Search
+                          // style={{ margin: "15px", position: 'fixed', top: 0 }}
+                          onSearchChange={_.debounce(
+                            (event, { value }) =>
+                              this.handleFilterChange(event, value),
+                            300
+                          )}
+                          noResultsMessage="No results found"
+                          showNoResults={false}
+                        />
+                      }
+                    />
+                  </Table.Row>
+                </Table.Header>
+                <Table.Header>
                   <Table.Row textAlign="center">
                     <Table.HeaderCell
                       sorted={column === "name" ? direction : null}
@@ -386,7 +421,8 @@ const mapStateToProps = state => {
     auth: state.auth,
     lists: state.lists,
     listWithLeadNotes: state.listWithLeadNotes,
-    message: state.message
+    message: state.message,
+    search: state.search
   };
 };
 
@@ -403,7 +439,7 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { deleteList, thunkFetchListById, addList, clearMessage, clearSearch }
+  { deleteList, thunkFetchListById, addList, clearMessage, clearSearch, updateSearch }
 )(withRouter(Dashboard));
 
 // <Modal

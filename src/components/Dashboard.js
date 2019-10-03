@@ -30,19 +30,20 @@ import {
 const uuidv1 = require("uuid/v1");
 
 const styleMetrics = {
-  borderWidth: "2px",
+  borderWidth: "1px",
   borderRadius: "10px",
   borderColor: "rgba(98, 0, 238, 0.2)",
   borderStyle: "solid",
-  margin: "0 30px 30px 30px",
+  margin: "0 50px 50px 50px",
   padding: "20px",
-  height: "150px",
-  boxShadow: "10px 10px 15px -6px rgba(67,66,93,0.68)"
+  height: "100px",
+  boxShadow: "10px 10px 15px -6px rgba(67,66,93,0.15)",
+  verticalAlign: 'middle'
 };
 
 const styleImage = {
   position: "relative",
-  top: "-40px",
+  top: "-30px",
   opacity: 0.8
 };
 
@@ -229,11 +230,11 @@ class Dashboard extends Component {
       totalLeads = leadCountArray.reduce((total, count) => total + count);
       return (
         <Grid.Column style={styleMetrics}>
-          <Header as="h2">Total Leads</Header>
-          <Header as="h2">{totalLeads}</Header>
+          <Header as="h4">Total Leads</Header>
+          <Header style={{margin: '0'}} as="h1">{totalLeads}</Header>
           <Image
             style={styleImage}
-            size="small"
+            size="tiny"
             floated="right"
             src="https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/71338480_839476829779627_88982982114672640_n.png?_nc_cat=103&_nc_oc=AQk-PoFytrGO-egRH0bNhdK77YgmvNvozJbUsZvn9xAPPpjioM-SRk6hyr3rXfVVq2Y&_nc_ht=scontent-ort2-2.xx&oh=c1bc858aa386c365cae63c3eea610b9e&oe=5DF88CFF"
           />
@@ -256,11 +257,11 @@ class Dashboard extends Component {
       });
       return (
         <Grid.Column style={styleMetrics}>
-          <Header as="h2">Meetings Booked</Header>
-          <Header as="h2">{meetingsBookedCount}</Header>
+          <Header as="h4">Meetings Booked</Header>
+          <Header style={{margin: '0'}} as="h1">{meetingsBookedCount}</Header>
           <Image
             style={styleImage}
-            size="small"
+            size="tiny"
             floated="right"
             src="https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/71382639_511374239440274_5689414491201077248_n.png?_nc_cat=102&_nc_oc=AQkSRgZv9fHBIZ5lFzTKwmraacs6QUA5uRFBuJR4EydKHSVwwZgfGIlTbZ1xT9ZobnU&_nc_ht=scontent-ort2-2.xx&oh=22d18caf4e251af44eb4b5b5807195cc&oe=5DF1636E"
           />
@@ -281,11 +282,11 @@ class Dashboard extends Component {
       });
       return (
         <Grid.Column style={styleMetrics}>
-          <Header as="h2">Not Yet Contacted</Header>
-          <Header as="h2">{notContacted}</Header>
+          <Header as="h4">Not Yet Contacted</Header>
+          <Header  style={{margin: '0'}}as="h1">{notContacted}</Header>
           <Image
             style={styleImage}
-            size="small"
+            size="tiny"
             floated="right"
             src="https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/70880021_751349978649592_7265954774900539392_n.png?_nc_cat=101&_nc_oc=AQk5RRMoC9mgfA61QWoq_mT8y4SylOWJWzRclLynSDsznJetifnuN5Ks-YcHFkuFiMs&_nc_ht=scontent-ort2-2.xx&oh=51a411e11a9181923a23d3a7d1e05c21&oe=5E35AB9A"
           />
@@ -316,9 +317,9 @@ class Dashboard extends Component {
 
           {/* STYLING FOR THE BUTTON */}
           <Grid.Row columns={1}>
-            <Grid.Column style={{ margin: "20px" }}>
+            <Grid.Column >
               <Modal
-                // basic
+                basic
                 closeIcon
                 onClose={this.closeModal}
                 open={this.state.showModal}
@@ -327,7 +328,7 @@ class Dashboard extends Component {
                   <Button
                     onClick={() => this.setState({ showModal: true })}
                     style={{
-                      borderRadius: "30px",
+                      borderRadius: "20px",
                       color: "white",
                       backgroundColor: "#6200EE"
                     }}
@@ -336,7 +337,8 @@ class Dashboard extends Component {
                   </Button>
                 }
               >
-                <Modal.Header>New List</Modal.Header>
+                <div style={{ verticalAlign: "center", textAlign: "center"}}>
+                <Modal.Header as='h2'>New List</Modal.Header>
                 <Modal.Content>
                   <Form.Input
                     placeholder="List Name..."
@@ -344,7 +346,7 @@ class Dashboard extends Component {
                     name="newListName"
                   >
                     <input
-                      style={{ borderRadius: "30px", width: "200px" }}
+                      style={{ borderRadius: "20px", width: "200px" }}
                     ></input>
                   </Form.Input>
                 </Modal.Content>
@@ -354,15 +356,18 @@ class Dashboard extends Component {
                     style={{
                       // margin: "20px",
                       borderRadius: "30px",
+                      margin: '20px',
+                      // marginBottom: '10px',
                       color: "white",
-                      backgroundColor: "#03DAC6",
-                      position: "relative",
-                      textAlign: "left"
+                      backgroundColor: "#6200EE",
+                      // position: "relative",
+                      // float: "left"
                     }}
                   >
                     Create New List
                   </Button>
                 </Modal.Actions>
+                </div>
               </Modal>
             </Grid.Column>
           </Grid.Row>
@@ -375,7 +380,7 @@ class Dashboard extends Component {
             columns={1}
           >
             <Grid.Column>
-              <Table sortable selectable celled style={{borderColor: "rgba(98, 0, 238, 0.2)", boxShadow: "0px 1px 36px -16px rgba(0,0,0,0.75)", borderWidth: '2px'}}>
+              <Table sortable selectable celled style={{borderColor: "rgba(98, 0, 238, 0.2)", boxShadow: "0px 1px 36px -16px rgba(0,0,0,0.15)", borderWidth: '1px', borderRadius: '10px'}}>
                 <Table.Header >
                   <Table.Row >
                     {" "}

@@ -16,7 +16,7 @@ import {
 } from "semantic-ui-react";
 import SearchBar from "./SearchBar";
 import { connect } from "react-redux";
-import { logoutUser, currentUser } from "../actions";
+import { logoutUser, currentUser, clearMessage } from "../actions";
 
 // Heads up!
 // We using React Static to prerender our docs with server side rendering, this is a quite simple solution.
@@ -102,6 +102,7 @@ class DesktopContainer extends Component {
                   as={Link}
                   to="/"
                   active
+                  onClick={this.props.clearMessage}
                 >
                   Home
                 </Menu.Item>
@@ -109,6 +110,7 @@ class DesktopContainer extends Component {
                   style={{ fontSize: "large", color: "#43425D" }}
                   as={Link}
                   to={this.props.auth.user ? "/dashboard" : "/login" }
+                  onClick={this.props.clearMessage}
                 >
                   Dashboard
                 </Menu.Item>
@@ -116,6 +118,7 @@ class DesktopContainer extends Component {
                   style={{ fontSize: "large", color: "#43425D" }}
                   as={Link}
                   to={this.props.auth.user ? "/profile" : '/login' }
+                  onClick={this.props.clearMessage}
                 >
                   My Account
                 </Menu.Item>
@@ -279,7 +282,7 @@ const mapStateToProps = state => {
 };
 export default connect(
   mapStateToProps,
-  { logoutUser, currentUser }
+  { logoutUser, currentUser, clearMessage }
 )(withRouter(DesktopContainer));
 
 // const HomepageLayout = () => (

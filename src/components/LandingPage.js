@@ -123,8 +123,8 @@ class DesktopContainer extends Component {
                   <Menu.Item position="right">
                     <Button
                       onClick={() => this.handleLogout()}
-                      basic
-                      color="grey"
+                      // basic
+                      // color="grey"
                       primary={fixed}
                       style={{
                         backgroundColor: "#03DAC6",

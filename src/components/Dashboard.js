@@ -31,17 +31,13 @@ const uuidv1 = require("uuid/v1");
 
 const styleMetrics = {
   borderWidth: "2px",
-  // marginRight: '30px',
   borderRadius: "10px",
   borderColor: "rgba(98, 0, 238, 0.2)",
   borderStyle: "solid",
   margin: "0 30px 30px 30px",
   padding: "20px",
-  // width: "10px",
   height: "150px",
   boxShadow: "10px 10px 15px -6px rgba(67,66,93,0.68)"
-  // opacity: 0.2
-    // padding: "20px"
 };
 
 const styleImage = {

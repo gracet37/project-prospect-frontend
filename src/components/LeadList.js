@@ -52,18 +52,27 @@ const filterOptions = [
   }
 ];
 
+const styleRow = {
+  // top: "70px",
+  margin: "20px",
+  paddingRight: "120px",
+  paddingLeft: "120px",
+  marginBottom: "40px",
+  // position: "relative",
+  top: 60,
+  textAlign: "left"
+};
+
 const styleMetrics = {
   borderWidth: "2px",
-  // marginRight: '30px',
   borderRadius: "10px",
-  borderColor: "#CECFD0",
+  borderColor: "rgba(98, 0, 238, 0.2)",
   borderStyle: "solid",
-  margin: "20px",
+  margin: "0 30px 30px 30px",
   padding: "20px",
-  // width: "10px",
   height: "150px",
   boxShadow: "10px 10px 15px -6px rgba(67,66,93,0.68)"
-  // padding: "20px"
+  // position: 'fixed'
 };
 
 const styleImage = {
@@ -493,35 +502,23 @@ class LeadList extends Component {
         <Grid
           style={{
             backgroundImage: `url(${"https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/s2048x2048/70590332_836756946718765_3473765009224368128_n.png?_nc_cat=111&_nc_oc=AQnI8TKKO2F4LqO-fZDRyZuRDWWLWhMONIpEB2mHf1QEmAP04HdNNIq8JU0QUq5LYwE&_nc_ht=scontent-ort2-2.xx&oh=e9db466921239dad5b5ae5b132f1f40f&oe=5E3DD369"})`,
-            minHeight: "1000px"
+            minHeight: "800px"
           }}
         >
-          <Grid.Row columns={1}>
+          <Grid.Row columns={1} style={{padding: 0}}>
             <Grid.Column>
               <Navbar />
             </Grid.Column>
           </Grid.Row>
 
-          <Grid.Row columns={1}>
-            <Grid.Column>
-              <Header as="h1">HI</Header>
+          <Grid.Row columns={1} style={{top: 90, verticalAlign: 'center'}}>
+            <Grid.Column style={{padding: 0, height: '50px'}}>
+              <Header as="h1">{this.props.listleads.list.name}</Header>
             </Grid.Column>
           </Grid.Row>
           {/* METRIC CARDS */}
           <Grid.Row
-            columns={3}
-            style={
-              {
-                // top: "70px",
-                // margin: "10px",
-                // marginTop: '10px',
-                // paddingRight: "120px",
-                // paddingLeft: "120px",
-                // // marginBottom: "10px",
-                // // position: "fixed",
-                // textAlign: "left"
-              }
-            }
+           columns="equal" style={styleRow}
           >
             {this.renderLeadCount()}
             {this.renderMeetingsBooked()}
@@ -530,13 +527,7 @@ class LeadList extends Component {
 
           {/*  BACK TO DASHBOARD BUTTON  */}
           <Grid.Row
-            columns={1}
-            style={{
-              margin: "1px",
-              // position: "fixed",
-              top: "50px",
-              display: "inline-block"
-            }}
+            columns={1} style={{top: -20, verticalAlign: 'center'}}
           >
             <Grid.Column style={{ margin: "20px" }}>
               <Button as={Link} to="/dashboard" style={styleButton}>
@@ -655,13 +646,12 @@ class LeadList extends Component {
             </Grid.Row>
           ) : (
             <Grid.Row
-              style={{
-                margin: "20px",
-                position: "fixed",
-                top: "400px",
-                display: "inline-block",
-                left: "-30px"
-              }}
+            style={{
+              margin: "1px",
+              // position: "fixed",
+              top: "50px",
+              display: "inline-block"
+            }}
               column={1}
             >
               <Grid.Column>

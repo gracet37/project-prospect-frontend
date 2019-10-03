@@ -18,7 +18,7 @@ const styleForm = {
   padding: "30px",
   margin: "40px",
   textAlign: 'center',
-  marginTop: '150px'
+  marginTop: '120px'
   // paddingLeft: "20px"
 };
 

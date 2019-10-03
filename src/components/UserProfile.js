@@ -39,7 +39,7 @@ class UserProfile extends Component {
       condRender = <div> LOADING </div>;
     } else if (this.state.success == true) {
       condRender = (
-        <div style={{textAlign: 'center',  minHeight: '1000px', backgroundImage: `url(${"https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/s2048x2048/70590332_836756946718765_3473765009224368128_n.png?_nc_cat=111&_nc_oc=AQnI8TKKO2F4LqO-fZDRyZuRDWWLWhMONIpEB2mHf1QEmAP04HdNNIq8JU0QUq5LYwE&_nc_ht=scontent-ort2-2.xx&oh=e9db466921239dad5b5ae5b132f1f40f&oe=5E3DD369"})`}}>
+        <div style={{textAlign: 'center',  minHeight: '800px', backgroundImage: `url(${"https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/s2048x2048/70590332_836756946718765_3473765009224368128_n.png?_nc_cat=111&_nc_oc=AQnI8TKKO2F4LqO-fZDRyZuRDWWLWhMONIpEB2mHf1QEmAP04HdNNIq8JU0QUq5LYwE&_nc_ht=scontent-ort2-2.xx&oh=e9db466921239dad5b5ae5b132f1f40f&oe=5E3DD369"})`}}>
           {" "}
           
           <Navbar />
@@ -49,7 +49,7 @@ class UserProfile extends Component {
             content="Text Container"
             textAlign="center"
           > */}
-          <Container style={{display: 'inline-block', minHeight: '830px', width: '50%'}}>
+          <Container style={{display: 'inline-block', minHeight: '500px', width: '50%'}}>
             <Grid>
               <Grid.Column style={{ positon: "absolute", top: '90px', verticalAlign: 'center'}}>
                 <Grid.Row columns={1} centered>
@@ -67,7 +67,7 @@ class UserProfile extends Component {
                     <Segment style={{ borderRadius: '50px', minWidth: '200px', height: '30px', backgroundColor: "#6200EE", color: 'white' }} as={Link} to='/edit' >Edit Account</Segment>
                     </Grid.Row>
                     <Grid.Row style={{ margin: "20px", marginBottom: "30px"}}>                    
-                    <Segment style={{ borderRadius: '50px', backgroundColor: "#03DAC6", color: 'white' }} as={Link} to='/dashboard'>View Lead Lists Account</Segment>
+                    <Segment style={{ borderRadius: '50px', backgroundColor: "#03DAC6", color: 'white', borderColor: "#03DAC6" }} as={Link} to='/dashboard'>View Lead Lists Account</Segment>
                     </Grid.Row>
                     <Grid.Row style={{ margin: "20px"}}>                    
                     <Segment style={{ borderRadius: '50px', backgroundColor: "#43425D", color: 'white'}} onClick={this.handleDeleteClick} >Delete Account</Segment>

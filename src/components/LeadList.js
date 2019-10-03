@@ -64,15 +64,15 @@ const styleRow = {
 };
 
 const styleMetrics = {
-  borderWidth: "2px",
+  borderWidth: "1px",
   borderRadius: "10px",
   borderColor: "rgba(98, 0, 238, 0.2)",
   borderStyle: "solid",
-  margin: "0 30px 30px 30px",
+  margin: "0 50px 50px 50px",
   padding: "20px",
-  height: "150px",
-  boxShadow: "10px 10px 15px -6px rgba(67,66,93,0.68)"
-  // position: 'fixed'
+  height: "100px",
+  boxShadow: "10px 10px 15px -6px rgba(67,66,93,0.15)",
+  verticalAlign: 'middle'
 };
 
 const styleImage = {
@@ -231,11 +231,11 @@ class LeadList extends Component {
       totalLeads = this.props.listleads.leads.length;
       return (
         <Grid.Column style={styleMetrics}>
-          <Header as="h2">Total Leads</Header>
-          <Header as="h2">{totalLeads}</Header>
+          <Header as="h4">Total Leads</Header>
+          <Header style={{margin: '0'}} as="h1">{totalLeads}</Header>
           <Image
             style={styleImage}
-            size="small"
+            size="tiny"
             floated="right"
             src="https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/71338480_839476829779627_88982982114672640_n.png?_nc_cat=103&_nc_oc=AQk-PoFytrGO-egRH0bNhdK77YgmvNvozJbUsZvn9xAPPpjioM-SRk6hyr3rXfVVq2Y&_nc_ht=scontent-ort2-2.xx&oh=c1bc858aa386c365cae63c3eea610b9e&oe=5DF88CFF"
           />
@@ -258,13 +258,13 @@ class LeadList extends Component {
       });
       return (
         <Grid.Column style={styleMetrics}>
-          <Header as="h2">Meetings Booked</Header>
-          <Header as="h2">{meetingsBookedCount}</Header>
+          <Header as="h4">Meetings Booked</Header>
+          <Header style={{margin: '0'}} as="h1">{meetingsBookedCount}</Header>
           <Image
-            size="small"
+            size="tiny"
             floated="right"
             style={styleImage}
-            src="https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/71338480_839476829779627_88982982114672640_n.png?_nc_cat=103&_nc_oc=AQk-PoFytrGO-egRH0bNhdK77YgmvNvozJbUsZvn9xAPPpjioM-SRk6hyr3rXfVVq2Y&_nc_ht=scontent-ort2-2.xx&oh=c1bc858aa386c365cae63c3eea610b9e&oe=5DF88CFF"
+            src="https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/71382639_511374239440274_5689414491201077248_n.png?_nc_cat=102&_nc_oc=AQkSRgZv9fHBIZ5lFzTKwmraacs6QUA5uRFBuJR4EydKHSVwwZgfGIlTbZ1xT9ZobnU&_nc_ht=scontent-ort2-2.xx&oh=22d18caf4e251af44eb4b5b5807195cc&oe=5DF1636E"
           />
         </Grid.Column>
       );
@@ -283,10 +283,10 @@ class LeadList extends Component {
       });
       return (
         <Grid.Column style={styleMetrics}>
-          <Header as="h2">Not Yet Contacted</Header>
-          <Header as="h2">{notContacted}</Header>
+          <Header as="h4">Not Yet Contacted</Header>
+          <Header style={{margin: '0'}} as="h1">{notContacted}</Header>
           <Image
-            size="small"
+            size="tiny"
             floated="right"
             style={styleImage}
             src="https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/70880021_751349978649592_7265954774900539392_n.png?_nc_cat=101&_nc_oc=AQk5RRMoC9mgfA61QWoq_mT8y4SylOWJWzRclLynSDsznJetifnuN5Ks-YcHFkuFiMs&_nc_ht=scontent-ort2-2.xx&oh=51a411e11a9181923a23d3a7d1e05c21&oe=5E35AB9A"
@@ -512,7 +512,7 @@ class LeadList extends Component {
           </Grid.Row>
 
           <Grid.Row columns={1} style={{top: 90, verticalAlign: 'center'}}>
-            <Grid.Column style={{padding: 0, height: '50px'}}>
+            <Grid.Column style={{padding: 0, height: '50px', color: "#43425D", fontSize: '31.25px'}}>
               <Header as="h1">{this.props.listleads.list.name}</Header>
             </Grid.Column>
           </Grid.Row>

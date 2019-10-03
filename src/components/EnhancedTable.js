@@ -63,13 +63,13 @@ const headCells = [
   },
   { id: "email", numeric: false, disablePadding: false, label: "Email" },
   { id: "position", numeric: false, disablePadding: false, label: "Position" },
-  { id: "company", numeric: false, disablePadding: false, label: "Company" },
-  {
-    id: "confidence",
-    numeric: true,
-    disablePadding: false,
-    label: "Confidence"
-  }
+  { id: "company", numeric: false, disablePadding: false, label: "Company" }
+  // {
+  //   id: "confidence",
+  //   numeric: true,
+  //   disablePadding: false,
+  //   label: "Lead Accuracy"
+  // }
 ];
 
 function EnhancedTableHead(props) {
@@ -588,7 +588,7 @@ export default function EnhancedTable(props) {
                         </TableCell>
                         <TableCell align="left">{row.position}</TableCell>
                         <TableCell align="left">{row.company}</TableCell>
-                        <TableCell align="left">{row.confidence}</TableCell>
+                        {/* <TableCell align="left">{row.confidence}</TableCell> */}
                       </TableRow>
                     );
                   })}

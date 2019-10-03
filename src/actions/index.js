@@ -27,7 +27,7 @@ export const UPDATE_SEARCH = "UPDATE_SEARCH";
 export const CLEAR_SEARCH = "CLEAR_SEARCH";
 export const SORT_LISTS = "SORT_LISTS"
 export const SORT_LEADLISTS = "SORT_LEADLISTS"
-
+export const ADD_METRIC_LEADS = "ADD_METRIC_LEADS"
 
 
 // export const START_DELETE_LEADLIST = "START_DELETE_LEADLIST";
@@ -446,6 +446,13 @@ export function sortLists(lists) {
 export function sortLeadLists(leads) {
   return function(dispatch) {
     dispatch({type: SORT_LEADLISTS, leads})
+  }
+}
+
+export function metricLeads(leads, history) {
+  return function(dispatch) {
+    dispatch({type: ADD_METRIC_LEADS, leads})
+      history.push('/detailed')
   }
 }
 

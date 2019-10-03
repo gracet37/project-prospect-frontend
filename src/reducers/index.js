@@ -23,6 +23,7 @@ import {
   LOGOUT_USER,
   DELETE_LIST,
   DELETE_LISTLEAD,
+  ADD_METRIC_LEADS,
   // FETCH_LEADNOTES,
   ADD_LEAD_NOTE,
   ACTION_SUCCESS,
@@ -47,7 +48,8 @@ export default combineReducers({
   // leadnotes: leadnotes,
   listWithLeadNotes: listWithLeadNotes,
   message: message,
-  search: search
+  search: search,
+  metricleads: metricleads
 });
 
 function categories(state = [], action) {
@@ -166,3 +168,15 @@ function search(state = "", action) {
       return state;
   }
 }
+
+function metricleads(state = [], action) {
+  switch (action.type) {
+    case ADD_METRIC_LEADS:
+      return action.leads;
+    default:
+      return state;
+  }
+}
+
+
+

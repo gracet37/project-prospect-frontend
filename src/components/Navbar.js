@@ -13,7 +13,7 @@ const styleBar = {
   textAlign: "center",
   verticalAlign: "middle",
   position: "fixed",
-  opacity: "1",
+  opacity: "0",
   zIndex: "1",
   top: "0",
   width: "100%"
@@ -23,7 +23,7 @@ const styleLinkLeft = {
   marginLeft: "10px",
   float: "left",
   display: "block",
-  color: "#6200EE",
+  color: "#6206EE",
   textAlign: "center",
   padding: "14px 16px",
   fontSize: "17px",
@@ -34,7 +34,7 @@ const styleLinkLeft = {
 const styleLinkRight = {
   float: "right",
   display: "block",
-  color: "#6200EE",
+  color: "#6206EE",
   textAlign: "center",
   padding: "14px 16px",
   fontSize: "17px",
@@ -49,7 +49,8 @@ const menuStyle = {
 const menuStyleRight = {
   fontSize: "large",
   color: "#6200EE",
-  float: 'right', margin: 0
+  float: "right",
+  margin: 0
 };
 
 class Navbar extends React.Component {
@@ -70,14 +71,15 @@ class Navbar extends React.Component {
   render() {
     const { fixed } = this.state;
     return (
-      <div style={styleBar}>
+      <div>
         <Menu
           fixed={fixed ? "top" : null}
           // inverted={!fixed}
           // pointing={!fixed}
           secondary={true}
           size="large"
-          borderless
+          // borderless
+          style={{ backgroundColor: "white" }}
         >
           <Container>
             <Menu.Item
@@ -105,31 +107,35 @@ class Navbar extends React.Component {
             >
               My Account
             </Menu.Item> */}
-              <Menu.Item 
-                  position='right'
-                  style={menuStyleRight}
-                  as={Link}
-                  to={this.props.auth.user ? "/profile" : "/login"}
-                  onClick={this.props.clearMessage}
-                >
-                <Image circular size='mini' src={this.props.auth.user.img_url}></Image>
-                </Menu.Item>
-                <Menu.Item
-                  style={menuStyleRight}
-                  as={Link}
-                  to={this.props.auth.user ? "/profile" : "/login"}
-                  onClick={this.props.clearMessage}
-                >
-                  {this.props.auth.user.first_name}
-                </Menu.Item>
-                <Menu.Item
-                  style={menuStyleRight}
-                  as={Link}
-                  // to={this.props.auth.user ? "/profile" : "/login"}
-                  onClick={() => this.handleLogout()}
-                >
-                  Logout 
-                </Menu.Item>
+            <Menu.Item
+              position="right"
+              style={menuStyleRight}
+              as={Link}
+              to={this.props.auth.user ? "/profile" : "/login"}
+              onClick={this.props.clearMessage}
+            >
+              <Image
+                circular
+                size="mini"
+                src={this.props.auth.user.img_url}
+              ></Image>
+            </Menu.Item>
+            <Menu.Item
+              style={menuStyleRight}
+              as={Link}
+              to={this.props.auth.user ? "/profile" : "/login"}
+              onClick={this.props.clearMessage}
+            >
+              {this.props.auth.user.first_name}
+            </Menu.Item>
+            <Menu.Item
+              style={menuStyleRight}
+              as={Link}
+              // to={this.props.auth.user ? "/profile" : "/login"}
+              onClick={() => this.handleLogout()}
+            >
+              Logout
+            </Menu.Item>
           </Container>
         </Menu>
       </div>

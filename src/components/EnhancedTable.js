@@ -23,7 +23,7 @@ import FilterListIcon from "@material-ui/icons/FilterList";
 import { Modal, Button, Dropdown, Form, Icon } from "semantic-ui-react";
 import Favorite from "@material-ui/icons/Favorite";
 import FavoriteBorder from "@material-ui/icons/FavoriteBorder";
-import {Link} from 'react-router-dom'
+import { Link } from "react-router-dom";
 
 const uuidv1 = require("uuid/v1");
 
@@ -91,8 +91,9 @@ function EnhancedTableHead(props) {
       <TableRow style={{ fontSize: "12px" }}>
         <TableCell style={{ fontSize: "12px" }} padding="checkbox">
           <Checkbox
-             style={{
-              marginLeft: "20px", marginRight: "20px"
+            style={{
+              marginLeft: "20px",
+              marginRight: "20px"
             }}
             icon={<FavoriteBorder />}
             checkedIcon={<Favorite />}
@@ -226,7 +227,8 @@ class EnhancedTableToolbar extends React.Component {
 
   handleSubmit = () => {
     const { listId, newListName } = this.state;
-    const capitalizedName = newListName.charAt(0).toUpperCase() + newListName.substring(1);
+    const capitalizedName =
+      newListName.charAt(0).toUpperCase() + newListName.substring(1);
     const { leadsArray, company, website } = this.props;
     console.log("SUBMIT", this.state);
     const userId = this.props.userId;
@@ -238,27 +240,27 @@ class EnhancedTableToolbar extends React.Component {
       capitalizedName,
       userId
     );
-    this.handleClearListName()
-    this.closeModal()
+    this.handleClearListName();
+    this.closeModal();
   };
 
   handleClearListName() {
-    this.setState({newListName: ""})
+    this.setState({ newListName: "" });
   }
 
   // handleClearMessage = () => {
-    
+
   // }
 
   closeModal = () => {
-    this.setState({ showModal: false })
-    this.props.clearMessage()
-  }
+    this.setState({ showModal: false });
+    this.props.clearMessage();
+  };
 
   render() {
-    console.log("search results", this.state)
+    console.log("search results", this.state);
     const classes = getClasses();
-    const {showModal} = this.state
+    const { showModal } = this.state;
     const { numSelected } = this.props;
     return (
       <Toolbar
@@ -273,122 +275,150 @@ class EnhancedTableToolbar extends React.Component {
               {numSelected} selected
             </Typography>
           ) : (
-            <div>
-            <Typography variant="h4" id="tableTitle">
-              Search Results
-            </Typography>
-               <Button
-               as={Link}
-               to="/"
-               style={{
-                 borderRadius: "30px",
-                 color: "white",
-                 backgroundColor: "#03DAC6", position: 'absolute', left: '1430px', top: '20px'
-               }}
-             >
-               <Icon name="arrow alternate circle left outline" /> Back to
-               Search
-             </Button>
-             </div>
+            <div style={{ width: "100%" }}>
+              <div style={{ display: "inline-block" }}>
+                <Typography variant="h4" id="tableTitle">
+                  Search Results
+                </Typography>
+              </div>
+              <div
+                style={{
+                  display: "inline-block",
+                  float: "right",
+                  marginLeft: "30px"
+                }}
+              >
+                <Button
+                  as={Link}
+                  to="/"
+                  style={{
+                    borderRadius: "30px",
+                    color: "#6200EE",
+                    backgroundColor: "white",
+                    // borderColor: "#6200EE",
+                    float: "right",
+                    top: "20px"
+                  }}
+                >
+                  <Icon name="arrow alternate circle left outline" /> Back to
+                  Search
+                </Button>
+              </div>
+            </div>
           )}
         </div>
         <div className={classes.spacer} />
         <div style={{ margin: "20px" }}>
           {numSelected > 0 ? (
-    
-              <Modal
+            <Modal
               closeIcon
-                onClose={this.closeModal} 
-                open={showModal}
-                centered
-                trigger={
-                  <Button
-                  onClick={() => this.setState({showModal: true})}
-                    style={{
-                      borderRadius: "20px",
-                      backgroundColor: "#6200EE",
-                      color: "white",
-                      width: "150px",
-                      fontSize: "medium",
-                      verticalAlign: "middle",
-                      textAlign: "center"
-                    }}
-                  >
-                    Save Leads
-                  </Button>
-                }
-                basic
-                size="small"
-              >
-                {this.props.listArray.length ? (
-                  <div style={{ verticalAlign: "center", textAlign: "center" }}>
-                    {this.props.message ? <Modal.Header style={{color: "#71EFE0"}} as='h2'>{this.props.message}</Modal.Header> : null }
-                    <Modal.Header as="h2">
-                      Select an Existing List:
+              onClose={this.closeModal}
+              open={showModal}
+              centered
+              trigger={
+                <Button
+                  onClick={() => this.setState({ showModal: true })}
+                  style={{
+                    borderRadius: "20px",
+                    backgroundColor: "#6200EE",
+                    color: "white",
+                    width: "150px",
+                    fontSize: "medium",
+                    verticalAlign: "middle",
+                    textAlign: "center"
+                  }}
+                >
+                  Save Leads
+                </Button>
+              }
+              basic
+              size="small"
+            >
+              {this.props.listArray.length ? (
+                <div style={{ verticalAlign: "center", textAlign: "center" }}>
+                  {this.props.message ? (
+                    <Modal.Header style={{ color: "#71EFE0" }} as="h2">
+                      {this.props.message}
                     </Modal.Header>
-                    <Modal.Actions>
-                      <Dropdown
-                        onChange={this.handleDropdown}
-                        name="listId"
-                        style={{ width: "40%"}}
-                        placeholder="Select list..."
-                        // fluid
-                        disabled={this.state.newListName ? true : false}
-                        selection
-                        options={this.props.listArray}
-                      />
-                      <Modal.Header as="h2">Create a New List:</Modal.Header>
-                      <Form.Input
-                        placeholder="Create new list..."
-                        onChange={this.handleChange}
-                        name="newListName"
-                      >
-                        <input
-                          style={{ width: "272px", height: "38px"}}
-                        ></input>
-                      </Form.Input>
-                      <Modal.Header as="h2"></Modal.Header>
-                      <Form.Button
-                        onClick={this.handleSubmit}
-                        
-                        // basic
-                        // color="violet"
-                        // inverted
-                        style={{ borderRadius: "70px", backgroundColor: "#6200EE", color: "white", width: "150px", padding: "10px"}}
-                      >
-                        <Icon name="add" /> Add Lead to List
-                      </Form.Button>
-                    </Modal.Actions>
-                  </div>
-                ) : (
-                  <div style={{ verticalAlign: "center", textAlign: "center" }}>
-                    {this.props.message ? <Modal.Header style={{color: "#71EFE0"}} as='h2'>{this.props.message}</Modal.Header> : null }
-                    <Modal.Header as="h2">Create A New List</Modal.Header>
-                    <Modal.Actions>
-                      <Form.Input
-                        placeholder="Create new list..."
-                        onChange={this.handleChange}
-                        name="newListName"
-                      >
-                       <input
-                          style={{ borderRadius: "50px", width: "300px" }}
-                        ></input>
-                      </Form.Input>
-                      <Form.Button
-                        onClick={this.handleSubmit}
-                        // basic
-                        // color="violet"
-                        // inverted
-                        style={{ borderRadius: "70px", backgroundColor: "#6200EE", color: "white", width: "150px", padding: "10px", margin: "20px"}}
-                      >
-                        <Icon name="add" /> Add Lead to List
-                      </Form.Button>
-                    </Modal.Actions>
-                  </div>
-                )}
-              </Modal>
-            // </Tooltip>
+                  ) : null}
+                  <Modal.Header as="h2">Select an Existing List:</Modal.Header>
+                  <Modal.Actions>
+                    <Dropdown
+                      onChange={this.handleDropdown}
+                      name="listId"
+                      style={{ width: "40%" }}
+                      placeholder="Select list..."
+                      // fluid
+                      disabled={this.state.newListName ? true : false}
+                      selection
+                      options={this.props.listArray}
+                    />
+                    <Modal.Header as="h2">Create a New List:</Modal.Header>
+                    <Form.Input
+                      placeholder="Create new list..."
+                      onChange={this.handleChange}
+                      name="newListName"
+                    >
+                      <input style={{ width: "272px", height: "38px" }}></input>
+                    </Form.Input>
+                    <Modal.Header as="h2"></Modal.Header>
+                    <Form.Button
+                      onClick={this.handleSubmit}
+                      // basic
+                      // color="violet"
+                      // inverted
+                      style={{
+                        borderRadius: "70px",
+                        backgroundColor: "#6200EE",
+                        color: "white",
+                        width: "150px",
+                        padding: "10px"
+                      }}
+                    >
+                      <Icon name="add" /> Add Lead to List
+                    </Form.Button>
+                  </Modal.Actions>
+                </div>
+              ) : (
+                <div style={{ verticalAlign: "center", textAlign: "center" }}>
+                  {this.props.message ? (
+                    <Modal.Header style={{ color: "#71EFE0" }} as="h2">
+                      {this.props.message}
+                    </Modal.Header>
+                  ) : null}
+                  <Modal.Header as="h2">Create A New List</Modal.Header>
+                  <Modal.Actions>
+                    <Form.Input
+                      placeholder="Create new list..."
+                      onChange={this.handleChange}
+                      name="newListName"
+                    >
+                      <input
+                        style={{ borderRadius: "50px", width: "300px" }}
+                      ></input>
+                    </Form.Input>
+                    <Form.Button
+                      onClick={this.handleSubmit}
+                      // basic
+                      // color="violet"
+                      // inverted
+                      style={{
+                        borderRadius: "70px",
+                        backgroundColor: "#6200EE",
+                        color: "white",
+                        width: "150px",
+                        padding: "10px",
+                        margin: "20px"
+                      }}
+                    >
+                      <Icon name="add" /> Add Lead to List
+                    </Form.Button>
+                  </Modal.Actions>
+                </div>
+              )}
+            </Modal>
           ) : (
+            // </Tooltip>
             <Tooltip title="Filter list">
               <IconButton aria-label="filter list">
                 {/* <FilterListIcon /> */}
@@ -411,7 +441,7 @@ const useStyles = makeStyles(theme => ({
     margin: "50px",
     marginTop: 100,
     // verticalAlign: "middle",
-    textAlign: 'center',
+    textAlign: "center",
     display: "inline-block"
   },
   paper: {
@@ -517,7 +547,7 @@ export default function EnhancedTable(props) {
       <div className={classes.root}>
         <Paper className={classes.paper}>
           <EnhancedTableToolbar
-          clearMessage={props.clearMessage}
+            clearMessage={props.clearMessage}
             addLead={props.addLead}
             leadsArray={leadsArray}
             company={props.company}
@@ -551,7 +581,7 @@ export default function EnhancedTable(props) {
 
                     return (
                       <TableRow
-                      // style={{fontSize: '20px' }}
+                        // style={{fontSize: '20px' }}
                         hover
                         onClick={event => handleClick(event, row.email)}
                         role="checkbox"
@@ -563,7 +593,8 @@ export default function EnhancedTable(props) {
                         <TableCell padding="checkbox">
                           <Checkbox
                             style={{
-                              marginLeft: "20px", marginRight: "20px"
+                              marginLeft: "20px",
+                              marginRight: "20px"
                             }}
                             icon={<FavoriteBorder />}
                             checkedIcon={<Favorite />}

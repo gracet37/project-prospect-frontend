@@ -92,7 +92,8 @@ export function loadUser(loadingCb, successCb, failCb) {
     return fetch("http://localhost:3000/api/v1/current_user", reqObj)
       .then(resp => resp.json())
       .then(data => {
-        dispatch({ type: "ACTION_SUCCESS", user: data.user });
+        console.log(data)
+        dispatch({ type: "ACTION_SUCCESS", user: data });
         successCb();
       })
       .catch(err => {

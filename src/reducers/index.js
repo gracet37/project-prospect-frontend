@@ -169,10 +169,10 @@ function search(state = "", action) {
   }
 }
 
-function metricleads(state = [], action) {
+function metricleads(state = {leads: [], title: ""}, action) {
   switch (action.type) {
     case ADD_METRIC_LEADS:
-      return action.leads;
+      return {leads: action.leads, title: action.title}
     default:
       return state;
   }

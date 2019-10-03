@@ -128,11 +128,12 @@ class DesktopContainer extends Component {
                     <Button
                       onClick={() => this.handleLogout()}
                       // basic
-                      // color="grey"
+                      // color="black"
+                      inverted
                       primary={fixed}
                       style={{
-                        backgroundColor: "#03DAC6",
-                        color: "white",
+                        // backgroundColor: "#03DAC6",
+                        // color: "white",
                         marginLeft: "1em"
                       }}
                     >
@@ -144,7 +145,8 @@ class DesktopContainer extends Component {
                     <Button
                       as={Link}
                       to="/login"
-                      style={{ backgroundColor: "#6200EE", color: "white" }}
+                      // style={{ backgroundColor: "#6200EE", color: "white" }}
+                      inverted
                     >
                       Log in
                     </Button>
@@ -152,8 +154,9 @@ class DesktopContainer extends Component {
                       as={Link}
                       to="/signup"
                       // basic
+                      inverted
                       style={{
-                        backgroundColor: "#03DAC6",
+                        // backgroundColor: "#03DAC6",
                         color: "white",
                         marginLeft: "0.5em"
                       }}

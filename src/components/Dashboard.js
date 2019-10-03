@@ -24,7 +24,8 @@ import {
   clearMessage,
   clearSearch,
   updateSearch,
-  sortLists
+  sortLists,
+  metricLeads
 } from "../actions";
 
 const uuidv1 = require("uuid/v1");
@@ -38,7 +39,7 @@ const styleMetrics = {
   padding: "20px",
   height: "100px",
   boxShadow: "10px 10px 15px -6px rgba(67,66,93,0.15)",
-  verticalAlign: 'middle'
+  verticalAlign: "middle"
 };
 
 const styleImage = {
@@ -55,6 +56,13 @@ const styleRow = {
   marginBottom: "40px",
   position: "relative",
   textAlign: "left"
+};
+
+const styleTableHead = {
+  border: "solid",
+  borderWidth: "1px",
+  // borderColor: "rgba(98, 0, 238, 0.2)", 
+  backgroundColor: "#03d8C5", color: "white"
 };
 
 class Dashboard extends Component {
@@ -98,27 +106,27 @@ class Dashboard extends Component {
   };
 
   handleSort = clickedColumn => () => {
-    console.log(this.state)
-    console.log(clickedColumn)
+    console.log(this.state);
+    console.log(clickedColumn);
     const { column, direction } = this.state;
     const dataArray = this.props.lists;
 
-    const dataSorted = _.sortBy(dataArray, [clickedColumn])
-    console.log(dataSorted)
+    const dataSorted = _.sortBy(dataArray, [clickedColumn]);
+    console.log(dataSorted);
 
     if (column !== clickedColumn) {
       this.setState({
         column: clickedColumn,
         direction: "ascending"
       });
-      this.props.sortLists(_.sortBy(dataArray, [clickedColumn]))
+      this.props.sortLists(_.sortBy(dataArray, [clickedColumn]));
       return;
     }
 
     this.setState({
       direction: direction === "ascending" ? "descending" : "ascending"
-    })
-    this.props.sortLists(dataArray.reverse())
+    });
+    this.props.sortLists(dataArray.reverse());
   };
 
   handleChange = e => {
@@ -129,7 +137,8 @@ class Dashboard extends Component {
 
   handleSubmit = () => {
     const { newListName } = this.state;
-    const capitalizedName = newListName.charAt(0).toUpperCase() + newListName.substring(1);
+    const capitalizedName =
+      newListName.charAt(0).toUpperCase() + newListName.substring(1);
     const userId = this.props.auth.user.id;
     this.closeModal();
     this.props.clearMessage();
@@ -152,7 +161,14 @@ class Dashboard extends Component {
       });
     }
     return (
-      <Table.Body>
+      <Table.Body
+        style={{
+          borderColor: "#03D8C5",
+          boxShadow: "0px 1px 36px -16px rgba(0,0,0,0.15)",
+          borderWidth: "1px",
+          borderRadius: "10px"
+        }}
+      >
         {_.map(listArr, ({ id, name, created_at, leads }) => {
           let dateString = new Date(created_at).toDateString();
           let leadCount = leads.length;
@@ -231,7 +247,9 @@ class Dashboard extends Component {
       return (
         <Grid.Column style={styleMetrics}>
           <Header as="h4">Total Leads</Header>
-          <Header style={{margin: '0'}} as="h1">{totalLeads}</Header>
+          <Header style={{ margin: "0" }} as="h1">
+            {totalLeads}
+          </Header>
           <Image
             style={styleImage}
             size="tiny"
@@ -245,8 +263,29 @@ class Dashboard extends Component {
     }
   }
 
+  renderMeetingsBookedList = () => {
+    let leadArray = [];
+    let leadwithnotes = [];
+    if (this.props.listWithLeadNotes.length) {
+      leadwithnotes = this.props.listWithLeadNotes.filter(lead => {
+        return lead.leadnotes.length !== 0;
+        // return leadnote.status === "Meeting booked"
+      });
+    }
+    let filteredLeads = leadwithnotes.filter(lead => {
+      console.log(lead.leadnotes[lead.leadnotes.length - 1]);
+      return (
+        lead.leadnotes[lead.leadnotes.length - 1].status === "Meeting booked"
+      );
+    });
+    this.props.metricLeads(filteredLeads, this.props.history);
+    // console.log("MEETINGS BOOKED?? ", filteredLeads)
+  };
+  // return leadArray
+
   renderMeetingsBooked() {
     let meetingsBookedCount = 0;
+    // let leadArray = []
     if (this.props.listWithLeadNotes.length) {
       this.props.listWithLeadNotes.forEach(lead => {
         lead.leadnotes.forEach(leadnote => {
@@ -256,9 +295,14 @@ class Dashboard extends Component {
         });
       });
       return (
-        <Grid.Column style={styleMetrics}>
+        <Grid.Column
+          onClick={this.renderMeetingsBookedList}
+          style={styleMetrics}
+        >
           <Header as="h4">Meetings Booked</Header>
-          <Header style={{margin: '0'}} as="h1">{meetingsBookedCount}</Header>
+          <Header style={{ margin: "0" }} as="h1">
+            {meetingsBookedCount}
+          </Header>
           <Image
             style={styleImage}
             size="tiny"
@@ -270,10 +314,32 @@ class Dashboard extends Component {
     } else {
       return null;
     }
+
+    // if (this.props.listWithLeadNotes.length) {
+    //   this.props.listWithLeadNotes.forEach(lead => {
+    //     return lead.leadnotes.filter(leadnote => {
+    //       if (leadnote.status === "Meeting booked") {
+    //         meetingsBookedCount += 1
+    //       }
+    //     });
+    //   });
+    // }
   }
+
+  renderNotContactedList = () => {
+    let notContacted = [];
+    if (this.props.listWithLeadNotes.length) {
+      notContacted = this.props.listWithLeadNotes.filter(lead => {
+        return lead.leadnotes.length === 0;
+      });
+      console.log(notContacted);
+      this.props.metricLeads(notContacted, this.props.history);
+    }
+  };
 
   renderNotContacted() {
     let notContacted = 0;
+
     if (this.props.listWithLeadNotes.length) {
       this.props.listWithLeadNotes.forEach(lead => {
         if (lead.leadnotes.length < 1) {
@@ -281,9 +347,11 @@ class Dashboard extends Component {
         }
       });
       return (
-        <Grid.Column style={styleMetrics}>
+        <Grid.Column onClick={this.renderNotContactedList} style={styleMetrics}>
           <Header as="h4">Not Yet Contacted</Header>
-          <Header  style={{margin: '0'}}as="h1">{notContacted}</Header>
+          <Header style={{ margin: "0" }} as="h1">
+            {notContacted}
+          </Header>
           <Image
             style={styleImage}
             size="tiny"
@@ -317,7 +385,7 @@ class Dashboard extends Component {
 
           {/* STYLING FOR THE BUTTON */}
           <Grid.Row columns={1}>
-            <Grid.Column >
+            <Grid.Column>
               <Modal
                 basic
                 closeIcon
@@ -337,36 +405,36 @@ class Dashboard extends Component {
                   </Button>
                 }
               >
-                <div style={{ verticalAlign: "center", textAlign: "center"}}>
-                <Modal.Header as='h2'>New List</Modal.Header>
-                <Modal.Content>
-                  <Form.Input
-                    placeholder="List Name..."
-                    onChange={this.handleChange}
-                    name="newListName"
-                  >
-                    <input
-                      style={{ borderRadius: "20px", width: "200px" }}
-                    ></input>
-                  </Form.Input>
-                </Modal.Content>
-                <Modal.Actions>
-                  <Button
-                    onClick={this.handleSubmit}
-                    style={{
-                      // margin: "20px",
-                      borderRadius: "30px",
-                      margin: '20px',
-                      // marginBottom: '10px',
-                      color: "white",
-                      backgroundColor: "#6200EE",
-                      // position: "relative",
-                      // float: "left"
-                    }}
-                  >
-                    Create New List
-                  </Button>
-                </Modal.Actions>
+                <div style={{ verticalAlign: "center", textAlign: "center" }}>
+                  <Modal.Header as="h2">New List</Modal.Header>
+                  <Modal.Content>
+                    <Form.Input
+                      placeholder="List Name..."
+                      onChange={this.handleChange}
+                      name="newListName"
+                    >
+                      <input
+                        style={{ borderRadius: "20px", width: "200px" }}
+                      ></input>
+                    </Form.Input>
+                  </Modal.Content>
+                  <Modal.Actions>
+                    <Button
+                      onClick={this.handleSubmit}
+                      style={{
+                        // margin: "20px",
+                        borderRadius: "30px",
+                        margin: "20px",
+                        // marginBottom: '10px',
+                        color: "white",
+                        backgroundColor: "#6200EE"
+                        // position: "relative",
+                        // float: "left"
+                      }}
+                    >
+                      Create New List
+                    </Button>
+                  </Modal.Actions>
                 </div>
               </Modal>
             </Grid.Column>
@@ -380,15 +448,28 @@ class Dashboard extends Component {
             columns={1}
           >
             <Grid.Column>
-              <Table sortable selectable celled style={{borderColor: "rgba(98, 0, 238, 0.2)", boxShadow: "0px 1px 36px -16px rgba(0,0,0,0.15)", borderWidth: '1px', borderRadius: '10px'}}>
-                <Table.Header >
-                  <Table.Row >
+              <Table
+                sortable
+                selectable
+                celled
+                style={{
+                  padding: "0px 10px 10px 10px",
+                  borderColor: "rgba(3, 216, 197, 0.2)",
+                  boxShadow: "0px 1px 36px -16px rgba(0,0,0,0.15)",
+                  borderWidth: "1px",
+                  borderRadius: "10px"
+                }}
+              >
+                <Table.Header>
+                  <Table.Row>
                     {" "}
                     <Popup
                       content="Search List Name"
                       trigger={
                         <Search
-                        style={{margin: "10px 20px 10px 20px"}}
+                          style={{
+                            margin: "20px 20px 20px 20px"
+                          }}
                           // style={{ margin: "15px", position: 'fixed', top: 0 }}
                           onSearchChange={_.debounce(
                             (event, { value }) =>
@@ -405,24 +486,36 @@ class Dashboard extends Component {
                 <Table.Header>
                   <Table.Row textAlign="center">
                     <Table.HeaderCell
+                      style={styleTableHead}
                       sorted={column === "name" ? direction : null}
                       onClick={this.handleSort("name")}
                     >
                       List Name
                     </Table.HeaderCell>
                     <Table.HeaderCell
+                      style={styleTableHead}
                       sorted={column === "leads" ? direction : null}
                       onClick={this.handleSort("leads")}
                     >
                       No. of Leads
                     </Table.HeaderCell>
                     <Table.HeaderCell
+                      style={styleTableHead}
                       sorted={column === "date" ? direction : null}
                       onClick={this.handleSort("date")}
                     >
                       Date Created
                     </Table.HeaderCell>
-                    <Table.HeaderCell>Delete List</Table.HeaderCell>
+                    <Table.HeaderCell
+                      style={{
+                        border: "solid",
+                        borderWidth: "1px",
+                        backgroundColor: "#03d8C5", color: "white",
+                        width: "8px"
+                      }}
+                    >
+                      Delete List
+                    </Table.HeaderCell>
                   </Table.Row>
                 </Table.Header>
                 {this.renderListBody()}
@@ -465,7 +558,8 @@ export default connect(
     clearMessage,
     clearSearch,
     updateSearch,
-    sortLists
+    sortLists,
+    metricLeads
   }
 )(withRouter(Dashboard));
 

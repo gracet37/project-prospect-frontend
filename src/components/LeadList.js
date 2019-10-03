@@ -53,13 +53,11 @@ const filterOptions = [
 ];
 
 const styleRow = {
-  // top: "70px",
-  margin: "20px",
+  margin: "10px",
   paddingRight: "120px",
   paddingLeft: "120px",
-  marginBottom: "40px",
-  // position: "relative",
-  top: 60,
+  marginBottom: "20px",
+  top: 50,
   textAlign: "left"
 };
 
@@ -72,7 +70,7 @@ const styleMetrics = {
   padding: "20px",
   height: "100px",
   boxShadow: "10px 10px 15px -6px rgba(67,66,93,0.15)",
-  verticalAlign: 'middle'
+  verticalAlign: "middle"
 };
 
 const styleImage = {
@@ -88,6 +86,14 @@ const styleButton = {
   padding: "14px",
   paddingRight: "20px",
   paddingLeft: "20px"
+};
+
+const styleTableHead = {
+  border: "solid",
+  borderWidth: "1px",
+  // borderColor: "rgba(98, 0, 238, 0.2)",
+  backgroundColor: "#03d8C5",
+  color: "white"
 };
 
 const statusArray = [
@@ -232,7 +238,9 @@ class LeadList extends Component {
       return (
         <Grid.Column style={styleMetrics}>
           <Header as="h4">Total Leads</Header>
-          <Header style={{margin: '0'}} as="h1">{totalLeads}</Header>
+          <Header style={{ margin: "0" }} as="h1">
+            {totalLeads}
+          </Header>
           <Image
             style={styleImage}
             size="tiny"
@@ -259,7 +267,9 @@ class LeadList extends Component {
       return (
         <Grid.Column style={styleMetrics}>
           <Header as="h4">Meetings Booked</Header>
-          <Header style={{margin: '0'}} as="h1">{meetingsBookedCount}</Header>
+          <Header style={{ margin: "0" }} as="h1">
+            {meetingsBookedCount}
+          </Header>
           <Image
             size="tiny"
             floated="right"
@@ -284,7 +294,9 @@ class LeadList extends Component {
       return (
         <Grid.Column style={styleMetrics}>
           <Header as="h4">Not Yet Contacted</Header>
-          <Header style={{margin: '0'}} as="h1">{notContacted}</Header>
+          <Header style={{ margin: "0" }} as="h1">
+            {notContacted}
+          </Header>
           <Image
             size="tiny"
             floated="right"
@@ -323,7 +335,15 @@ class LeadList extends Component {
     }
 
     return (
-      <Table.Body onScroll={() => console.log("scroll")}>
+      <Table.Body
+        onScroll={() => console.log("scroll")}
+        style={{
+          borderColor: "rgba(98, 0, 238, 0.2)",
+          boxShadow: "0px 1px 36px -16px rgba(0,0,0,0.15)",
+          borderWidth: "1px",
+          borderRadius: "10px"
+        }}
+      >
         {_.map(listArr, ({ lead, leadnotes }) => {
           let last = null;
           let dateString;
@@ -350,7 +370,12 @@ class LeadList extends Component {
                 {" "}
                 <Icon
                   onClick={() =>
-                    this.setState({ showModal: true, selectedLead: lead, selectedLeadNotes: last, dateString: dateString})
+                    this.setState({
+                      showModal: true,
+                      selectedLead: lead,
+                      selectedLeadNotes: last,
+                      dateString: dateString
+                    })
                   }
                   name={"edit outline"}
                   size="large"
@@ -370,24 +395,26 @@ class LeadList extends Component {
     );
   }
   renderModal() {
-    const {selectedLead, selectedLeadNotes, dateString} = this.state
+    const { selectedLead, selectedLeadNotes, dateString } = this.state;
     const lead = selectedLead;
     const last = selectedLeadNotes;
     // const dateString = dateString;
     return (
       <Modal closeIcon onClose={this.closeModal} open={this.state.showModal}>
         <Modal.Header as="h1">
-          {selectedLead.first_name +
-            " " +
-            selectedLead.last_name}{" "}
-          <br /> {lead.position ? lead.position + "," : null} {lead.company}
+          {selectedLead.first_name + " " + selectedLead.last_name} <br />{" "}
+          {lead.position ? lead.position + "," : null} {lead.company}
         </Modal.Header>
         <Modal.Header as="h3">
           Email: {lead.email}
           {/* <Icon name={"envelope"}></Icon> */}
           <Modal
             trigger={
-              <Icon size='large' style={{ color: "#03DAC6", float: 'right' }} name={"envelope"}></Icon>
+              <Icon
+                size="large"
+                style={{ color: "#03DAC6", float: "right" }}
+                name={"envelope"}
+              ></Icon>
             }
           >
             <Modal.Header>Send an email to {lead.first_name}</Modal.Header>
@@ -498,45 +525,49 @@ class LeadList extends Component {
     // }
 
     return (
-      <div>
-        <Grid
-          style={{
-            backgroundImage: `url(${"https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/s2048x2048/70590332_836756946718765_3473765009224368128_n.png?_nc_cat=111&_nc_oc=AQnI8TKKO2F4LqO-fZDRyZuRDWWLWhMONIpEB2mHf1QEmAP04HdNNIq8JU0QUq5LYwE&_nc_ht=scontent-ort2-2.xx&oh=e9db466921239dad5b5ae5b132f1f40f&oe=5E3DD369"})`,
-            minHeight: "800px"
-          }}
-        >
-          <Grid.Row columns={1} style={{padding: 0}}>
+      <div
+        style={{
+          backgroundImage: `url(${"https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/s2048x2048/70590332_836756946718765_3473765009224368128_n.png?_nc_cat=111&_nc_oc=AQnI8TKKO2F4LqO-fZDRyZuRDWWLWhMONIpEB2mHf1QEmAP04HdNNIq8JU0QUq5LYwE&_nc_ht=scontent-ort2-2.xx&oh=e9db466921239dad5b5ae5b132f1f40f&oe=5E3DD369"})`,
+          backgroundSize: "cover",
+          minHeight: "800px"
+        }}
+      >
+        <Grid>
+          <Grid.Row columns={1} style={{ padding: 0 }}>
             <Grid.Column>
               <Navbar />
             </Grid.Column>
           </Grid.Row>
 
-          <Grid.Row columns={1} style={{top: 90, verticalAlign: 'center'}}>
-            <Grid.Column style={{padding: 0, height: '50px', color: "#43425D", fontSize: '31.25px'}}>
+          <Grid.Row columns={1} style={{ top: 80, verticalAlign: "center" }}>
+            <Grid.Column
+              style={{
+                padding: 0,
+                height: "50px",
+                color: "#43425D",
+                fontSize: "31.25px"
+              }}
+            >
               <Header as="h1">{this.props.listleads.list.name}</Header>
             </Grid.Column>
           </Grid.Row>
           {/* METRIC CARDS */}
-          <Grid.Row
-           columns="equal" style={styleRow}
-          >
+          <Grid.Row columns="equal" style={styleRow}>
             {this.renderLeadCount()}
             {this.renderMeetingsBooked()}
             {this.renderNotContacted()}
           </Grid.Row>
 
           {/*  BACK TO DASHBOARD BUTTON  */}
-          <Grid.Row
-            columns={1} style={{top: -20, verticalAlign: 'center'}}
-          >
-            <Grid.Column style={{ margin: "20px" }}>
+          <Grid.Row columns={1} style={{ top: -20, verticalAlign: "center" }}>
+            <Grid.Column style={{ margin: "10px" }}>
               <Button as={Link} to="/dashboard" style={styleButton}>
                 <Icon name="arrow alternate circle left outline" /> Back to
                 Dashboard
               </Button>
             </Grid.Column>
           </Grid.Row>
-
+          {/* TABLE */}
           {this.props.listleads.leads.length ? (
             <Grid.Row
               style={{
@@ -552,16 +583,32 @@ class LeadList extends Component {
                 // marginLeft: "150px",
                 // marginRight: "150px"
                 width: "400px",
-                margin: "60px",
+                margin: "30px",
                 height: "500px",
+                marginRight: "50px",
+                marginLeft: "50px",
+                marginBottom: "20px",
                 // marginTop: '20px',
-                display: "inline-block"
+                display: "inline-block",
+                top: -40
               }}
               columns={1}
             >
               {/* TABLE OF CONTENTS */}
               <Grid.Column>
-                <Table sortable selectable celled fixed>
+                <Table
+                  sortable
+                  selectable
+                  celled
+                  fixed
+                  style={{
+                    borderColor: "rgba(3, 216, 197, 0.2)",
+                    boxShadow: "0px 1px 36px -16px rgba(0,0,0,0.15)",
+                    borderWidth: "1px",
+                    borderRadius: "10px",
+                    padding: "0px 10px 10px 10px"
+                  }}
+                >
                   <Table.Header>
                     <Table.Row>
                       <span>
@@ -575,6 +622,9 @@ class LeadList extends Component {
                         />
                       </span>
                       <Search
+                        style={{
+                          margin: "20px 20px 20px 20px"
+                        }}
                         // style={{ margin: "15px", position: 'fixed', top: 0 }}
                         onSearchChange={_.debounce(
                           (event, { value }) =>
@@ -592,51 +642,62 @@ class LeadList extends Component {
                       textAlign="center"
                     >
                       <Table.HeaderCell
+                        style={styleTableHead}
                         // sorted={column === "first_name" ? direction : null}
                         // onClick={this.handleSort("first_name")}
                       >
                         First Name
                       </Table.HeaderCell>
                       <Table.HeaderCell
+                        style={styleTableHead}
                         // sorted={column === "last_name" ? direction : null}
                         // onClick={this.handleSort("last_name")}
                       >
                         Last Name
                       </Table.HeaderCell>
                       <Table.HeaderCell
+                        style={styleTableHead}
                         // sorted={column === "position" ? direction : null}
                         // onClick={this.handleSort("position")}
                       >
                         Position
                       </Table.HeaderCell>
                       <Table.HeaderCell
+                        style={styleTableHead}
                         // sorted={column === "company" ? direction : null}
                         // onClick={this.handleSort("company")}
                       >
                         Company
                       </Table.HeaderCell>
                       <Table.HeaderCell
+                        style={styleTableHead}
                         // sorted={column === "status" ? direction : null}
                         // onClick={this.handleSort("status")}
                       >
                         Status
                       </Table.HeaderCell>
                       <Table.HeaderCell
+                        style={styleTableHead}
                         // sorted={column === "next_steps" ? direction : null}
                         // onClick={this.handleSort("next_steps")}
                       >
                         Next Steps
                       </Table.HeaderCell>
                       <Table.HeaderCell
+                        style={styleTableHead}
                         // sorted={
                         //   column === "last_date_contacted" ? direction : null
                         // }
                         // onClick={this.handleSort("last_date_contacted")}
                       >
-                        Last Date Contacted
+                        Last Contact
                       </Table.HeaderCell>
-                      <Table.HeaderCell>Edit Lead</Table.HeaderCell>
-                      <Table.HeaderCell>Delete Lead</Table.HeaderCell>
+                      <Table.HeaderCell style={styleTableHead}>
+                        Edit Lead
+                      </Table.HeaderCell>
+                      <Table.HeaderCell style={styleTableHead}>
+                        Delete Lead
+                      </Table.HeaderCell>
                     </Table.Row>
                   </Table.Header>
                   {this.renderModal()}
@@ -646,12 +707,12 @@ class LeadList extends Component {
             </Grid.Row>
           ) : (
             <Grid.Row
-            style={{
-              margin: "1px",
-              // position: "fixed",
-              top: "50px",
-              display: "inline-block"
-            }}
+              style={{
+                margin: "1px",
+                // position: "fixed",
+                // top: "50px",
+                display: "inline-block"
+              }}
               column={1}
             >
               <Grid.Column>
@@ -714,7 +775,14 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { deleteList, deleteListLead, addLeadNote, updateSearch, sortLists, sortLeadLists }
+  {
+    deleteList,
+    deleteListLead,
+    addLeadNote,
+    updateSearch,
+    sortLists,
+    sortLeadLists
+  }
 )(LeadList);
 
 // handleFetchClick = (id) => {

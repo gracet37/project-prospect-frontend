@@ -10,6 +10,7 @@ import NewUserForm from "./NewUserForm";
 import LandingPage from "./LandingPage";
 import LeadList from "./LeadList";
 import EditUserForm from "./EditUserForm";
+import MetricLeads from "./MetricLeads";
 import { connect } from "react-redux";
 import { currentUser, thunkFetchLists, thunkFetchAllListById } from "../actions";
 
@@ -41,6 +42,7 @@ class App extends React.Component {
           <Route exact path="/leads" component={LeadList} />
           <Route exact path="/edit" component={EditUserForm} />
           <Route exact path="/results" component={SearchResultsTable} />
+          <Route exact path="/detailed" component={MetricLeads} />
         </Switch>
         {/* <Route exact path="/logout" component={} /> */}
       </div>

@@ -53,6 +53,7 @@ class DesktopContainer extends Component {
 
   componentDidMount = () => {
     this.props.currentUser(this.props.history)
+    this.props.clearMessage()
   }
 
   hideFixedMenu = () => this.setState({ fixed: false });

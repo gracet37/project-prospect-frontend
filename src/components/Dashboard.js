@@ -278,7 +278,7 @@ class Dashboard extends Component {
         lead.leadnotes[lead.leadnotes.length - 1].status === "Meeting booked"
       );
     });
-    this.props.metricLeads(filteredLeads, this.props.history);
+    this.props.metricLeads(filteredLeads, this.props.history, "Meetings Booked");
     // console.log("MEETINGS BOOKED?? ", filteredLeads)
   };
   // return leadArray
@@ -333,7 +333,7 @@ class Dashboard extends Component {
         return lead.leadnotes.length === 0;
       });
       console.log(notContacted);
-      this.props.metricLeads(notContacted, this.props.history);
+      this.props.metricLeads(notContacted, this.props.history, "Not Contacted");
     }
   };
 

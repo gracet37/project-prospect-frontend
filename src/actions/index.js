@@ -449,9 +449,9 @@ export function sortLeadLists(leads) {
   }
 }
 
-export function metricLeads(leads, history) {
+export function metricLeads(leads, history, title) {
   return function(dispatch) {
-    dispatch({type: ADD_METRIC_LEADS, leads})
+    dispatch({type: ADD_METRIC_LEADS, leads, title})
       history.push('/detailed')
   }
 }

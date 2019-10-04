@@ -379,6 +379,7 @@ class LeadList extends Component {
                   }
                   name={"edit outline"}
                   size="large"
+                  style={{cursor: 'pointer'}}
                 />
               </Table.Cell>
               <Table.Cell>

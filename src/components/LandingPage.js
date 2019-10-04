@@ -86,7 +86,7 @@ class DesktopContainer extends Component {
             style={{
               backgroundImage: `url(${"https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/s2048x2048/71093458_463527317706998_6857018496128122880_n.png?_nc_cat=101&_nc_oc=AQl2gDIEaIvqJ9nlneGMjfaDHtgfbFjLjkXKrF1ATz_lG8I8Qq2SYVjDCYwbysjSCwM&_nc_ht=scontent-ort2-2.xx&oh=644556da3c91d328452fcb67714c1c7d&oe=5E3A8CD8"})`,
               backgroundSize: "cover",
-              minHeight: "700px",
+              minHeight: "1000px",
               padding: "1em 0em"
             }}
           >
@@ -127,9 +127,9 @@ class DesktopContainer extends Component {
                   <Menu.Item position="right">
                     <Button
                       onClick={() => this.handleLogout()}
-                      // basic
-                      // color="black"
-                      inverted
+                      basic
+                      color="grey"
+                      // inverted
                       primary={fixed}
                       style={{
                         // backgroundColor: "#03DAC6",
@@ -146,7 +146,9 @@ class DesktopContainer extends Component {
                       as={Link}
                       to="/login"
                       // style={{ backgroundColor: "#6200EE", color: "white" }}
-                      inverted
+                      // inverted
+                      basic
+                      color="grey"
                     >
                       Log in
                     </Button>
@@ -154,7 +156,9 @@ class DesktopContainer extends Component {
                       as={Link}
                       to="/signup"
                       // basic
-                      inverted
+                      // inverted
+                      basic
+                      color="grey"
                       style={{
                         // backgroundColor: "#03DAC6",
                         color: "white",

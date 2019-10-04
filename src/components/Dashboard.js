@@ -39,7 +39,8 @@ const styleMetrics = {
   padding: "20px",
   height: "100px",
   boxShadow: "10px 10px 15px -6px rgba(67,66,93,0.15)",
-  verticalAlign: "middle"
+  verticalAlign: "middle",
+  cursor: "pointer"
 };
 
 const styleImage = {
@@ -190,6 +191,7 @@ class Dashboard extends Component {
                   size="mini"
                   trigger={
                     <Icon
+                    style={{cursor: 'pointer'}}
                       name={"trash alternate outline"}
                       name="trash alternate outline"
                       size="large"

@@ -1,10 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
-import {Link} from 'react-router-dom'
 import { addLead, clearMessage } from "../actions";
 import Navbar from "./Navbar";
 import EnhancedTable from "./EnhancedTable";
-import { Button, Icon } from "semantic-ui-react";
 
 const style = {
   backgroundImage: `url(${"https://scontent-ort2-2.xx.fbcdn.net/v/t1.15752-9/s2048x2048/71093458_463527317706998_6857018496128122880_n.png?_nc_cat=101&_nc_oc=AQl2gDIEaIvqJ9nlneGMjfaDHtgfbFjLjkXKrF1ATz_lG8I8Qq2SYVjDCYwbysjSCwM&_nc_ht=scontent-ort2-2.xx&oh=644556da3c91d328452fcb67714c1c7d&oe=5E3A8CD8"})`,
@@ -54,17 +52,6 @@ class DataTable extends React.Component {
     this.setState({ rows: array });
     this.setState({ isLoading: false });
   };
-
-  // handleDropdown = (e, data) => {
-  //   const targetValue = data.value;
-  //   this.setState({ listId: targetValue });
-  // };
-
-  // handleChange = e => {
-  //   const targetValue = e.target.value;
-  //   const targetName = e.target.name;
-  //   this.setState({ [targetName]: targetValue });
-  // };
 
   handleSubmit = () => {
     const { leadsArray, company, website, listId, newListName } = this.state;
@@ -123,19 +110,6 @@ const mapStateToProps = state => {
     listWithLeadNotes: state.listWithLeadNotes
   };
 };
-
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     // addList: (listName, id) => {
-//     //   dispatch(addList(listName, id));
-//     // },
-//     addLead: (leadsArray, company, website, listId, newListName, userId) => {
-//       dispatch(
-//         addLead(leadsArray, company, website, listId, newListName, userId)
-//       );
-//     }
-//   };
-// };
 
 export default connect(
   mapStateToProps,

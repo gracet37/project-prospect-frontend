@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, withRouter, Switch } from "react-router-dom";
 import LeadListContainer from "../containers/LeadListContainer";
-import SearchContainer from "../containers/SearchContainer";
+import SearchContainer from "../NOT USING/SearchContainer";
 import UserProfile from "./UserProfile";
 // import SearchResults from "./SearchResults";
 import SearchResultsTable from "./SearchResultsTable";

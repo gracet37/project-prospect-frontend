@@ -2,10 +2,8 @@ import React, { Component } from "react";
 import {
   Grid,
   Image,
-  Card,
   Table,
   Icon,
-  Confirm,
   Button,
   Modal,
   Form,
@@ -16,7 +14,6 @@ import {
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import _ from "lodash";
-import Navbar from "./Navbar";
 import {
   deleteList,
   thunkFetchListById,

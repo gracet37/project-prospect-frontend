@@ -184,7 +184,7 @@ export function thunkFetchListById(id, history) {
         history.push("/leads");
       })
       .catch(err => console.log(err));
-  };_
+  };
 }
 
 export function thunkFetchAllListById(id) {

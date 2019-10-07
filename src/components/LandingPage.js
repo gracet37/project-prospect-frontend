@@ -6,13 +6,11 @@ import {
   Container,
   Header,
   Icon,
-  Loader,
   Menu,
   Responsive,
   Segment,
   Sidebar,
-  Visibility,
-  Grid
+  Visibility
 } from "semantic-ui-react";
 import SearchBar from "./SearchBar";
 import { connect } from "react-redux";

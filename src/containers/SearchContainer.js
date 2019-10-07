@@ -10,8 +10,8 @@ import { thunkFetchLeads, thunkFetchLists } from "../actions";
 import { connect } from "react-redux";
 
 
-const CATEGORY_URL = "http://localhost:3000/api/v1/categories";
-const LEADS_URL = "http://localhost:3000/api/v1/leads";
+const CATEGORY_URL = "https://frozen-shore-20550.herokuapp.com/api/v1/categories";
+const LEADS_URL = "https://frozen-shore-20550.herokuapp.com/api/v1/leads";
 
 class SearchContainer extends Component {
 

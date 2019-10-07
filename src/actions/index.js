@@ -62,7 +62,7 @@ export function currentUser(history) {
 
     // dispatch with "loading" current user
 
-    return fetch("http://localhost:3000/api/v1/current_user", reqObj)
+    return fetch("https://frozen-shore-20550.herokuapp.com/api/v1/current_user", reqObj)
       .then(resp => resp.json())
       .then(data => {
         if (data.error) {
@@ -89,7 +89,7 @@ export function loadUser(loadingCb, successCb, failCb) {
       }
     };
 
-    return fetch("http://localhost:3000/api/v1/current_user", reqObj)
+    return fetch("https://frozen-shore-20550.herokuapp.com/api/v1/current_user", reqObj)
       .then(resp => resp.json())
       .then(data => {
         console.log(data)
@@ -110,7 +110,7 @@ export function login(formData, history) {
       body: JSON.stringify(formData)
     };
 
-    return fetch("http://localhost:3000/api/v1/login", reqObj)
+    return fetch("https://frozen-shore-20550.herokuapp.com/api/v1/login", reqObj)
       .then(resp => resp.json())
       .then(data => {
         if (data.message) {
@@ -136,7 +136,7 @@ export function registerUser(formData, history) {
       body: JSON.stringify(formData)
     };
 
-    return fetch("http://localhost:3000/api/v1/auth", reqObj)
+    return fetch("https://frozen-shore-20550.herokuapp.com/api/v1/auth", reqObj)
       .then(resp => resp.json())
       .then(data => {
         if (data.error) {
@@ -159,7 +159,7 @@ export function thunkFetchLists(id) {
   return function(dispatch) {
     // dispatch({ type: START_FETCH_LISTS });
 
-    fetch(`http://localhost:3000/api/v1/lists/show_lists/${id}`)
+    fetch(`https://frozen-shore-20550.herokuapp.com/api/v1/lists/show_lists/${id}`)
       .then(res => res.json())
       .then(data => {
         dispatch({ type: FETCH_LISTS, lists: data });
@@ -173,7 +173,7 @@ export function thunkFetchLists(id) {
 
 export function thunkFetchListById(id, history) {
   return function(dispatch) {
-    fetch(`http://localhost:3000/api/v1/lists/show_special/${id}`)
+    fetch(`https://frozen-shore-20550.herokuapp.com/api/v1/lists/show_special/${id}`)
       .then(res => res.json())
       .then(data => {
         dispatch({
@@ -184,12 +184,12 @@ export function thunkFetchListById(id, history) {
         history.push("/leads");
       })
       .catch(err => console.log(err));
-  };
+  };_
 }
 
 export function thunkFetchAllListById(id) {
   return function(dispatch) {
-    fetch(`http://localhost:3000/api/v1/lists/show_special_all/${id}`)
+    fetch(`https://frozen-shore-20550.herokuapp.com/api/v1/lists/show_special_all/${id}`)
       .then(res => res.json())
       .then(data => {
         dispatch({
@@ -214,7 +214,7 @@ export function addLead(
     // const token = localStorage.token;
     dispatch({ type: START_FETCH_LEADS_AND_LIST });
 
-    fetch("http://localhost:3000/api/v1/leads", {
+    fetch("https://frozen-shore-20550.herokuapp.com/api/v1/leads", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -231,7 +231,7 @@ export function addLead(
         const leadsData = data;
         if (listId) {
           data.forEach(lead => {
-            fetch("http://localhost:3000/api/v1/leadlists", {
+            fetch("https://frozen-shore-20550.herokuapp.com/api/v1/leadlists", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -249,7 +249,7 @@ export function addLead(
               .catch(err => console.log(err));
           });
         } else {
-          fetch("http://localhost:3000/api/v1/lists", {
+          fetch("https://frozen-shore-20550.herokuapp.com/api/v1/lists", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -264,7 +264,7 @@ export function addLead(
             .then(data => {
               dispatch({ type: ADD_LIST, list: data });
               leadsData.forEach(lead => {
-                fetch("http://localhost:3000/api/v1/leadlists", {
+                fetch("https://frozen-shore-20550.herokuapp.com/api/v1/leadlists", {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",
@@ -291,7 +291,7 @@ export function addLead(
 
 export function addList(newListName, userId) {
   return function(dispatch) {
-    fetch("http://localhost:3000/api/v1/lists", {
+    fetch("https://frozen-shore-20550.herokuapp.com/api/v1/lists", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -330,7 +330,7 @@ export function deleteList(id) {
   return function(dispatch) {
     dispatch({ type: START_DELETE_LIST });
 
-    fetch(`http://localhost:3000/api/v1/lists/${id}`, {
+    fetch(`https://frozen-shore-20550.herokuapp.com/api/v1/lists/${id}`, {
       method: "DELETE"
     })
       .then(res => res.json())
@@ -346,7 +346,7 @@ export function deleteList(id) {
 // ? delete lead from LeadList.js
 export function deleteListLead(list_id, lead_id) {
   return function(dispatch) {
-    fetch(`http://localhost:3000/api/v1/leadlists`, {
+    fetch(`https://frozen-shore-20550.herokuapp.com/api/v1/leadlists`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -365,7 +365,7 @@ export function deleteListLead(list_id, lead_id) {
 
 export function addLeadNote(status, nextSteps, userId, leadId, comment) {
   return function(dispatch) {
-    fetch("http://localhost:3000/leadnotes/create", {
+    fetch("https://frozen-shore-20550.herokuapp.com/leadnotes/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -398,7 +398,7 @@ export function updateUser(formData, history) {
       body: JSON.stringify(formData)
     };
 
-    return fetch("http://localhost:3000/api/v1/auth", reqObj)
+    return fetch("https://frozen-shore-20550.herokuapp.com/api/v1/auth", reqObj)
       .then(resp => resp.json())
       .then(data => {
         if (data.error) {
@@ -462,7 +462,7 @@ export function metricLeads(leads, history, title) {
 //   return function(dispatch) {
 //     dispatch({ type: START_FETCH_CATEGORIES });
 
-//     fetch("http://localhost:3000/api/v1/categories")
+//     fetch("https://frozen-shore-20550.herokuapp.com/api/v1/categories")
 //       .then(res => res.json())
 //       .then(data => {
 //         dispatch({ type: FETCH_CATEGORIES, categories: data });
@@ -475,7 +475,7 @@ export function metricLeads(leads, history, title) {
 //   return function(dispatch) {
 //     dispatch({ type: START_FETCH_LEADNOTE });
 
-//     fetch("http://localhost:3000/leadnotes/show", {
+//     fetch("https://frozen-shore-20550.herokuapp.com/leadnotes/show", {
 //       method: "POST",
 //       headers: {
 //         "Content-Type": 'application/json',
@@ -501,7 +501,7 @@ export function metricLeads(leads, history, title) {
 //   return function(dispatch) {
 //     dispatch({ type: START_FETCH_LEADNOTES });
 
-//     fetch(`http://localhost:3000/leadnotes/${user_id}`)
+//     fetch(`https://frozen-shore-20550.herokuapp.com/leadnotes/${user_id}`)
 //     .then(res => res.json())
 //     .then(data => {
 //       console.log("leadnotes", data)
@@ -517,7 +517,7 @@ export function metricLeads(leads, history, title) {
 //   return function(dispatch) {
 //     // dispatch({ type: START_FETCH_LISTS });
 
-//     fetch(`http://localhost:3000/api/v1/lists/show/${id}`)
+//     fetch(`https://frozen-shore-20550.herokuapp.com/api/v1/lists/show/${id}`)
 //       .then(res => res.json())
 //       .then(data => {
 //         console.log(data.leads)

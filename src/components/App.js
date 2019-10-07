@@ -14,7 +14,6 @@ import MetricLeads from "./MetricLeads";
 import { connect } from "react-redux";
 import { currentUser, thunkFetchLists, thunkFetchAllListById } from "../actions";
 
-// const LEADS_URL = 'http://localhost:3000/api/v1/leads'
 
 class App extends React.Component {
   

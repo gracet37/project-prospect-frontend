@@ -1,13 +1,11 @@
 import React from "react";
-import PropTypes from "prop-types";
-import { NavLink, Redirect, Link, withRouter } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { logoutUser, clearMessage } from "../actions";
 import { connect } from "react-redux";
-import { Header, Image, Menu, Button, Container } from "semantic-ui-react";
+import { Image, Menu, Container } from "semantic-ui-react";
 
 const styleBar = {
   overflow: "hidden",
-  // backgroundColor: '#5400E8',
   margin: "10px",
   height: "50px",
   textAlign: "center",

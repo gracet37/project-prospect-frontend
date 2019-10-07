@@ -5,16 +5,11 @@ import {
   Table,
   Icon,
   Button,
-  Pagination,
   Header,
   Modal,
   Form,
   Search,
-  Segment,
   Label,
-  Popup,
-  Sticky,
-  Visibility,
   Dropdown
 } from "semantic-ui-react";
 import { Link } from "react-router-dom";
@@ -31,8 +26,6 @@ import {
   sortLeadLists
 } from "../actions";
 import PropTypes from "prop-types";
-import FilterLeads from "./FilterLeads";
-import { GridList } from "@material-ui/core";
 
 const filterOptions = [
   {
@@ -91,7 +84,6 @@ const styleButton = {
 const styleTableHead = {
   border: "solid",
   borderWidth: "1px",
-  // borderColor: "rgba(98, 0, 238, 0.2)",
   backgroundColor: "#03d8C5",
   color: "white"
 };
@@ -785,99 +777,3 @@ export default connect(
     sortLeadLists
   }
 )(LeadList);
-
-// handleFetchClick = (id) => {
-//   this.props.thunkFetchLeadNote(this.props.auth.user.id, id)
-// }
-
-// countTotalLeads = () => {
-//   if (this.props.listleads) {
-//     let totalLeads;
-//     // console.log(this.props.lists);
-//     totalLeads = this.props.listleads.leads.length;
-//     this.setState({ totalLeadCount: totalLeads });
-//   } else {
-//     return null;
-//   }
-// };
-
-// countMeetingsBooked = () => {
-//   let meetingsBookedCount = 0;
-//   if (this.props.listleads) {
-//     this.props.listleads.leads.forEach(lead => {
-//       lead.leadnotes.forEach(leadnote => {
-//         if (leadnote.status === "Meeting booked") {
-//           meetingsBookedCount += 1;
-//         }
-//       });
-//     });
-//     this.setState({ totalMeetingsBooked: meetingsBookedCount });
-//   } else {
-//     return null;
-//   }
-// };
-
-// countNotContacted = () => {
-//   let notContacted = 0;
-//   // let testArray = []
-//   if (this.props.listleads) {
-//     this.props.listleads.leads.forEach(lead => {
-//       if (lead.leadnotes.length < 1) {
-//         notContacted += 1;
-//       }
-//     });
-//     this.setState({ totalNotContacted: notContacted });
-//   } else {
-//     return null;
-//   }
-// };
-
-// id,
-// first_name,
-// last_name,
-// position,
-// company,
-// status,
-// next_steps,
-// last_date_contacted,
-// phone_number,
-// email,
-// comments,
-// comments_date
-
-{
-  /* <Table.Footer>
-                    {data.length > 10 ? (
-                      <Table.Row>
-                        <Table.HeaderCell colSpan="3">
-                          <Pagination
-                            boundaryRange={0}
-                            defaultActivePage={1}
-                            ellipsisItem={"..."}
-                            firstItem={{
-                              content: <Icon name="angle double left" />,
-                              icon: true
-                            }}
-                            lastItem={{
-                              content: <Icon name="angle double right" />,
-                              icon: true
-                            }}
-                            prevItem={{
-                              content: <Icon name="angle left" />,
-                              icon: true
-                            }}
-                            nextItem={{
-                              content: <Icon name="angle right" />,
-                              icon: true
-                            }}
-                            siblingRange={1}
-                            totalPages={10}
-                            onPageChange={(event, { activePage }) =>
-                              this.handlePageChange(activePage)
-                            }
-                          />
-                        </Table.HeaderCell>
-                      </Table.Row>
-                    ) : null}
-                  </Table.Footer> */
-}

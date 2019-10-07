@@ -7,30 +7,19 @@ import {
   Form,
   Grid,
   Header,
-  Image,
-  Message,
   Segment
 } from "semantic-ui-react";
-import { Link, withRouter, NavLink } from "react-router-dom";
+import { withRouter, NavLink } from "react-router-dom";
 import { connect } from "react-redux";
 import { updateUser} from "../actions";
 
-const styleColumn = {
-  float: "left",
-  width: "50%",
-  padding: "14px"
-  // margin: '10px'
-};
-
 const styleForm = {
-  // float: "right",
   width: "500px",
   height: "400px",
   padding: "30px",
   margin: "40px",
   textAlign: 'center',
   marginTop: '100px'
-  // paddingLeft: "20px"
 };
 
 const style = {

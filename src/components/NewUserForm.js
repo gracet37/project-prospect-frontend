@@ -4,8 +4,6 @@ import {
   Form,
   Grid,
   Header,
-  Image,
-  Message,
   Segment
 } from "semantic-ui-react";
 import { Link, withRouter, NavLink } from "react-router-dom";
@@ -16,18 +14,15 @@ const styleColumn = {
   float: "left",
   width: "50%",
   padding: "14px"
-  // margin: '10px'
 };
 
 const styleForm = {
-  // float: "right",
   width: "500px",
   height: "400px",
   padding: "30px",
   margin: "40px",
   textAlign: 'center',
   marginTop: '150px'
-  // paddingLeft: "20px"
 };
 
 const style = {
@@ -51,7 +46,6 @@ class NewUserForm extends Component {
   };
 
   handleSubmit = event => {
-    const {firstName, lastName, email, password} = this.state
     event.preventDefault();
     this.props.registerUser(this.state, this.props.history);
   };
@@ -79,16 +73,6 @@ class NewUserForm extends Component {
           <Form.Group>
             <Form style={styleForm} size="large" onSubmit={this.handleSubmit}>
               {this.handleError()}
-            {/* {this.props.message ? this.props.message.forEach(error => {
-            return <Header as="h5" style={{ color: "#03DAC6" }} textAlign="center">
-                {error}
-            </Header>  }) : null } */}
-{/* 
-{this.props.message ?  <Header as="h3" style={{ color: "#E57373" }} textAlign="center">
-                  {this.props.message}
-                  </Header> : null} */}
-
-
               <Header as="h1" style={{ color: "#03DAC6" }} textAlign="center">
                 Create A New Account
               </Header>
@@ -153,15 +137,6 @@ class NewUserForm extends Component {
     );
   }
 }
-
-// function mapDispatchToProps(dispatch) {
-//   return {
-//     registerUser: (formData, history) =>
-//       dispatch(registerUser(formData, history))
-//   }, 
-//     clearMessage: () => 
-//     dispatch(clearUser())
-// }
 
 function mapStateToProps(state) {
   return {

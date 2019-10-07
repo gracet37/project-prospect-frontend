@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import { Form, Loader, Button } from "semantic-ui-react";
+import { Form, Button } from "semantic-ui-react";
 import { thunkFetchLeads, fetchError, clearMessage } from "../actions";
 import { connect } from "react-redux";
-import { Link, withRouter } from "react-router-dom";
-import Loading from "./Loading";
+import { withRouter } from "react-router-dom";
 import "../App.css";
 /////////////////////// STYLING /////////////////////////
 

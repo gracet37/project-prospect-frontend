@@ -8,7 +8,8 @@ import {
 } from "semantic-ui-react";
 import { Link, withRouter, NavLink } from "react-router-dom";
 import { connect } from "react-redux";
-import { registerUser, clearMessage } from "../actions";
+import { clearMessage } from "../actions";
+import { registerUser } from "../actions/auth";
 
 const styleColumn = {
   float: "left",

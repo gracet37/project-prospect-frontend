@@ -12,7 +12,8 @@ import LeadList from "./LeadList";
 import EditUserForm from "./EditUserForm";
 import MetricLeads from "./MetricLeads";
 import { connect } from "react-redux";
-import { currentUser, thunkFetchLists, thunkFetchAllListById } from "../actions";
+import { thunkFetchLists, thunkFetchAllListById } from "../actions";
+import { currentUser } from "../actions/auth";
 
 
 class App extends React.Component {

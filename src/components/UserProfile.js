@@ -3,7 +3,7 @@ import Navbar from "./Navbar";
 import { Header, Image, Segment, Container, Grid} from "semantic-ui-react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { loadUser } from "../actions";
+import { loadUser } from "../actions/auth";
 
 class UserProfile extends Component {
   constructor(props) {

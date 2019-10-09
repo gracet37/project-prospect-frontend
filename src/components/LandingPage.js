@@ -14,7 +14,8 @@ import {
 } from "semantic-ui-react";
 import SearchBar from "./SearchBar";
 import { connect } from "react-redux";
-import { logoutUser, currentUser, clearMessage } from "../actions";
+import { clearMessage } from "../actions";
+import {logoutUser, currentUser} from '../actions/auth'
 
 // Heads up!
 // We using React Static to prerender our docs with server side rendering, this is a quite simple solution.

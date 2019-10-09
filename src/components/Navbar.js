@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
-import { logoutUser, clearMessage } from "../actions";
+import { clearMessage } from "../actions";
+import { logoutUser } from "../actions/auth";
 import { connect } from "react-redux";
 import { Image, Menu, Container } from "semantic-ui-react";
 

@@ -8,7 +8,8 @@ import {
 } from "semantic-ui-react";
 import { NavLink, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
-import { login, clearMessage } from "../actions";
+import { clearMessage } from "../actions";
+import { login } from "../actions/auth";
 import "../App.css";
 
 const styleForm = {

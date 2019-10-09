@@ -1,202 +1,40 @@
-export const FETCH_CATEGORIES = "FETCH_CATEGORIES";
-export const START_FETCH_CATEGORIES = "START_FETCH_CATEGORIES";
-export const START_FETCH_LEADS = "START_FETCH_LEADS";
-export const START_FETCH_LEADS_AND_LIST = "START_FETCH_LEADS_AND_LIST";
-export const FETCH_LEADS = "FETCH_LEADS";
-export const START_FETCH_LISTS = "FETCH_LISTS";
-export const START_FETCH_LEADNOTES = "START_FETCH_LEADNOTES";
-export const FETCH_LISTS = "FETCH_LISTS";
-export const FETCH_LEADNOTES = "FETCH_LEADNOTES";
-export const ADD_LIST = "ADD_LIST";
-export const LOGIN_USER = "LOGIN_USER";
-export const LOGOUT_USER = "LOGOUT_USER";
-export const START_DELETE_LIST = "START_DELETE_LIST";
-export const START_DELETE_LEAD = "START_DELETE_LIST";
-export const DELETE_LIST = "DELETE_LIST";
-export const DELETE_LISTLEAD = "DELETE_LISTLEAD";
-export const FETCH_LIST_BY_ID = "FETCH_LIST_BY_ID";
-export const ADD_LEAD_NOTE = "ADD_LEAD_NOTE";
-export const ACTION_SUCCESS = "ACTION_SUCCESS";
-export const FETCH_LIST_WITH_LEADNOTES = "FETCH_LIST_WITH_LEADNOTES";
-export const COMPLETE_FETCH_LEADS_AND_LIST = "COMPLETE_FETCH_LEADS_AND_LIST";
-export const FETCH_ERROR = "FETCH_ERROR";
-export const SUCCESS_MESSAGE = "SUCCESS_MESSAGE";
-export const CLEAR_MESSAGE = "CLEAR_MESSAGE";
-export const DELETE_LIST_WITH_LEADNOTE = "DELETE_LIST_WITH_LEADNOTE";
-export const UPDATE_SEARCH = "UPDATE_SEARCH";
-export const CLEAR_SEARCH = "CLEAR_SEARCH";
-export const SORT_LISTS = "SORT_LISTS"
-export const SORT_LEADLISTS = "SORT_LEADLISTS"
-export const ADD_METRIC_LEADS = "ADD_METRIC_LEADS"
+// export const FETCH_CATEGORIES = "FETCH_CATEGORIES";
+// export const START_FETCH_CATEGORIES = "START_FETCH_CATEGORIES";
+// export const START_FETCH_LEADS = "START_FETCH_LEADS";
+// export const START_FETCH_LEADS_AND_LIST = "START_FETCH_LEADS_AND_LIST";
+// export const FETCH_LEADS = "FETCH_LEADS";
+// export const START_FETCH_LISTS = "FETCH_LISTS";
+// export const START_FETCH_LEADNOTES = "START_FETCH_LEADNOTES";
+// export const FETCH_LISTS = "FETCH_LISTS";
+// export const FETCH_LEADNOTES = "FETCH_LEADNOTES";
+// export const ADD_LIST = "ADD_LIST";
+// export const LOGIN_USER = "LOGIN_USER";
+// export const LOGOUT_USER = "LOGOUT_USER";
+// export const START_DELETE_LIST = "START_DELETE_LIST";
+// export const START_DELETE_LEAD = "START_DELETE_LIST";
+// export const DELETE_LIST = "DELETE_LIST";
+// export const DELETE_LISTLEAD = "DELETE_LISTLEAD";
+// export const FETCH_LIST_BY_ID = "FETCH_LIST_BY_ID";
+// export const ADD_LEAD_NOTE = "ADD_LEAD_NOTE";
+// export const ACTION_SUCCESS = "ACTION_SUCCESS";
+// export const FETCH_LIST_WITH_LEADNOTES = "FETCH_LIST_WITH_LEADNOTES";
+// export const COMPLETE_FETCH_LEADS_AND_LIST = "COMPLETE_FETCH_LEADS_AND_LIST";
+// export const FETCH_ERROR = "FETCH_ERROR";
+// export const SUCCESS_MESSAGE = "SUCCESS_MESSAGE";
+// export const CLEAR_MESSAGE = "CLEAR_MESSAGE";
+// export const DELETE_LIST_WITH_LEADNOTE = "DELETE_LIST_WITH_LEADNOTE";
+// export const UPDATE_SEARCH = "UPDATE_SEARCH";
+// export const CLEAR_SEARCH = "CLEAR_SEARCH";
+// export const SORT_LISTS = "SORT_LISTS"
+// export const SORT_LEADLISTS = "SORT_LEADLISTS"
+// export const ADD_METRIC_LEADS = "ADD_METRIC_LEADS"
 
 const uuidv1 = require("uuid/v1");
 
 // LOGIN
 
-export function loginUser(user) {
-  return {
-    type: "LOGIN_USER",
-    user
-  };
-}
 
-export function logoutUser() {
-  return {
-    type: "LOGOUT_USER"
-  };
-}
 
-export function currentUser(history) {
-  return dispatch => {
-    const token = localStorage.token;
-    const reqObj = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      }
-    };
-
-    // dispatch with "loading" current user
-
-    return fetch("https://frozen-shore-20550.herokuapp.com/api/v1/current_user", reqObj)
-      .then(resp => resp.json())
-      .then(data => {
-        if (data.error) {
-          //handle error
-          history.push("/");
-          console.log("current user", data.error);
-        } else {
-          dispatch(loginUser({ user: data.user }));
-        }
-      });
-  };
-}
-
-// ? testing
-export function loadUser(loadingCb, successCb, failCb) {
-  return function(dispatch) {
-    loadingCb();
-    const token = localStorage.token;
-    const reqObj = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      }
-    };
-
-    return fetch("https://frozen-shore-20550.herokuapp.com/api/v1/current_user", reqObj)
-      .then(resp => resp.json())
-      .then(data => {
-        console.log(data)
-        dispatch({ type: "ACTION_SUCCESS", user: data });
-        successCb();
-      })
-      .catch(err => {
-        failCb();
-      });
-  };
-}
-
-export function login(formData, history) {
-  return dispatch => {
-    const reqObj = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData)
-    };
-
-    return fetch("https://frozen-shore-20550.herokuapp.com/api/v1/login", reqObj)
-      .then(resp => resp.json())
-      .then(data => {
-        if (data.message) {
-          //handle error case
-          dispatch({ type: "FETCH_ERROR", error: data.message });
-        } else {
-          console.log("fetch login", data);
-          localStorage.token = data.token;
-          dispatch(loginUser({ user: data.user }));
-          dispatch({ type: "CLEAR_MESSAGE" });
-          history.push("/");
-        }
-      })
-      .catch(err => console.log(err));
-  };
-}
-
-export function registerUser(formData, history) {
-  return dispatch => {
-    const reqObj = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData)
-    };
-
-    return fetch("https://frozen-shore-20550.herokuapp.com/api/v1/auth", reqObj)
-      .then(resp => resp.json())
-      .then(data => {
-        if (data.error) {
-          //handle error case
-          console.log(data.error)
-          dispatch({type: FETCH_ERROR, error: data.error})
-        } else {
-          localStorage.token = data.token;
-          dispatch(loginUser(data.user));
-          history.push("/");
-        }
-      });
-  };
-}
-
-// ? Invoked on App.js and fetches all lists in array format with leads data
-// ? Used to populate the Dashboard.js
-
-export function thunkFetchLists(id) {
-  return function(dispatch) {
-    // dispatch({ type: START_FETCH_LISTS });
-
-    fetch(`https://frozen-shore-20550.herokuapp.com/api/v1/lists/show_lists/${id}`)
-      .then(res => res.json())
-      .then(data => {
-        dispatch({ type: FETCH_LISTS, lists: data });
-      })
-      .catch(err => console.log(err));
-  };
-}
-
-// ? Search by id of the LIST and return a list with leads and leadnote data
-// ? Used to populate LeadList.js
-
-export function thunkFetchListById(id, history) {
-  return function(dispatch) {
-    fetch(`https://frozen-shore-20550.herokuapp.com/api/v1/lists/show_special/${id}`)
-      .then(res => res.json())
-      .then(data => {
-        dispatch({
-          type: FETCH_LIST_BY_ID,
-          leads: data.leads,
-          list: data.list
-        });
-        history.push("/leads");
-      })
-      .catch(err => console.log(err));
-  };
-}
-
-export function thunkFetchAllListById(id) {
-  return function(dispatch) {
-    fetch(`https://frozen-shore-20550.herokuapp.com/api/v1/lists/show_special_all/${id}`)
-      .then(res => res.json())
-      .then(data => {
-        dispatch({
-          type: FETCH_LIST_WITH_LEADNOTES,
-          leads: data.leads_with_notes
-        });
-      })
-      .catch(err => console.log(err));
-  };
-}
 
 // ? creating a new lead instance of the one the user saved and creating the association between list and lead
 export function addLead(
@@ -286,27 +124,6 @@ export function addLead(
   };
 }
 
-export function addList(newListName, userId) {
-  return function(dispatch) {
-    fetch("https://frozen-shore-20550.herokuapp.com/api/v1/lists", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json"
-      },
-      body: JSON.stringify({
-        name: newListName,
-        user_id: userId
-      })
-    })
-      .then(res => res.json())
-      .then(data => {
-        dispatch({ type: ADD_LIST, list: data });
-        dispatch({ type: SUCCESS_MESSAGE, message: "🎉 List Created!" });
-      })
-      .catch(err => console.log(err));
-  };
-}
 
 export function thunkFetchLeads(domainName, history) {
   return function(dispatch) {
@@ -323,22 +140,6 @@ export function thunkFetchLeads(domainName, history) {
   };
 }
 
-export function deleteList(id) {
-  return function(dispatch) {
-    dispatch({ type: START_DELETE_LIST });
-
-    fetch(`https://frozen-shore-20550.herokuapp.com/api/v1/lists/${id}`, {
-      method: "DELETE"
-    })
-      .then(res => res.json())
-      .then(data => {
-        dispatch({ type: DELETE_LIST, id });
-        dispatch({ type: DELETE_LIST_WITH_LEADNOTE, id });
-        dispatch({ type: SUCCESS_MESSAGE, message: data.message });
-      })
-      .catch(err => console.log(err));
-  };
-}
 
 // ? delete lead from LeadList.js
 export function deleteListLead(list_id, lead_id) {
@@ -434,11 +235,6 @@ export function clearSearch() {
   }
 }
 
-export function sortLists(lists) {
-  return function(dispatch) {
-    dispatch({type: SORT_LISTS, lists})
-  }
-}
 
 export function sortLeadLists(leads) {
   return function(dispatch) {

@@ -1,6 +1,6 @@
 // General functions that are used throughout the app
 
-
+import { UPDATE_SEARCH, CLEAR_MESSAGE, FETCH_ERROR, CLEAR_SEARCH } from './types'
 // const uuidv1 = require("uuid/v1");
 export function fetchError(error) {
   return function(dispatch) {

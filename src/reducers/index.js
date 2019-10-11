@@ -39,17 +39,17 @@ import { combineReducers } from "redux";
 //   SORT_LEADLISTS
 // } from "../actions";
 
-import { listWithLeadNotes } from "./listWithLeadNotes";
-import { leads } from "./leads";
-import { lists } from "./lists";
-import { auth } from "./auth";
-import { listleads } from "./listleads";
-import { message } from "./message";
-import { search } from "./search";
-import { metricleads } from "./metricleads";
+import listWithLeadNotes from "./listWithLeadNotes";
+import leads from "./leads";
+import lists from "./lists";
+import auth from "./auth";
+import listleads from "./listleads";
+import message from "./message";
+import search from "./search";
+import metricleads from "./metricleads";
 
 export default combineReducers({
-  categories: categories,
+  // categories: categories,
   leads: leads,
   lists: lists,
   auth: auth,

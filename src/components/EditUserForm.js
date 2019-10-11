@@ -11,7 +11,7 @@ import {
 } from "semantic-ui-react";
 import { withRouter, NavLink } from "react-router-dom";
 import { connect } from "react-redux";
-import { updateUser} from "../actions";
+import { updateUser} from "../actions/user";
 
 const styleForm = {
   width: "500px",

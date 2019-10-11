@@ -1,3 +1,5 @@
+// All redux functions relating to leadnotes ( i.e. notes that belong to a lead and a user)
+
 import { ADD_LEAD_NOTE } from './types'
 
 

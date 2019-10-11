@@ -1,3 +1,6 @@
+// General functions that are used throughout the app
+
+
 // const uuidv1 = require("uuid/v1");
 export function fetchError(error) {
   return function(dispatch) {

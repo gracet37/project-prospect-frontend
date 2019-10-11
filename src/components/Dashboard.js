@@ -15,15 +15,17 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import _ from "lodash";
 import {
+  clearMessage,
+  clearSearch,
+  updateSearch
+} from "../actions";
+import {
   deleteList,
   thunkFetchListById,
   addList,
-  clearMessage,
-  clearSearch,
-  updateSearch,
-  sortLists,
-  metricLeads
-} from "../actions";
+  sortLists
+} from "../actions/lists";
+import { metricLeads } from '../actions/leads'
 
 const uuidv1 = require("uuid/v1");
 

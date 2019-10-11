@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Form, Button } from "semantic-ui-react";
-import { thunkFetchLeads, fetchError, clearMessage } from "../actions";
+import { fetchError, clearMessage } from "../actions";
+import { thunkFetchLeads } from "../actions/leads";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import "../App.css";
@@ -30,12 +31,12 @@ class SearchBar extends Component {
     const targetValue = e.target.value;
     const targetName = e.target.name;
     this.setState({ [targetName]: targetValue });
-    this.props.clearMessage()
+    this.props.clearMessage();
   };
 
   handleSubmit = () => {
-    const period = this.state.searchParam.indexOf('.') !== -1
-    console.log(period)
+    const period = this.state.searchParam.indexOf(".") !== -1;
+    console.log(period);
     if (this.state.searchParam && period) {
       if (this.props.auth.user) {
         this.setState({ searchClicked: true });
@@ -45,51 +46,55 @@ class SearchBar extends Component {
         this.props.history.push("/login");
       }
     } else if (this.state.searchParam === "") {
-      this.props.fetchError("Search Field Empty")
+      this.props.fetchError("Search Field Empty");
     } else {
-      this.props.fetchError("Please Enter a Valid Domain")
+      this.props.fetchError("Please Enter a Valid Domain");
     }
   };
 
   render() {
     return (
       <div>
-      <div style={{ verticalAlign: "center", textAlign: "center" }}>
-        {/* {this.state.searchClicked ? <Loading /> : null} */}
-        {/* <Form>  */}
-        <Form>
-          <Form.Group>
-            <Form.Input
-              onChange={this.handleChange}
-              name="searchParam"
-              placeholder="Enter domain name..."
-              // loading={this.state.searchClicked ? true : false}
-            >
-              <input style={styleSearchBar}/>
-            </Form.Input>
-            <Button
-              type="submit"
-              loading={this.state.searchClicked ? true : false}
-              onClick={this.handleSubmit}
-              style={{
-                borderRadius: "50px",
-                marginLeft: "10px",
-                backgroundColor: "#6200EE",
-                color: "white",
-                marginTop: "10px",
-                width: "130px",
-                height: "60px",
-                fontSize: "large",
-                textAlign: "center"
-              }}
-            >
-              Search
-            </Button>
-          </Form.Group>
-        </Form>
-        {/* </Form> */}
-      </div>
-      <div><p style={{color: "#EF5350"}}>{ this.props.message ? this.props.message : null }</p></div>
+        <div style={{ verticalAlign: "center", textAlign: "center" }}>
+          {/* {this.state.searchClicked ? <Loading /> : null} */}
+          {/* <Form>  */}
+          <Form>
+            <Form.Group>
+              <Form.Input
+                onChange={this.handleChange}
+                name="searchParam"
+                placeholder="Enter domain name..."
+                // loading={this.state.searchClicked ? true : false}
+              >
+                <input style={styleSearchBar} />
+              </Form.Input>
+              <Button
+                type="submit"
+                loading={this.state.searchClicked ? true : false}
+                onClick={this.handleSubmit}
+                style={{
+                  borderRadius: "50px",
+                  marginLeft: "10px",
+                  backgroundColor: "#6200EE",
+                  color: "white",
+                  marginTop: "10px",
+                  width: "130px",
+                  height: "60px",
+                  fontSize: "large",
+                  textAlign: "center"
+                }}
+              >
+                Search
+              </Button>
+            </Form.Group>
+          </Form>
+          {/* </Form> */}
+        </div>
+        <div>
+          <p style={{ color: "#EF5350" }}>
+            {this.props.message ? this.props.message : null}
+          </p>
+        </div>
       </div>
     );
   }
@@ -117,5 +122,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  {thunkFetchLeads, fetchError, clearMessage}
+  { thunkFetchLeads, fetchError, clearMessage }
 )(withRouter(SearchBar));

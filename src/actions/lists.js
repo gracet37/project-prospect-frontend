@@ -1,3 +1,5 @@
+// All redux functions that relate to lists
+
 import { FETCH_LISTS, FETCH_LIST_BY_ID, FETCH_LIST_WITH_LEADNOTES, ADD_LIST, SUCCESS_MESSAGE, DELETE_LIST, DELETE_LIST_WITH_LEADNOTE, SORT_LISTS } from './types'
 
 const uuidv1 = require("uuid/v1");

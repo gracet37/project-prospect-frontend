@@ -22,16 +22,12 @@ import { connect } from "react-redux";
 import _ from "lodash";
 import Navbar from "./Navbar";
 import MailForm from "./MailForm";
-import {
-  deleteList,
-  deleteListLead,
-  addLeadNote,
-  updateSearch,
-  sortLists,
-  sortLeadLists
-} from "../actions";
+import { updateSearch } from "../actions";
+import { deleteList, sortLists } from "../actions/lists";
+import { addLeadNote } from "../actions/leadnotes";
+import { deleteListLead, sortLeadLists } from "../actions/leadlists";
 import PropTypes from "prop-types";
-import FilterLeads from "./FilterLeads";
+// import FilterLeads from "./FilterLeads";
 import { GridList } from "@material-ui/core";
 
 const filterOptions = [

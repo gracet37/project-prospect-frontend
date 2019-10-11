@@ -17,14 +17,10 @@ import { connect } from "react-redux";
 import _ from "lodash";
 import Navbar from "./Navbar";
 import MailForm from "./MailForm";
-import {
-  deleteList,
-  deleteListLead,
-  addLeadNote,
-  updateSearch,
-  sortLists,
-  sortLeadLists
-} from "../actions";
+import { updateSearch } from "../actions";
+import { deleteList, sortLists } from "../actions/lists";
+import { addLeadNote } from "../actions/leadnotes";
+import { deleteListLead, sortLeadLists } from "../actions/leadlists";
 import PropTypes from "prop-types";
 
 const filterOptions = [
@@ -371,7 +367,7 @@ class LeadList extends Component {
                   }
                   name={"edit outline"}
                   size="large"
-                  style={{cursor: 'pointer'}}
+                  style={{ cursor: "pointer" }}
                 />
               </Table.Cell>
               <Table.Cell>
@@ -746,25 +742,6 @@ const mapStateToProps = state => {
     search: state.search
   };
 };
-
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     deleteList: id => {
-//       dispatch(deleteList(id));
-//     },
-//     deleteListLead: (list_id, lead_id) => {
-//       dispatch(deleteListLead(list_id, lead_id));
-//     },
-//     addLeadNote: (status, nextSteps, userId, leadId, comment) => {
-//       dispatch(addLeadNote(status, nextSteps, userId, leadId, comment))
-//     }
-//   };
-// };
-
-// export default connect(
-//   mapStateToProps,
-//   mapDispatchToProps
-// )(Dashboard);
 
 export default connect(
   mapStateToProps,

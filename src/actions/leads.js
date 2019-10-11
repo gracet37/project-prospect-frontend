@@ -1,3 +1,5 @@
+// All redux functions that relate to leads
+
 import { FETCH_LEADS, START_FETCH_LEADS, START_FETCH_LEADS_AND_LIST, SUCCESS_MESSAGE, ADD_LIST, ADD_METRIC_LEADS } from './types'
 
 export function thunkFetchLeads(domainName, history) {

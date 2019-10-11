@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { addLead, clearMessage } from "../actions";
+import { addLead } from "../actions/leads";
+import { clearMessage } from "../actions";
 import Navbar from "./Navbar";
 import EnhancedTable from "./EnhancedTable";
 

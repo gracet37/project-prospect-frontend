@@ -1,27 +1,29 @@
-import React, { Component } from "react";
+// ! Component not in use
 
-export default class Search extends Component {
-  state = {
-    query: ""
-  };
+// import React, { Component } from "react";
 
-  handleSubmit = event => {
-    event.preventDefault();
-  };
+// export default class Search extends Component {
+//   state = {
+//     query: ""
+//   };
 
-  handleChange = event => {
-    this.setState({ query: event.target.value });
-  };
+//   handleSubmit = event => {
+//     event.preventDefault();
+//   };
 
-  render() {
-    return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
-          <label>Search:</label>
-          <input type="text" onChange={this.handleChange} />
-          <input type="submit" />
-        </form>
-      </div>
-    );
-  }
-}
+//   handleChange = event => {
+//     this.setState({ query: event.target.value });
+//   };
+
+//   render() {
+//     return (
+//       <div>
+//         <form onSubmit={this.handleSubmit}>
+//           <label>Search:</label>
+//           <input type="text" onChange={this.handleChange} />
+//           <input type="submit" />
+//         </form>
+//       </div>
+//     );
+//   }
+// }

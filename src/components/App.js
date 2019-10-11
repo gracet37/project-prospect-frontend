@@ -1,9 +1,7 @@
 import React from "react";
 import { Route, withRouter, Switch } from "react-router-dom";
 import LeadListContainer from "../containers/LeadListContainer";
-import SearchContainer from "../NOT USING/SearchContainer";
 import UserProfile from "./UserProfile";
-// import SearchResults from "./SearchResults";
 import SearchResultsTable from "./SearchResultsTable";
 import LoginForm from "./LoginForm";
 import NewUserForm from "./NewUserForm";
@@ -12,7 +10,7 @@ import LeadList from "./LeadList";
 import EditUserForm from "./EditUserForm";
 import MetricLeads from "./MetricLeads";
 import { connect } from "react-redux";
-import { thunkFetchLists, thunkFetchAllListById } from "../actions";
+import { thunkFetchLists, thunkFetchAllListById } from "../actions/lists";
 import { currentUser } from "../actions/auth";
 
 

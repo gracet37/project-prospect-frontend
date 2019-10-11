@@ -11,11 +11,11 @@ import { connect } from "react-redux";
 import { registerUser } from "../actions/auth";
 import { clearMessage } from "../actions";
 
-const styleColumn = {
-  float: "left",
-  width: "50%",
-  padding: "14px"
-};
+// const styleColumn = {
+//   float: "left",
+//   width: "50%",
+//   padding: "14px"
+// };
 
 const styleForm = {
   width: "500px",

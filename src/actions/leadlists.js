@@ -1,3 +1,5 @@
+// All redux functions relating to listleads (or leadlists in some places)
+
 import { DELETE_LISTLEAD, SORT_LEADLISTS } from './types'
 
 

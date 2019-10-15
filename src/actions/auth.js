@@ -28,7 +28,7 @@ export function currentUser(history) {
 
     // dispatch with "loading" current user
 
-    return fetch("https://frozen-shore-20550.herokuapp.com/api/v1/current_user", reqObj)
+    return fetch("http://localhost:3000/api/v1/current_user", reqObj)
       .then(resp => resp.json())
       .then(data => {
         if (data.error) {
@@ -42,31 +42,31 @@ export function currentUser(history) {
   };
 }
 
-// ? testing
-export function loadUser(loadingCb, successCb, failCb) {
-  return function(dispatch) {
-    loadingCb();
-    const token = localStorage.token;
-    const reqObj = {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      }
-    };
+// // ? testing
+// export function loadUser(loadingCb, successCb, failCb) {
+//   return function(dispatch) {
+//     loadingCb();
+//     const token = localStorage.token;
+//     const reqObj = {
+//       method: "GET",
+//       headers: {
+//         "Content-Type": "application/json",
+//         Authorization: `Bearer ${token}`
+//       }
+//     };
 
-    return fetch("https://frozen-shore-20550.herokuapp.com/api/v1/current_user", reqObj)
-      .then(resp => resp.json())
-      .then(data => {
-        console.log(data)
-        dispatch({ type: ACTION_SUCCESS, user: data });
-        successCb();
-      })
-      .catch(err => {
-        failCb();
-      });
-  };
-}
+//     return fetch("http://localhost:3000/api/v1/current_user", reqObj)
+//       .then(resp => resp.json())
+//       .then(data => {
+//         console.log(data)
+//         dispatch({ type: ACTION_SUCCESS, user: data });
+//         successCb();
+//       })
+//       .catch(err => {
+//         failCb();
+//       });
+//   };
+// }
 
 export function login(formData, history) {
   return dispatch => {
@@ -76,7 +76,7 @@ export function login(formData, history) {
       body: JSON.stringify(formData)
     };
 
-    return fetch("https://frozen-shore-20550.herokuapp.com/api/v1/login", reqObj)
+    return fetch("http://localhost:3000/api/v1/login", reqObj)
       .then(resp => resp.json())
       .then(data => {
         if (data.message) {
@@ -85,7 +85,8 @@ export function login(formData, history) {
         } else {
           console.log("fetch login", data);
           localStorage.token = data.token;
-          dispatch(loginUser({ user: data.user }));
+          // dispatch(loginUser({ user: data.user }));
+          dispatch(loginUser({ user: data.user }))
           dispatch({ type: CLEAR_MESSAGE });
           history.push("/");
         }
@@ -102,7 +103,7 @@ export function registerUser(formData, history) {
       body: JSON.stringify(formData)
     };
 
-    return fetch("https://frozen-shore-20550.herokuapp.com/api/v1/auth", reqObj)
+    return fetch("http://localhost:3000/api/v1/auth", reqObj)
       .then(resp => resp.json())
       .then(data => {
         if (data.error) {
@@ -119,7 +120,7 @@ export function registerUser(formData, history) {
 }
 
 
-// ! I DONT THINK THIS FUNCTION IS FINISHED YET (29/SEP)
+// ! FUNCTION IS FINISHED YET (29/SEP)
 export function updateUser(formData, history) {
   return dispatch => {
     const reqObj = {
@@ -128,7 +129,7 @@ export function updateUser(formData, history) {
       body: JSON.stringify(formData)
     };
 
-    return fetch("https://frozen-shore-20550.herokuapp.com/api/v1/auth", reqObj)
+    return fetch("http://localhost:3000/api/v1/auth", reqObj)
       .then(resp => resp.json())
       .then(data => {
         if (data.error) {

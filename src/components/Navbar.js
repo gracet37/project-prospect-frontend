@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, withRouter } from "react-router-dom";
 import { clearMessage } from "../actions";
-import { logoutUser } from "../actions/auth";
+import { logoutUser, currentUser } from "../actions/auth";
 import { connect } from "react-redux";
 import { Image, Menu, Container } from "semantic-ui-react";
 
@@ -56,6 +56,11 @@ class Navbar extends React.Component {
   state = {
     fixed: true
   };
+
+  componentDidMount() {
+    this.props.currentUser();
+  }
+
   handleLogout = () => {
     this.props.logoutUser();
     localStorage.removeItem("token");
@@ -67,10 +72,10 @@ class Navbar extends React.Component {
     this.props.clearMessage();
   };
 
-  render() {
+  renderNavBar() {
     const { fixed } = this.state;
-    return (
-      <div>
+    if (this.props.auth.user) {
+      return (
         <Menu
           fixed={fixed ? "top" : null}
           secondary={true}
@@ -124,8 +129,15 @@ class Navbar extends React.Component {
             </Menu.Item>
           </Container>
         </Menu>
-      </div>
-    );
+      );
+    } else {
+      return null
+    }
+  }
+
+  render() {
+    // const { fixed } = this.state;
+    return <div>{this.renderNavBar()}</div>;
   }
 }
 
@@ -137,5 +149,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { logoutUser, clearMessage }
+  { logoutUser, clearMessage, currentUser }
 )(withRouter(Navbar));

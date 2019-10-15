@@ -5,7 +5,7 @@ import { ADD_LEAD_NOTE } from './types'
 
 export function addLeadNote(status, nextSteps, userId, leadId, comment) {
   return function(dispatch) {
-    fetch("https://frozen-shore-20550.herokuapp.com/leadnotes/create", {
+    fetch("http://localhost:3000/leadnotes/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

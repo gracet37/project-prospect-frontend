@@ -443,8 +443,9 @@ class Dashboard extends Component {
           {/* TABLE OF CONTENTS */}
           <Grid.Row
             style={{
-              marginLeft: "150px",
-              marginRight: "150px"
+              margin: '15px',
+              marginLeft: "70px",
+              marginRight: "70px"
             }}
             columns={1}
           >

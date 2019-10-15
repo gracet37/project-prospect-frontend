@@ -225,11 +225,12 @@ class EnhancedTableToolbar extends React.Component {
     const { listId, newListName } = this.state;
     const capitalizedName =
       newListName.charAt(0).toUpperCase() + newListName.substring(1);
-    const { leadsArray, company, website } = this.props;
-    console.log("SUBMIT", this.state);
+    const { leadsArray, selected, company, website } = this.props;
+    console.log("WHAT IS SELCTED?", selected);
     const userId = this.props.userId;
     this.props.addLead(
-      leadsArray,
+      // leadsArray,
+      selected,
       company,
       website,
       listId,
@@ -494,19 +495,20 @@ export default function EnhancedTable(props) {
 
   const handleSelectAllClick = event => {
     if (event.target.checked) {
-      const newSelecteds = props.rows.map(n => n.email);
+      const newSelecteds = props.rows.map(n => n);
+      console.log(newSelecteds)
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, email) => {
-    const selectedIndex = selected.indexOf(email);
+  const handleClick = (event, row) => {
+    const selectedIndex = selected.indexOf(row);
     let newSelected = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, email);
+      newSelected = newSelected.concat(selected, row);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -517,7 +519,7 @@ export default function EnhancedTable(props) {
         selected.slice(selectedIndex + 1)
       );
     }
-
+    console.log(newSelected)
     setSelected(newSelected);
   };
 
@@ -534,7 +536,7 @@ export default function EnhancedTable(props) {
     setDense(event.target.checked);
   };
 
-  const isSelected = email => selected.indexOf(email) !== -1;
+  const isSelected = row => selected.indexOf(row) !== -1;
 
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, props.rows.length - page * rowsPerPage);
@@ -545,7 +547,8 @@ export default function EnhancedTable(props) {
           <EnhancedTableToolbar
             clearMessage={props.clearMessage}
             addLead={props.addLead}
-            leadsArray={leadsArray}
+            selected={selected}
+            // leadsArray={leadsArray}
             company={props.company}
             website={props.website}
             listArray={listArray}
@@ -572,14 +575,14 @@ export default function EnhancedTable(props) {
                 {stableSort(props.rows, getSorting(order, orderBy))
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => {
-                    const isItemSelected = isSelected(row.email);
+                    const isItemSelected = isSelected(row);
                     const labelId = `enhanced-table-checkbox-${index}`;
 
                     return (
                       <TableRow
                         // style={{fontSize: '20px' }}
                         hover
-                        onClick={event => handleClick(event, row.email)}
+                        onClick={event => handleClick(event, row)}
                         role="checkbox"
                         aria-checked={isItemSelected}
                         tabIndex={-1}

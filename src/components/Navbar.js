@@ -106,11 +106,12 @@ class Navbar extends React.Component {
               to={this.props.auth.user ? "/profile" : "/login"}
               onClick={this.props.clearMessage}
             >
-              <Image
+              {/* <Image
                 circular
                 size="mini"
-                src={this.props.auth.user.img_url}
-              ></Image>
+                // src={this.props.auth.user.img_url}
+                src="https://images.unsplash.com/photo-1506085452766-c330853bea50?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=200&fit=max&s=3e378252a934e660f231666b51bd269a"
+              ></Image> */}
             </Menu.Item>
             <Menu.Item
               style={menuStyleRight}

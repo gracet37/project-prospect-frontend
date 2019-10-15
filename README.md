@@ -1,3 +1,7 @@
+PROJECT PROSPECT
+
+FULL DEMO VIDEO:
+
 Project Overview
 - "Prospect" is a Customer Relationship Management (CRM) system built to enable users to search for sales prospects and manage these relationships directly through this web application
 

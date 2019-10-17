@@ -47,6 +47,7 @@ export function addLead(
     })
       .then(res => res.json())
       .then(data => {
+        console.log("added leads", data)
         const leadsData = data;
         if (listId) {
           data.forEach(lead => {

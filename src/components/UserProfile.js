@@ -48,7 +48,7 @@ class UserProfile extends Component {
                       {this.props.auth.user.first_name}{" "}
                       {this.props.auth.user.last_name}
                     </Header>
-                    <Image style={{display: 'inline-block', textAlign: 'center', margin: '10px'}} circular src={this.props.auth.user.img_url} />
+                    <Image style={{display: 'inline-block', textAlign: 'center', margin: '10px'}} circular src="https://media.licdn.com/dms/image/C4E03AQGmSDje3w_TPA/profile-displayphoto-shrink_200_200/0?e=1576713600&v=beta&t=D8g2PpWCOItHB5D7QyYdA3JeHYvZg8MF8NBcsIfJWak" />
                   <Grid.Row style={{ margin: "40px"}}>
                   <Segment style={{ borderRadius: '50px', minWidth: '200px', height: '30px', backgroundColor: "#6200EE", color: 'white' }} as={Link} to='/edit' >Edit Account</Segment>
                   </Grid.Row>

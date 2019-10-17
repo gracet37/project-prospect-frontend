@@ -28,7 +28,7 @@ export function currentUser(history) {
 
     // dispatch with "loading" current user
 
-    return fetch("http://localhost:3000/api/v1/current_user", reqObj)
+    return fetch("https://frozen-shore-20550.herokuapp.com/api/v1/current_user", reqObj)
       .then(resp => resp.json())
       .then(data => {
         if (data.error) {
@@ -55,7 +55,7 @@ export function currentUser(history) {
 //       }
 //     };
 
-//     return fetch("http://localhost:3000/api/v1/current_user", reqObj)
+//     return fetch("https://frozen-shore-20550.herokuapp.com/api/v1/current_user", reqObj)
 //       .then(resp => resp.json())
 //       .then(data => {
 //         console.log(data)
@@ -76,7 +76,7 @@ export function login(formData, history) {
       body: JSON.stringify(formData)
     };
 
-    return fetch("http://localhost:3000/api/v1/login", reqObj)
+    return fetch("https://frozen-shore-20550.herokuapp.com/api/v1/login", reqObj)
       .then(resp => resp.json())
       .then(data => {
         if (data.message) {
@@ -103,7 +103,7 @@ export function registerUser(formData, history) {
       body: JSON.stringify(formData)
     };
 
-    return fetch("http://localhost:3000/api/v1/auth", reqObj)
+    return fetch("https://frozen-shore-20550.herokuapp.com/api/v1/auth", reqObj)
       .then(resp => resp.json())
       .then(data => {
         if (data.error) {
@@ -129,7 +129,7 @@ export function updateUser(formData, history) {
       body: JSON.stringify(formData)
     };
 
-    return fetch("http://localhost:3000/api/v1/auth", reqObj)
+    return fetch("https://frozen-shore-20550.herokuapp.com/api/v1/auth", reqObj)
       .then(resp => resp.json())
       .then(data => {
         if (data.error) {

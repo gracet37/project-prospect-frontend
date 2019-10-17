@@ -12,7 +12,7 @@ export function thunkFetchLists(id) {
   return function(dispatch) {
     // dispatch({ type: START_FETCH_LISTS });
 
-    fetch(`http://localhost:3000/api/v1/lists/show_lists/${id}`)
+    fetch(`https://frozen-shore-20550.herokuapp.com/api/v1/lists/show_lists/${id}`)
       .then(res => res.json())
       .then(data => {
         dispatch({ type: FETCH_LISTS, lists: data });
@@ -26,7 +26,7 @@ export function thunkFetchLists(id) {
 
 export function thunkFetchListById(id, user_id, history) {
   return function(dispatch) {
-    fetch(`http://localhost:3000/api/v1/lists/show_special`, {
+    fetch(`https://frozen-shore-20550.herokuapp.com/api/v1/lists/show_special`, {
       method: "POST",
       headers: {
         "Content-Type": 'application/json',
@@ -51,7 +51,7 @@ export function thunkFetchListById(id, user_id, history) {
 
 // export function thunkFetchListById(id, user_id, history) {
 //   return function(dispatch) {
-//     fetch(`http://localhost:3000/api/v1/lists/show_special/${id}`)
+//     fetch(`https://frozen-shore-20550.herokuapp.com/api/v1/lists/show_special/${id}`)
 //       .then(res => res.json())
 //       .then(data => {
 //         dispatch({
@@ -68,7 +68,7 @@ export function thunkFetchListById(id, user_id, history) {
 
 export function thunkFetchAllListById(id) {
   return function(dispatch) {
-    fetch(`http://localhost:3000/api/v1/lists/show_special_all/${id}`)
+    fetch(`https://frozen-shore-20550.herokuapp.com/api/v1/lists/show_special_all/${id}`)
       .then(res => res.json())
       .then(data => {
         dispatch({
@@ -83,7 +83,7 @@ export function thunkFetchAllListById(id) {
 
 export function addList(newListName, userId) {
   return function(dispatch) {
-    fetch("http://localhost:3000/api/v1/lists", {
+    fetch("https://frozen-shore-20550.herokuapp.com/api/v1/lists", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -108,7 +108,7 @@ export function deleteList(id) {
   return function(dispatch) {
     dispatch({ type: START_DELETE_LIST });
 
-    fetch(`http://localhost:3000/api/v1/lists/${id}`, {
+    fetch(`https://frozen-shore-20550.herokuapp.com/api/v1/lists/${id}`, {
       method: "DELETE"
     })
       .then(res => res.json())

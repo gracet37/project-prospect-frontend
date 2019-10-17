@@ -1,6 +1,8 @@
 PROJECT PROSPECT
 
-FULL DEMO VIDEO:
+![Project Prospect Demo](https://media.giphy.com/media/QBGVKlGrSTOz8CdWNm/giphy.gif)
+
+FULL DEMO VIDEO: https://youtu.be/y5SWDbFPZGI
 
 Project Overview
 - "Prospect" is a Customer Relationship Management (CRM) system built to enable users to search for sales prospects and manage these relationships directly through this web application
@@ -17,7 +19,7 @@ Project Functionality / How to Use
 Instructions for Running
 1. Create a new account OR,
 2. Sign in to an existing user account:
-  email: example@email.com
+  email: gracetan@email.com
   password: 123456
 
 Technologies and Frameworks

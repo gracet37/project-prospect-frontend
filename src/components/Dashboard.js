@@ -14,18 +14,14 @@ import {
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import _ from "lodash";
-import {
-  clearMessage,
-  clearSearch,
-  updateSearch
-} from "../actions";
+import { clearMessage, clearSearch, updateSearch } from "../actions";
 import {
   deleteList,
   thunkFetchListById,
   addList,
   sortLists
 } from "../actions/lists";
-import { metricLeads } from '../actions/leads'
+import { metricLeads } from "../actions/leads";
 
 const uuidv1 = require("uuid/v1");
 
@@ -61,8 +57,9 @@ const styleRow = {
 const styleTableHead = {
   border: "solid",
   borderWidth: "1px",
-  // borderColor: "rgba(98, 0, 238, 0.2)", 
-  backgroundColor: "#03d8C5", color: "white"
+  // borderColor: "rgba(98, 0, 238, 0.2)",
+  backgroundColor: "#03d8C5",
+  color: "white"
 };
 
 class Dashboard extends Component {
@@ -101,7 +98,11 @@ class Dashboard extends Component {
   };
 
   handleRowClick = id => {
-    this.props.thunkFetchListById(id, this.props.auth.user.id, this.props.history);
+    this.props.thunkFetchListById(
+      id,
+      this.props.auth.user.id,
+      this.props.history
+    );
   };
 
   handleSort = clickedColumn => () => {
@@ -156,79 +157,87 @@ class Dashboard extends Component {
           .includes(this.props.search.toUpperCase());
       });
     }
-    return (
-      <Table.Body
-        style={{
-          borderColor: "#03D8C5",
-          boxShadow: "0px 1px 36px -16px rgba(0,0,0,0.15)",
-          borderWidth: "1px",
-          borderRadius: "10px"
-        }}
-      >
-        {_.map(listArr, ({ id, name, created_at, leads }) => {
-          let dateString = new Date(created_at).toDateString();
-          let leadCount = leads.length;
-          // let dateString = date
-          return (
-            <Table.Row textAlign="center" key={uuidv1()}>
-              <Table.Cell onClick={() => this.handleRowClick(id)}>
-                {name}
-              </Table.Cell>
-              <Table.Cell onClick={() => this.handleRowClick(id)}>
-                {leadCount}
-              </Table.Cell>
-              <Table.Cell onClick={() => this.handleRowClick(id)}>
-                {dateString}
-              </Table.Cell>
-              <Table.Cell>
-                <Modal
-                  closeIcon
-                  size="mini"
-                  trigger={
-                    <Icon
-                    style={{cursor: 'pointer'}}
-                      name={"trash alternate outline"}
-                      name="trash alternate outline"
-                      size="large"
-                    />
-                  }
-                >
-                  <Modal.Header>Delete List</Modal.Header>
-                  <Modal.Content>
-                    <p>Are you sure you want to delete this list?</p>
-                  </Modal.Content>
-                  <Modal.Actions>
-                    <Button
-                      style={{
-                        borderRadius: "30px",
-                        color: "white",
-                        backgroundColor: "#6200EE"
-                      }}
-                      onClick={this.handleCancelModal}
-                      basic
-                      color="violet"
-                    >
-                      No
-                    </Button>
-                    <Button
-                      onClick={event => this.handleConfirm(event, id)}
-                      // icon="checkmark"
-                      // labelPosition="right"
-                      content="Yes"
-                      style={{
-                        borderRadius: "30px",
-                        color: "white",
-                        backgroundColor: "#03DAC6"
-                      }}
-                    />
-                  </Modal.Actions>
-                </Modal>
-              </Table.Cell>
-            </Table.Row>
-          );
-        })}
-      </Table.Body>
-    );
+    if (listArr.length > 0) {
+      return (
+        <Table.Body
+          style={{
+            borderColor: "#03D8C5",
+            boxShadow: "0px 1px 36px -16px rgba(0,0,0,0.15)",
+            borderWidth: "1px",
+            borderRadius: "10px"
+          }}
+        >
+          {_.map(listArr, ({ id, name, created_at, leads }) => {
+            let dateString = new Date(created_at).toDateString();
+            let leadCount = leads.length;
+            // let dateString = date
+            return (
+              <Table.Row textAlign="center" key={uuidv1()}>
+                <Table.Cell onClick={() => this.handleRowClick(id)}>
+                  {name}
+                </Table.Cell>
+                <Table.Cell onClick={() => this.handleRowClick(id)}>
+                  {leadCount}
+                </Table.Cell>
+                <Table.Cell onClick={() => this.handleRowClick(id)}>
+                  {dateString}
+                </Table.Cell>
+                <Table.Cell>
+                  <Modal
+                    closeIcon
+                    size="mini"
+                    trigger={
+                      <Icon
+                        style={{ cursor: "pointer" }}
+                        name={"trash alternate outline"}
+                        name="trash alternate outline"
+                        size="large"
+                      />
+                    }
+                  >
+                    <Modal.Header>Delete List</Modal.Header>
+                    <Modal.Content>
+                      <p>Are you sure you want to delete this list?</p>
+                    </Modal.Content>
+                    <Modal.Actions>
+                      <Button
+                        style={{
+                          borderRadius: "30px",
+                          color: "white",
+                          backgroundColor: "#6200EE"
+                        }}
+                        onClick={this.handleCancelModal}
+                        basic
+                        color="violet"
+                      >
+                        No
+                      </Button>
+                      <Button
+                        onClick={event => this.handleConfirm(event, id)}
+                        // icon="checkmark"
+                        // labelPosition="right"
+                        content="Yes"
+                        style={{
+                          borderRadius: "30px",
+                          color: "white",
+                          backgroundColor: "#03DAC6"
+                        }}
+                      />
+                    </Modal.Actions>
+                  </Modal>
+                </Table.Cell>
+              </Table.Row>
+            );
+          })}
+        </Table.Body>
+      );
+    } else {
+      return (
+        <Table.Row style={{textAlign: 'center', fontSize: '15px'}}>
+          You do not have any lists
+        </Table.Row>
+      );
+    }
   }
 
   renderLeadCount() {
@@ -273,7 +282,11 @@ class Dashboard extends Component {
         lead.leadnotes[lead.leadnotes.length - 1].status === "Meeting booked"
       );
     });
-    this.props.metricLeads(filteredLeads, this.props.history, "Meetings Booked");
+    this.props.metricLeads(
+      filteredLeads,
+      this.props.history,
+      "Meetings Booked"
+    );
   };
 
   renderMeetingsBooked() {
@@ -282,15 +295,18 @@ class Dashboard extends Component {
     if (this.props.listWithLeadNotes.length) {
       this.props.listWithLeadNotes.forEach(lead => {
         if (lead.leadnotes.length) {
-          if (lead.leadnotes[lead.leadnotes.length - 1].status === "Meeting booked") {
-              meetingsBookedCount += 1;
+          if (
+            lead.leadnotes[lead.leadnotes.length - 1].status ===
+            "Meeting booked"
+          ) {
+            meetingsBookedCount += 1;
+          }
         }
-      }
         // lead.leadnotes.forEach(leadnote => {
         //   if (leadnote.status === "Meeting booked") {
         //   }
         // });
-      })
+      });
       return (
         <Grid.Column
           onClick={this.renderMeetingsBookedList}
@@ -437,7 +453,7 @@ class Dashboard extends Component {
           {/* TABLE OF CONTENTS */}
           <Grid.Row
             style={{
-              margin: '15px',
+              margin: "15px",
               marginLeft: "70px",
               marginRight: "70px"
             }}
@@ -506,7 +522,8 @@ class Dashboard extends Component {
                       style={{
                         border: "solid",
                         borderWidth: "1px",
-                        backgroundColor: "#03d8C5", color: "white",
+                        backgroundColor: "#03d8C5",
+                        color: "white",
                         width: "8px"
                       }}
                     >

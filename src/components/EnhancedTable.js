@@ -218,7 +218,7 @@ class EnhancedTableToolbar extends React.Component {
   handleChange = e => {
     const targetValue = e.target.value;
     const targetName = e.target.name;
-    this.setState({ [targetName]: targetValue });
+    this.setState({ [targetName]: targetValue , listId: ""});
   };
 
   handleSubmit = () => {

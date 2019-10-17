@@ -24,10 +24,19 @@ export function thunkFetchLists(id) {
 // ? Search by id of the LIST and return a list with leads and leadnote data
 // ? Used to populate LeadList.js
 
-export function thunkFetchListById(id, history) {
+export function thunkFetchListById(id, user_id, history) {
   return function(dispatch) {
-    fetch(`http://localhost:3000/api/v1/lists/show_special/${id}`)
-      .then(res => res.json())
+    fetch(`http://localhost:3000/api/v1/lists/show_special`, {
+      method: "POST",
+      headers: {
+        "Content-Type": 'application/json',
+        "Accept": 'application/json'
+      },
+      body: JSON.stringify({
+        id: id,
+        user_id: user_id
+      })
+    }).then(res => res.json())
       .then(data => {
         dispatch({
           type: FETCH_LIST_BY_ID,
@@ -39,6 +48,23 @@ export function thunkFetchListById(id, history) {
       .catch(err => console.log(err));
   };
 }
+
+// export function thunkFetchListById(id, user_id, history) {
+//   return function(dispatch) {
+//     fetch(`http://localhost:3000/api/v1/lists/show_special/${id}`)
+//       .then(res => res.json())
+//       .then(data => {
+//         dispatch({
+//           type: FETCH_LIST_BY_ID,
+//           leads: data.leads,
+//           list: data.list
+//         });
+//         history.push("/leads");
+//       })
+//       .catch(err => console.log(err));
+//   };
+// }
+
 
 export function thunkFetchAllListById(id) {
   return function(dispatch) {

@@ -36,7 +36,6 @@ class SearchBar extends Component {
 
   handleSubmit = () => {
     const period = this.state.searchParam.indexOf(".") !== -1;
-    console.log(period);
     if (this.state.searchParam && period) {
       if (this.props.auth.user) {
         this.setState({ searchClicked: true });

@@ -52,7 +52,6 @@ class NewUserForm extends Component {
   };
 
   handleError = () => {
-    console.log(this.props.message)
     if (this.props.message) {
         return <Header as="h3" style={{ color: "#F44336" }} textAlign="center">
         {this.props.message[0]}
@@ -66,8 +65,6 @@ class NewUserForm extends Component {
   
 
   render() {
-    console.log("new user form", this.state);
-    console.log(this.props.message)
     return (
       <div className="new-user-form" style={style}>
         <Grid textAlign="center" verticalAlign="middle">

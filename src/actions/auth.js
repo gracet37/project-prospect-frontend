@@ -38,7 +38,7 @@ export function currentUser(history) {
         } else {
           dispatch(loginUser({ user: data.user }));
         }
-      });
+      }).catch(err => console.log(err));
   };
 }
 

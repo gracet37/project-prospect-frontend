@@ -189,13 +189,11 @@ class LeadList extends Component {
   };
 
   handleDropdown = (e, data) => {
-    console.log(e);
     const targetValue = data.value;
     this.setState({ statusInput: targetValue });
   };
 
   handleSearchDropdown = (e, data) => {
-    console.log(e);
     const targetValue = data.value;
     this.setState({ searchSelection: targetValue });
   };

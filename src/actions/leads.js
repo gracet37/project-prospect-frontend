@@ -22,7 +22,7 @@ export function thunkFetchLeads(domainName, history) {
 
 // ? creating a new lead instance of the one the user saved and creating the association between list and lead
 export function addLead(
-  leadsArray,
+  selected,
   company,
   website,
   listId,
@@ -40,7 +40,7 @@ export function addLead(
         Accept: "application/json"
       },
       body: JSON.stringify({
-        leadsArray,
+        selected,
         company: company,
         website: website
       })
@@ -62,9 +62,9 @@ export function addLead(
               })
             })
               .then(res => res.json())
-              .then(data => {
-                dispatch({ type: SUCCESS_MESSAGE, message: data.message });
-              })
+              // .then(data => {
+              //   dispatch({ type: SUCCESS_MESSAGE, message: data.message });
+              // })
               .catch(err => console.log(err));
           });
         } else {
@@ -95,9 +95,9 @@ export function addLead(
                   })
                 }) // end of the fetch
                   .then(res => res.json())
-                  .then(data => {
-                    dispatch({ type: SUCCESS_MESSAGE, message: data.message });
-                  })
+                  // .then(data => {
+                  //   dispatch({ type: SUCCESS_MESSAGE, message: data.message });
+                  // })
                   .catch(err => console.log(err));
               });
             })

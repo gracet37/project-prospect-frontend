@@ -1,5 +1,7 @@
 PROJECT PROSPECT
 
+![Project Prospect Demo](demo/demo.gif)
+
 FULL DEMO VIDEO:
 
 Project Overview

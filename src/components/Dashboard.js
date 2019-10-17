@@ -281,12 +281,16 @@ class Dashboard extends Component {
     // let leadArray = []
     if (this.props.listWithLeadNotes.length) {
       this.props.listWithLeadNotes.forEach(lead => {
-        lead.leadnotes.forEach(leadnote => {
-          if (leadnote.status === "Meeting booked") {
-            meetingsBookedCount += 1;
-          }
-        });
-      });
+        if (lead.leadnotes.length) {
+          if (lead.leadnotes[lead.leadnotes.length - 1].status === "Meeting booked") {
+              meetingsBookedCount += 1;
+        }
+      }
+        // lead.leadnotes.forEach(leadnote => {
+        //   if (leadnote.status === "Meeting booked") {
+        //   }
+        // });
+      })
       return (
         <Grid.Column
           onClick={this.renderMeetingsBookedList}

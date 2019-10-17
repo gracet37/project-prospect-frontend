@@ -85,6 +85,7 @@ const styleTableHead = {
 };
 
 const statusArray = [
+  {key: "contact", text: "Contact made", value: "Contact made"},
   { key: "10", text: "Meeting booked", value: "Meeting booked" },
   {
     key: "25",

@@ -21,13 +21,12 @@ class DataTable extends React.Component {
     company: "",
     website: "",
     newListName: "",
-    leadsArray: [],
+    // leadsArray: [],
     rows: [],
     isLoading: true
   };
 
   componentDidMount() {
-    console.log(this.props.leads);
     const array = this.props.leads;
     this.createRowData();
     this.setState({ company: array.organization, website: array.domain });
@@ -54,19 +53,19 @@ class DataTable extends React.Component {
     this.setState({ isLoading: false });
   };
 
-  handleSubmit = () => {
-    const { leadsArray, company, website, listId, newListName } = this.state;
-    console.log("SUBMIT", this.state);
-    const userId = this.props.auth.user.id;
-    this.props.addLead(
-      leadsArray,
-      company,
-      website,
-      listId,
-      newListName,
-      userId
-    );
-  };
+  // handleSubmit = () => {
+  //   const { leadsArray, company, website, listId, newListName } = this.state;
+  //   console.log("SUBMIT", this.state);
+  //   const userId = this.props.auth.user.id;
+  //   this.props.addLead(
+  //     leadsArray,
+  //     company,
+  //     website,
+  //     listId,
+  //     newListName,
+  //     userId
+  //   );
+  // };
 
 
   render() {
@@ -79,7 +78,6 @@ class DataTable extends React.Component {
       };
     });
 
-    console.log(this.state);
     if (this.state.isLoading) {
       return <div>Loading</div>;
     }

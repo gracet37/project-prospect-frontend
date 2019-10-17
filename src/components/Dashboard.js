@@ -101,18 +101,14 @@ class Dashboard extends Component {
   };
 
   handleRowClick = id => {
-    console.log("row clicked", id);
-    this.props.thunkFetchListById(id, this.props.history);
+    this.props.thunkFetchListById(id, this.props.auth.user.id, this.props.history);
   };
 
   handleSort = clickedColumn => () => {
-    console.log(this.state);
-    console.log(clickedColumn);
     const { column, direction } = this.state;
     const dataArray = this.props.lists;
 
     const dataSorted = _.sortBy(dataArray, [clickedColumn]);
-    console.log(dataSorted);
 
     if (column !== clickedColumn) {
       this.setState({
@@ -239,7 +235,6 @@ class Dashboard extends Component {
     if (this.props.lists.length > 0) {
       let leadCountArray = [];
       let totalLeads = 0;
-      console.log(this.props.lists);
       this.props.lists.forEach(list => {
         let count = list.leads.length;
         leadCountArray.push(count);
@@ -274,15 +269,12 @@ class Dashboard extends Component {
       });
     }
     let filteredLeads = leadwithnotes.filter(lead => {
-      console.log(lead.leadnotes[lead.leadnotes.length - 1]);
       return (
         lead.leadnotes[lead.leadnotes.length - 1].status === "Meeting booked"
       );
     });
     this.props.metricLeads(filteredLeads, this.props.history, "Meetings Booked");
-    // console.log("MEETINGS BOOKED?? ", filteredLeads)
   };
-  // return leadArray
 
   renderMeetingsBooked() {
     let meetingsBookedCount = 0;
@@ -333,7 +325,6 @@ class Dashboard extends Component {
       notContacted = this.props.listWithLeadNotes.filter(lead => {
         return lead.leadnotes.length === 0;
       });
-      console.log(notContacted);
       this.props.metricLeads(notContacted, this.props.history, "Not Contacted");
     }
   };
@@ -372,7 +363,6 @@ class Dashboard extends Component {
 
   render() {
     const { column, direction } = this.state;
-    console.log(this.state);
     return (
       <div>
         {this.renderMetricCards}

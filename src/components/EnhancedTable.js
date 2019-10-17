@@ -225,8 +225,7 @@ class EnhancedTableToolbar extends React.Component {
     const { listId, newListName } = this.state;
     const capitalizedName =
       newListName.charAt(0).toUpperCase() + newListName.substring(1);
-    const { leadsArray, selected, company, website } = this.props;
-    console.log("WHAT IS SELCTED?", selected);
+    const { selected, company, website } = this.props;
     const userId = this.props.userId;
     this.props.addLead(
       // leadsArray,
@@ -255,7 +254,6 @@ class EnhancedTableToolbar extends React.Component {
   };
 
   render() {
-    console.log("search results", this.state);
     const classes = getClasses();
     const { showModal } = this.state;
     const { numSelected } = this.props;
@@ -476,16 +474,16 @@ export default function EnhancedTable(props) {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(15);
-  const [leadsArray, setLeadsArray] = React.useState([]);
+  // const [leadsArray, setLeadsArray] = React.useState([]);
 
-  const handleLeadClick = (lead, event) => {
-    if (event.target.checked) {
-      setLeadsArray(leadsArray => [...leadsArray, lead]);
-    } else {
-      const newArray = leadsArray.filter(l => l.email !== lead.email);
-      setLeadsArray(leadsArray => newArray);
-    }
-  };
+  // const handleLeadClick = (lead, event) => {
+  //   if (event.target.checked) {
+  //     setLeadsArray(leadsArray => [...leadsArray, lead]);
+  //   } else {
+  //     const newArray = leadsArray.filter(l => l.email !== lead.email);
+  //     setLeadsArray(leadsArray => newArray);
+  //   }
+  // };
 
   const handleRequestSort = (event, property) => {
     const isDesc = orderBy === property && order === "desc";
@@ -496,7 +494,6 @@ export default function EnhancedTable(props) {
   const handleSelectAllClick = event => {
     if (event.target.checked) {
       const newSelecteds = props.rows.map(n => n);
-      console.log(newSelecteds)
       setSelected(newSelecteds);
       return;
     }
@@ -519,7 +516,6 @@ export default function EnhancedTable(props) {
         selected.slice(selectedIndex + 1)
       );
     }
-    console.log(newSelected)
     setSelected(newSelected);
   };
 
@@ -597,9 +593,9 @@ export default function EnhancedTable(props) {
                             }}
                             icon={<FavoriteBorder />}
                             checkedIcon={<Favorite />}
-                            onChange={event => {
-                              handleLeadClick(row, event);
-                            }}
+                            // onChange={event => {
+                            //   handleLeadClick(row, event);
+                            // }}
                             checked={isItemSelected}
                             inputProps={{ "aria-labelledby": labelId }}
                           />

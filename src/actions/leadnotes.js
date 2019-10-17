@@ -21,7 +21,6 @@ export function addLeadNote(status, nextSteps, userId, leadId, comment) {
     })
       .then(res => res.json())
       .then(data => {
-        console.log("lead note", data);
         dispatch({ type: ADD_LEAD_NOTE, leadnote: data, id: leadId });
         // dispatch(thunkFetchAllListById(userId))
       })

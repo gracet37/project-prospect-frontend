@@ -33,7 +33,7 @@ export function addLead(
     // const token = localStorage.token;
     dispatch({ type: START_FETCH_LEADS_AND_LIST });
 
-    fetch("http://localhost:3000/api/v1/leads", {
+    fetch("https://frozen-shore-20550.herokuapp.com/api/v1/leads", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -51,7 +51,7 @@ export function addLead(
         const leadsData = data;
         if (listId) {
           data.forEach(lead => {
-            fetch("http://localhost:3000/api/v1/leadlists", {
+            fetch("https://frozen-shore-20550.herokuapp.com/api/v1/leadlists", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -69,7 +69,7 @@ export function addLead(
               .catch(err => console.log(err));
           });
         } else {
-          fetch("http://localhost:3000/api/v1/lists", {
+          fetch("https://frozen-shore-20550.herokuapp.com/api/v1/lists", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -84,7 +84,7 @@ export function addLead(
             .then(data => {
               dispatch({ type: ADD_LIST, list: data });
               leadsData.forEach(lead => {
-                fetch("http://localhost:3000/api/v1/leadlists", {
+                fetch("https://frozen-shore-20550.herokuapp.com/api/v1/leadlists", {
                   method: "POST",
                   headers: {
                     "Content-Type": "application/json",

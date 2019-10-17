@@ -6,7 +6,7 @@ import { DELETE_LISTLEAD, SORT_LEADLISTS } from './types'
 // ? delete lead from LeadList.js
 export function deleteListLead(list_id, lead_id) {
   return function(dispatch) {
-    fetch(`http://localhost:3000/api/v1/leadlists`, {
+    fetch(`https://frozen-shore-20550.herokuapp.com/api/v1/leadlists`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

@@ -4,6 +4,8 @@ PROJECT PROSPECT
 
 FULL DEMO VIDEO: https://youtu.be/y5SWDbFPZGI
 
+Heroku: https://gentle-river-47581.herokuapp.com
+
 Project Overview
 - "Prospect" is a Customer Relationship Management (CRM) system built to enable users to search for sales prospects and manage these relationships directly through this web application
 
@@ -17,9 +19,11 @@ Project Functionality / How to Use
 - There is new user, edit user and delete user account functions
 
 Instructions for Running
+
+Head to the application deployed on heroku: https://gentle-river-47581.herokuapp.com
 1. Create a new account OR,
 2. Sign in to an existing user account:
-  email: gracetan@email.com
+  email: example@email.com
   password: 123456
 
 Technologies and Frameworks

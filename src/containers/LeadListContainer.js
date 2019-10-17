@@ -2,18 +2,10 @@ import React, { Component } from "react";
 import Navbar from "../components/Navbar";
 import Dashboard from "../components/Dashboard";
 import { connect } from "react-redux";
-<<<<<<< HEAD
 import { thunkFetchLists } from "../actions/lists";
 import { withRouter } from "react-router-dom";
 
 class LeadListContainer extends Component {
-=======
-import { thunkFetchLists } from "../actions";
-import { withRouter } from "react-router-dom";
-
-class LeadListContainer extends Component {
-
->>>>>>> b722cbf115b1d614d934d8c54f5ab2e5ba3426bb
   render() {
     return (
       <div
@@ -30,7 +22,6 @@ class LeadListContainer extends Component {
   }
 }
 
-<<<<<<< HEAD
 // const mapDispatchToProps = dispatch => {
 //   return {
 //     thunkFetchLists: id => {
@@ -38,15 +29,6 @@ class LeadListContainer extends Component {
 //     }
 //   };
 // };
-=======
-const mapDispatchToProps = dispatch => {
-  return {
-    thunkFetchLists: id => {
-      dispatch(thunkFetchLists(id));
-    }
-  };
-};
->>>>>>> b722cbf115b1d614d934d8c54f5ab2e5ba3426bb
 
 const mapStateToProps = state => {
   return {
@@ -57,9 +39,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-<<<<<<< HEAD
   { thunkFetchLists }
-=======
-  mapDispatchToProps
->>>>>>> b722cbf115b1d614d934d8c54f5ab2e5ba3426bb
 )(withRouter(LeadListContainer));
